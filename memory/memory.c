@@ -27,7 +27,7 @@ void* s_request_memory_block()
 	
 	free_blocks = *free_blocks;
 	*(free_blocks+1) = NULL;
-	return (void*)(allocated_block+3);
+	return (void*)(allocated_block+5);
 }
 
 /**
@@ -37,7 +37,7 @@ void* s_request_memory_block()
 int s_release_memory_block( void* memory_block )
 {
 	UINT32 *memory_address;
-	memory_address = (UINT32 *)memory_block - 3;
+	memory_address = (UINT32 *)memory_block - 5;
 	memory_block = memory_address;
 	UINT32 next = (*(UINT32 *)memory_block);
 	UINT32 previous = *((UINT32 *)memory_block+1);
@@ -71,15 +71,19 @@ void *initBlock(int num_blocks)
 	
 	*(temp_end+1) = NULL;
 	*(temp_end+2) = FREE;
+	*(temp_end+3) = NULL;
+	*(temp_end+4) = NULL;
 	
 	for(i; i<num_blocks; i++)
 	{
 		UINT32	*prev = temp_end; 
-		*temp_end = temp_end + 140/4;
+		*temp_end = temp_end + 148/4;
 
-		temp_end = temp_end + 140/4;
+		temp_end = temp_end + 148/4;
 		*(temp_end+1) = prev;
 		*(temp_end+2) = FREE;
+		*(temp_end+3) = NULL;
+		*(temp_end+4) = NULL;
 	}
 	
 	*temp_end = NULL;
