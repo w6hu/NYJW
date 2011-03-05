@@ -88,29 +88,17 @@ void remove_from_blocked(PCB* p) {
 	}
 }
 
-
-struct PCB* ready_queue [4];
-struct PCB* blocked_queue [6];
+struct PCB* ready_queue[5];
+struct PCB* blocked_queue[6];
 struct PCB p [6] ;
 
-<<<<<<< HEAD
-UINT32 pop (struct PCB p) {
-	UINT32 temp = *(p.stack);
-	p.stack = p.stack - 1;
-	return temp;
-}
-
-void push (struct PCB p, UINT32 val) {
-	*(p.stack) = val;
-	p.stack = p.stack + 1;
-=======
-UINT32 pop (struct process* p) {
+UINT32 pop (struct PCB* p) {
 	UINT32 temp = *(p->stack);
 	p->stack = p->stack - 1;
 	return temp;
 }
 
-void push (struct process* p, UINT32 val) {
+void push (struct PCB* p, UINT32 val) {
 	*(p->stack) = val;
 	p->stack = p->stack + 1;
 }
@@ -121,18 +109,16 @@ void init () {
 	UNIT32* process_start = mem_end;
 
 	for (i; i < 6; i++) {
-		p[i].next = process_start;
-		*p[i].next = NULL;
-		p[i].id = process_start + 1;
-		*(p[i].id) = g_test_proc[i].pid;
-		p[i].state = process_start + 2;
-		*(p[i].state) = STATE_READY;
-		p[i].priority = process_start + 3;
-		*(p[i].priority) = g_test_proc[i].priority;
+		p[i].next = NULL;
+		p[i].id = g_test_proc[i].pid;
+		p[i].state = STATE_READY;
+		p[i].priority = g_test_proc[i].priority;
+		p[i].psw = 0;   // assuming 0 is the nomal initial state ... eh ?
 		p[i].pc = g_test_proc[i].entry; //point pc to entry point of code
-		p[i].stack = process_start + 5;
-
-		ready_queue[p[i].priority]->next = p[i];
+		p[i].stack = process_start + 5; // where exactly is the process stack ?
+		
+		// initialize the process to the correct ready queue
+		put_to_ready(&(p[i]));
 
 		process_start = process_start + 5 + g_test_proc[i].sz_stack/4;
 	}

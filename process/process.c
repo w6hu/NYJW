@@ -2,7 +2,8 @@
 
 // global variable to keep track of the current process that is running
 PCB* current_running_process = 0;
-PCB* ready_queue[6]; // TODO need initialize this 
+
+// need to import the ready_queue here ~
 
 int release_processor()
 {
@@ -40,25 +41,22 @@ int release_processor()
 	push(current_running_process, val);
 	asm("move.l %%d7, %0" : "=r" (val));
 	push(current_running_process, val);
-
 	// save PSW
 	asm("move.w %%sr, %0" : "=r" (val));
-	current_running_process->PSW = val;
-	
+	current_running_process->psw = val;
 	// set the flag so that it would go to selecting next process
 	current_running_process->returning = false;
-	// save PC
+	// save PC //TODO how exactly do I load teh address ? need some testing to find out
 	asm("move.w %%pc, %0" : "=r" (val));
-	current_running_process->PC = val;
+	current_running_process->pc = val;
 	
 	// if the process is not returning, then we look for another one
 	if(current_running_process->returning == false)
 	{
-		// TODO this needs to be fixed once the PCB is out
 		if(current_running_process->state == STATE_READY)
-			put_to_ready(current_running_process->ID);
+			put_to_ready(current_running_process->id);
 		else
-			put_to_block(current_running_process->ID);
+			put_to_blocked(current_running_process->id);
 
 		schedule_next_process();
 	}
@@ -121,10 +119,10 @@ void schedule_next_process()
 			val = *(pop(current_running_process));
 			asm("move.l %0, %%a0" : : "r" (val));
 			// restore the PWS
-			val = current_running_process->PWS;
+			val = current_running_process->psw;
 			asm("move.l %0, %%sr" : : "r" (val));
 			// restore the PC
-			val = current_running_process->PC;
+			val = current_running_process->pc;
 			asm("move.l %0, %%pc" : : "r" (val));
 			
 			// this is hopefully not run at all ;)
@@ -133,8 +131,8 @@ void schedule_next_process()
 	}
 }
 
-
 //Copied to init.c
+/*
 void put_to_ready(int process_id)
 {
 	// get the process from process_id
@@ -170,3 +168,4 @@ void put_to_ready(int process_id)
 	one_pcb->next_process = NULL;
 	one_pcb->state = STATE_READY;
 }
+*/

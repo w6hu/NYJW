@@ -7,12 +7,16 @@ struct queue {
 
 //Built based on structure from test dummy procs
 struct PCB {
-	PCB* next;
-	UINT8* id;
-	UINT8* state;			
-	UINT8* priority;
-	UINT32* pc;	//not sure about the variable type for this
+	UINT16 pws;
+	
+	UINT32* pc;	
 	UINT32* stack;
+
+	PCB* next;
+	int id;
+	int state;			
+	int priority;
+	bool returning;
 }
 
 void put_to_ready(PCB* p);
