@@ -6,7 +6,8 @@ struct queue {
 }
 
 //Built based on structure from test dummy procs
-struct process {
+struct PCB {
+	PCB* next;
 	UINT8* id;
 	UINT8* state;			
 	UINT8* priority;
@@ -14,8 +15,10 @@ struct process {
 	UINT32* stack;
 }
 
-UINT8 next (struct queue q);
-void add (struct queue q, UINT8* pid);
+void put_to_ready(PCB* p);
+void put_to_blocked(int waiting_on, PCB* p);
+void remove_from_ready(PCB* p);
+void remove_from_blocked(PCB* p);
 
 UINT32 pop (struct process p);
 void push (struct process p, UINT32 val);

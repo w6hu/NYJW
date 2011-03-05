@@ -133,6 +133,8 @@ void schedule_next_process()
 	}
 }
 
+
+//Copied to init.c
 void put_to_ready(int process_id)
 {
 	// get the process from process_id
@@ -152,7 +154,7 @@ void put_to_ready(int process_id)
 	if(temp != NULL && temp->ID == process_id)
 		return;
 
-	while(temp != NULLi && temp->next_process != NULL)
+	while(temp != NULL && temp->next_process != NULL)
 	{
 
 		// if the process is alreay in there, don't bother doing anything (sanity check)
