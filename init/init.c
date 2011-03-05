@@ -93,6 +93,7 @@ struct PCB* ready_queue [4];
 struct PCB* blocked_queue [6];
 struct PCB p [6] ;
 
+<<<<<<< HEAD
 UINT32 pop (struct PCB p) {
 	UINT32 temp = *(p.stack);
 	p.stack = p.stack - 1;
@@ -102,6 +103,16 @@ UINT32 pop (struct PCB p) {
 void push (struct PCB p, UINT32 val) {
 	*(p.stack) = val;
 	p.stack = p.stack + 1;
+=======
+UINT32 pop (struct process* p) {
+	UINT32 temp = *(p->stack);
+	p->stack = p->stack - 1;
+	return temp;
+}
+
+void push (struct process* p, UINT32 val) {
+	*(p->stack) = val;
+	p->stack = p->stack + 1;
 }
 
 void init () {
