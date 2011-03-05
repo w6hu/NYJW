@@ -2,9 +2,9 @@
 Allocating common symbols
 Common symbol       size              file
 
-old_stack           0x4               /tmp/cc3OVsZb.o
+old_stack           0x4               /tmp/ccttMXJJ.o
 free_blocks         0x4               main.o
-main_stack          0x1000            /tmp/cc3OVsZb.o
+main_stack          0x1000            /tmp/ccttMXJJ.o
 
 Memory Configuration
 
@@ -14,12 +14,12 @@ ram              0x10100000         0x00100000
 
 Linker script and memory map
 
-LOAD /tmp/cc3OVsZb.o
+LOAD /tmp/ccttMXJJ.o
 LOAD dbug.o
 LOAD memory.o
 LOAD main.o
 START GROUP
-LOAD /opt/gcc-coldfire/bin/../lib/gcc/m68k-elf/4.3.2/m5307/libgcc.a
+LOAD /usr/local/coldfire/lib/gcc/m68k-elf/3.4.6/m5307/libgcc.a
 END GROUP
                 0x00000000                __DYNAMIC = 0x0
                 0x00000000                PROVIDE (hardware_init_hook, 0x0)
@@ -29,7 +29,7 @@ END GROUP
 
 .text           0x10100000      0xf3a
  *(.text)
- .text          0x10100000       0x1e /tmp/cc3OVsZb.o
+ .text          0x10100000       0x1e /tmp/ccttMXJJ.o
  *fill*         0x1010001e        0x2 00
  .text          0x10100020       0x5c dbug.o
                 0x10100040                rtx_dbug_outs
@@ -90,7 +90,7 @@ END GROUP
 .data           0x10100f3c        0x4
  *(.shdata)
  *(.data)
- .data          0x10100f3c        0x0 /tmp/cc3OVsZb.o
+ .data          0x10100f3c        0x0 /tmp/ccttMXJJ.o
  .data          0x10100f3c        0x0 dbug.o
  .data          0x10100f3c        0x0 memory.o
  .data          0x10100f3c        0x4 main.o
@@ -101,14 +101,14 @@ END GROUP
                 0x10100f40                __bss_start = .
  *(.shbss)
  *(.bss)
- .bss           0x10100f40        0x0 /tmp/cc3OVsZb.o
+ .bss           0x10100f40        0x0 /tmp/ccttMXJJ.o
  .bss           0x10100f40        0x0 dbug.o
  .bss           0x10100f40        0x0 memory.o
  .bss           0x10100f40        0x4 main.o
                 0x10100f40                used_blocks
  *(COMMON)
  *fill*         0x10100f44        0xc 00
- COMMON         0x10100f50     0x1010 /tmp/cc3OVsZb.o
+ COMMON         0x10100f50     0x1010 /tmp/ccttMXJJ.o
                 0x10100f50                old_stack
                 0x10100f60                main_stack
  COMMON         0x10101f60        0x4 main.o
@@ -124,7 +124,7 @@ END GROUP
 
 __REGISTER_RTX__
                 0x10300000        0x0
-                0x10300000                __REGISTER_RTX_ENTRY__ = <code 345> (.)
+                0x10300000                __REGISTER_RTX_ENTRY__ = <code 342> (.)
  *(__REGISTER_RTX__)
                 0x10380000                __REGISTER_TEST_PROCS_ENTRY__ = 0x10380000
                 0x10400000                __RTX_TEST_CODE_ENTRY__ = 0x10400000
