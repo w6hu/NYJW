@@ -3,7 +3,7 @@
 #define SUCCESS 0
 #define FAILURE 1
 
-extern NUM_PROCESS
+extern NUM_PROCESS;
 
 UINT32 *mailboxStart[NUM_PROCESS] = 0;
 UINT32 *mailboxEnd[NUM_PROCESS] = 0;
