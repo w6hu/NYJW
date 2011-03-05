@@ -23,7 +23,7 @@ int release_processor()
 	push(current_running_process, val);
 	asm("move.l %%a6, %0" : "=r" (val));
 	push(current_running_process, val);
-	asm("move.l %%a7, %0" : "=r" (val));
+	asm("move.l %%a7, %0" : "=r" (val)); //TODO we might not need to save/restore the a7 in the stack, as the PCB keep one copy of its own.
 	push(current_running_process, val);
 	asm("move.l %%d0, %0" : "=r" (val));
 	push(current_running_process, val);
@@ -103,7 +103,7 @@ void schedule_next_process()
 			val = *(pop(current_running_process));
 			asm("move.l %0, %%d0" : : "r" (val));
 			val = *(pop(current_running_process));
-			asm("move.l %0, %%a7" : : "r" (val));
+			asm("move.l %0, %%a7" : : "r" (val));  //TODO can we just use the PCB stack pointer restore it ?
 			val = *(pop(current_running_process));
 			asm("move.l %0, %%a6" : : "r" (val));
 			val = *(pop(current_running_process));

@@ -11,3 +11,7 @@ TODO:
 	- The assembly move instructions.  Currently I am using a normal move
 	  instruction to move stuff to and from the PC.  This might not work
 	  at all ...... 
+	  
+	- Right now we save and resotre the a7 as just another register, but do
+	  we need to do that ? Given that the PCB already has a stack pointer.  Or 
+	  do we even need to know the a7 ????
