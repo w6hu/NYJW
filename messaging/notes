@@ -5,12 +5,14 @@ process managing:
 		- return the process priority (already in the requirement)
 	- process_exists(int)  
 		- check whether a process exists given the process ID
-	- put_to_read(int)
+	- put_to_ready(int)
 		- put the given process to the ready queue
 	- preempt(int)
 		- preempt the given process
 	- start_to_run(int)
 		- start the run the given process(should already be in ready queue)
+	- put_to_block(int)
+		- put the process into the corresponding blocked queue based on the value given
 
 message managing:
 	- is_waiting_for (int receiver, int sender)

@@ -3,8 +3,10 @@
 #define SUCCESS 0
 #define FAILURE 1
 
-UINT32 *mailboxStart = 0;
-UINT32 *mailboxEnd = 0;
+extern NUM_PROCESS
+
+UINT32 *mailboxStart[NUM_PROCESS] = 0;
+UINT32 *mailboxEnd[NUM_PROCESS] = 0;
 
 // I'm assuming here process_ID is the receiver ID
 int send_message (int process_ID, void * MessageEnvelope) {
@@ -13,19 +15,22 @@ int send_message (int process_ID, void * MessageEnvelope) {
 		return FAILURE;
 	}
 	
+	int id = get_process_ID - 1;
+
 	// update mailbox
-	if (mailboxStart = 0) {
-		mailboxStart = (UINT32 *)MessageEnvelope;
-		mailboxEnd = (UINT32 *)MessageEnvelop;
+	if (mailboxStart[id] = 0) {
+		mailboxStart[id] = (UINT32 *)MessageEnvelope;
+		mailboxEnd[id] = (UINT32 *)MessageEnvelop;
 	}
 	else {
-		mailboxEnd-1 = (UINT32 *)MessageEnvelope;
+		mailboxEnd[id]-1 = (UINT32 *)MessageEnvelope;
 		*((UINT32 *)MessageEnvelop-1) = NULL;
-		mailboxEnd = (UINT32 *)MessageEnvelop;
+		mailboxEnd[id] = (UINT32 *)MessageEnvelop;
 	}
 
 	// update process states
-	int sender_ID = *((int *)MessageEnvelop + 2);
+	int sender_ID = id;
+	//int sender_ID = *((int *)MessageEnvelop + 2);
 	if (is_waiting_for(process_ID, sender_ID)) {
 		put_to_ready(process_ID);
 		if (get_process_priority(process_ID) > get_process_priority(sender_ID)) {
@@ -36,6 +41,7 @@ int send_message (int process_ID, void * MessageEnvelope) {
 	return SUCCESS;	
 }
 
+// If a message is not in the inbox yet, the process is put into the blocked queue
 void * receive_message (int * sender_ID) {
 	// error check
 	if (!process_exists(sender_ID)) {
@@ -43,11 +49,13 @@ void * receive_message (int * sender_ID) {
 	}
 	
 	// check if the message has arrived yet
+	int id = get_process_ID;
+	int sender_box = sender_ID - 1;
 	UINT32* message;
-	message  = mailboxStart;
+	message  = mailboxStart[sender_box];
 	while (message != 0) {
 		// if there is a message waiting
-		if ((int)(*(message + 2)) == *sender_ID) {
+		if ((int)(*(message + 2)) == id) {
 			// take it out of the mailbox
 			UINT32 previous = *(UINT32 *)message-2;
 			UINT32 next = *((UINT32 *)message-1);
@@ -55,13 +63,13 @@ void * receive_message (int * sender_ID) {
         		*((UINT32 *)next-2) = previous;
     		}   
     		else {
-				mailboxEnd = (UINT32 *)previous;
+				mailboxEnd[sender_box] = (UINT32 *)previous;
 			}
 			if (previous) {
         		*((UINT32 *)previous-1) = next;
     		}
 			else {
-				mailboxStart = (UINT32 *)next;
+				mailboxStart[sender_box] = (UINT32 *)next;
 			}
 			return message;   
 		}
@@ -69,6 +77,9 @@ void * receive_message (int * sender_ID) {
 		else {
 			message = (UINT32 *)(*(message-1));
 		}
-		return NULL;
+	}
+	
+	// if the message is not there yet, put into blocked queue
+	put_to_block(sender_ID);
 }
 
