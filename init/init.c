@@ -24,15 +24,15 @@ void add (struct queue q, UINT8* pid) {
 
 struct process p [6] ;
 
-UINT32 pop (struct process p) {
-	UINT32 temp = *(p.stack);
-	p.stack = p.stack - 1;
+UINT32 pop (struct process* p) {
+	UINT32 temp = *(p->stack);
+	p->stack = p->stack - 1;
 	return temp;
 }
 
-void push (struct process p, UINT32 val) {
-	*(p.stack) = val;
-	p.stack = p.stack + 1;
+void push (struct process* p, UINT32 val) {
+	*(p->stack) = val;
+	p->stack = p->stack + 1;
 }
 
 void init () {

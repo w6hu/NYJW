@@ -17,7 +17,7 @@ struct process {
 UINT8 next (struct queue q);
 void add (struct queue q, UINT8* pid);
 
-UINT32 pop (struct process p);
-void push (struct process p, UINT32 val);
+UINT32 pop (struct process* p);
+void push (struct process* p, UINT32 val);
 
 void init ();
