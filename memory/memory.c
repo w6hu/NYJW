@@ -16,6 +16,8 @@ const BYTE FREE = 0;
 const BYTE SUCCESS = 0;
 const BYTE FAILURE = 1;
 
+UNIT32* mem_end;
+
 void* s_request_memory_block()
 {
 	if(*free_blocks == NULL)	
@@ -87,6 +89,9 @@ void *initBlock(int num_blocks)
 	}
 	
 	*temp_end = NULL;
+
+	//Mark end of memory blocks to be used in init
+	*mem_end = temp_end + 148/4;
 	
 	return &__end;
 }

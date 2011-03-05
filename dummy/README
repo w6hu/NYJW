@@ -1,0 +1,4 @@
+Type make to generate the mdummy.s19 file
+Download the mdummy.s19 file to the coldfire board
+Type "go 10200000" to invoke the rtx loader.
+
