@@ -111,6 +111,7 @@ void schedule_next_process()
 	rtx_dbug_outs((CHAR *)"looping in scheler\r\n");
 		if(ready_queue[i] != NULL)
 		{
+			rtx_dbug_outs((CHAR *)"rtx: Love is sooo much .... CHARLIE !\r\n");
 			// select the next process
 			struct PCB* to_be_run = ready_queue[i];
 

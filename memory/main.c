@@ -42,7 +42,7 @@ int main( VOID )
 	*((UINT32 *)msg2 + 11) = 5;
 	
 	int result = send_message(2, msg1);
-	int result2 = send_message(3, msg2);
+	int result2 = send_message(2, msg2);
 	rtx_dbug_out_char(result + 48);
 	rtx_dbug_out_char('\r');
 	rtx_dbug_out_char('\n');
@@ -57,8 +57,28 @@ int main( VOID )
 	void* reMsg1 = receive_message(sender_id);
 	if (reMsg1 != NULL) {
 		rtx_dbug_outs("SUCCESS!!\r\n");
-		rtx_dbug_out_char(*((UINT32 *)msg1 + 10)+48);
-		rtx_dbug_out_char(*((UINT32 *)msg1 + 11)+48);
+		rtx_dbug_out_char(*((UINT32 *)reMsg1 + 10)+48);
+		rtx_dbug_out_char(*((UINT32 *)reMsg1 + 11)+48);
+	}
+	
+	void* reMsg2 = receive_message(sender_id);
+	if (reMsg2 != NULL) {
+		rtx_dbug_outs("SUCCESS!!\r\n");
+		rtx_dbug_out_char(*((UINT32 *)reMsg2 + 10)+48);
+		rtx_dbug_out_char(*((UINT32 *)reMsg2 + 11)+48);
+	}
+	else {
+		rtx_dbug_outs("No message!!\r\n");
+	}
+	
+	void* reMsg3 = receive_message(sender_id);
+	if (reMsg3 != NULL) {
+		rtx_dbug_outs("SUCCESS!!\r\n");
+		rtx_dbug_out_char(*((UINT32 *)reMsg3 + 10)+48);
+		rtx_dbug_out_char(*((UINT32 *)reMsg3 + 11)+48);
+	}
+	else {
+		rtx_dbug_outs("No message!!\r\n");
 	}
 	
     return 0;

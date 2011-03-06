@@ -98,8 +98,8 @@ void * receive_message (int * sender_ID) {
 	}
 	
 	// check if the message has arrived yet
-	int id = 3;
 	int sender_box = *sender_ID - 1;
+	int id = 2;
 	UINT32* message;
 	
 	message  = mailboxStart[sender_box];
@@ -119,13 +119,17 @@ void * receive_message (int * sender_ID) {
 	while (message != 0) {
 		// if there is a message waiting*/
 		
-		
+		rtx_dbug_outs("receiver id in message: ");
 		rtx_dbug_out_char((int)(*(message + 2))+48);
+		rtx_dbug_outs("\r\n");
+		rtx_dbug_outs("receiver id requested: ");
+		rtx_dbug_out_char(id + 48);
+		rtx_dbug_outs("\r\n");
 		
 		
 		if ((int)(*(message + 2)) == id) {
 			// take it out of the mailbox
-			UINT32 previous = *(UINT32 *)message-2;
+			UINT32 previous = *((UINT32 *)message-2);
 			UINT32 next = *((UINT32 *)message-1);
 			if (next) {
         		*((UINT32 *)next-2) = previous;
@@ -139,6 +143,8 @@ void * receive_message (int * sender_ID) {
 			else {
 				mailboxStart[sender_box] = (UINT32 *)next;
 			}
+			
+			rtx_dbug_outs("this better executes\r\n");
 			return message;   
 		}
 		// else check next message
@@ -159,7 +165,6 @@ void * receive_message (int * sender_ID) {
 		}
 		
 	}
-	
 	// if the message is not there yet, put into blocked queue
 	//put_to_block(sender_ID);
 	return NULL;

@@ -4,10 +4,10 @@ Common symbol       size              file
 
 p                   0xcc              main_rtx.o
 blocked_queue       0x18              process.o
-old_stack           0x4               /tmp/ccpd0FhM.o
+old_stack           0x4               /tmp/ccYr7ACE.o
 ready_queue         0x14              process.o
 free_blocks         0x4               process.o
-main_stack          0x1000            /tmp/ccpd0FhM.o
+main_stack          0x1000            /tmp/ccYr7ACE.o
 mem_end             0x4               memory.o
 
 Memory Configuration
@@ -18,7 +18,7 @@ ram              0x10100000         0x00100000
 
 Linker script and memory map
 
-LOAD /tmp/ccpd0FhM.o
+LOAD /tmp/ccYr7ACE.o
 LOAD process.o
 LOAD init.o
 LOAD memory.o
@@ -34,116 +34,119 @@ END GROUP
                 0x00000000                PROVIDE (software_init_hook, 0x0)
                 0x00000000                PROVIDE (_software_init_hook, 0x0)
 
-.text           0x10100000     0x12b6
+.text           0x10100000     0x130e
  *(.text)
- .text          0x10100000       0x1e /tmp/ccpd0FhM.o
+ .text          0x10100000       0x1e /tmp/ccYr7ACE.o
  *fill*         0x1010001e        0x2 00
- .text          0x10100020      0x63a process.o
+ .text          0x10100020      0x692 process.o
                 0x10100020                release_processor_kuma_san
+                0x1010066c                process_exists
                 0x10100350                schedule_next_process
- *fill*         0x1010065a        0x2 00
- .text          0x1010065c      0x218 init.o
-                0x10100716                put_to_blocked
-                0x1010065c                put_to_ready
-                0x10100824                pop
-                0x101007d4                remove_from_blocked
-                0x10100794                remove_from_ready
-                0x1010084e                push
- .text          0x10100874      0x270 memory.o
-                0x101008da                s_release_memory_block
-                0x10100874                s_request_memory_block
-                0x101009da                initBlock
- .text          0x10100ae4       0x5c dbug.o
-                0x10100b04                rtx_dbug_outs
-                0x10100ae4                rtx_dbug_out_char
- .text          0x10100b40       0xc2 rtx.o
-                0x10100bea                get_process_priority
-                0x10100b6e                request_memory_block
-                0x10100bd2                set_process_priority
-                0x10100b40                send_message
-                0x10100b86                release_memory_block
-                0x10100b58                receive_message
-                0x10100bba                delayed_send
-                0x10100b9e                release_processor
- *fill*         0x10100c02        0x2 00
- .text          0x10100c04      0x282 main_rtx.o
-                0x10100c04                __main
-                0x10100c0e                main
-                0x10100e88                . = ALIGN (0x4)
- *fill*         0x10100e86        0x2 00
-                0x10100e88                __CTOR_LIST__ = .
-                0x10100e88        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
+                0x1010065a                get_process_ID
+ *fill*         0x101006b2        0x2 00
+ .text          0x101006b4      0x218 init.o
+                0x1010076e                put_to_blocked
+                0x101006b4                put_to_ready
+                0x1010087c                pop
+                0x1010082c                remove_from_blocked
+                0x101007ec                remove_from_ready
+                0x101008a6                push
+ .text          0x101008cc      0x270 memory.o
+                0x10100932                s_release_memory_block
+                0x101008cc                s_request_memory_block
+                0x10100a32                initBlock
+ .text          0x10100b3c       0x5c dbug.o
+                0x10100b5c                rtx_dbug_outs
+                0x10100b3c                rtx_dbug_out_char
+ .text          0x10100b98       0xc2 rtx.o
+                0x10100c42                get_process_priority
+                0x10100bc6                request_memory_block
+                0x10100c2a                set_process_priority
+                0x10100b98                send_message
+                0x10100bde                release_memory_block
+                0x10100bb0                receive_message
+                0x10100c12                delayed_send
+                0x10100bf6                release_processor
+ *fill*         0x10100c5a        0x2 00
+ .text          0x10100c5c      0x282 main_rtx.o
+                0x10100c5c                __main
+                0x10100c66                main
+                0x10100ee0                . = ALIGN (0x4)
+ *fill*         0x10100ede        0x2 00
+                0x10100ee0                __CTOR_LIST__ = .
+                0x10100ee0        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
  *(.ctors)
-                0x10100e8c        0x4 LONG 0x0
-                0x10100e90                __CTOR_END__ = .
-                0x10100e90                __DTOR_LIST__ = .
-                0x10100e90        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
+                0x10100ee4        0x4 LONG 0x0
+                0x10100ee8                __CTOR_END__ = .
+                0x10100ee8                __DTOR_LIST__ = .
+                0x10100ee8        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
  *(.dtors)
-                0x10100e94        0x4 LONG 0x0
-                0x10100e98                __DTOR_END__ = .
+                0x10100eec        0x4 LONG 0x0
+                0x10100ef0                __DTOR_END__ = .
  *(.rodata*)
- .rodata        0x10100e98      0x195 process.o
- .rodata        0x1010102d       0x50 init.o
- .rodata        0x1010107d       0x7c memory.o
-                0x1010107e                FREE
-                0x10101080                FAILURE
-                0x1010107f                SUCCESS
-                0x1010107d                USED
- .rodata        0x101010f9       0xd0 rtx.o
- .rodata        0x101011c9       0xdd main_rtx.o
+ .rodata        0x10100ef0      0x195 process.o
+ .rodata        0x10101085       0x50 init.o
+ .rodata        0x101010d5       0x7c memory.o
+                0x101010d6                FREE
+                0x101010d8                FAILURE
+                0x101010d7                SUCCESS
+                0x101010d5                USED
+ .rodata        0x10101151       0xd0 rtx.o
+ .rodata        0x10101221       0xdd main_rtx.o
  *(.gcc_except_table)
-                0x101012a6                __INIT_SECTION__ = .
-                0x101012a6        0x4 LONG 0x4e560000
+                0x101012fe                __INIT_SECTION__ = .
+                0x101012fe        0x4 LONG 0x4e560000
  *(.init)
-                0x101012aa        0x2 SHORT 0x4e5e
-                0x101012ac        0x2 SHORT 0x4e75
-                0x101012ae                __FINI_SECTION__ = .
-                0x101012ae        0x4 LONG 0x4e560000
+                0x10101302        0x2 SHORT 0x4e5e
+                0x10101304        0x2 SHORT 0x4e75
+                0x10101306                __FINI_SECTION__ = .
+                0x10101306        0x4 LONG 0x4e560000
  *(.fini)
-                0x101012b2        0x2 SHORT 0x4e5e
-                0x101012b4        0x2 SHORT 0x4e75
-                0x101012b6                _etext = .
+                0x1010130a        0x2 SHORT 0x4e5e
+                0x1010130c        0x2 SHORT 0x4e75
+                0x1010130e                _etext = .
  *(.lit)
 
-.data           0x101012b8        0x0
+.data           0x10101310        0x0
  *(.shdata)
  *(.data)
- .data          0x101012b8        0x0 /tmp/ccpd0FhM.o
- .data          0x101012b8        0x0 process.o
- .data          0x101012b8        0x0 init.o
- .data          0x101012b8        0x0 memory.o
- .data          0x101012b8        0x0 dbug.o
- .data          0x101012b8        0x0 rtx.o
- .data          0x101012b8        0x0 main_rtx.o
-                0x101012b8                _edata = .
+ .data          0x10101310        0x0 /tmp/ccYr7ACE.o
+ .data          0x10101310        0x0 process.o
+ .data          0x10101310        0x0 init.o
+ .data          0x10101310        0x0 memory.o
+ .data          0x10101310        0x0 dbug.o
+ .data          0x10101310        0x0 rtx.o
+ .data          0x10101310        0x0 main_rtx.o
+                0x10101310                _edata = .
 
-.bss            0x101012b8     0x1118
-                0x101012b8                __bss_start = .
+.bss            0x10101310     0x1120
+                0x10101310                __bss_start = .
  *(.shbss)
  *(.bss)
- .bss           0x101012b8        0x0 /tmp/ccpd0FhM.o
- .bss           0x101012b8        0x4 process.o
-                0x101012b8                current_running_process
- .bss           0x101012bc        0x4 init.o
-                0x101012bc                used_blocks
- .bss           0x101012c0        0x0 memory.o
- .bss           0x101012c0        0x0 dbug.o
- .bss           0x101012c0        0x0 rtx.o
- .bss           0x101012c0        0x0 main_rtx.o
+ .bss           0x10101310        0x0 /tmp/ccYr7ACE.o
+ .bss           0x10101310        0x4 process.o
+                0x10101310                current_running_process
+ .bss           0x10101314        0x4 init.o
+                0x10101314                used_blocks
+ .bss           0x10101318        0x0 memory.o
+ .bss           0x10101318        0x0 dbug.o
+ .bss           0x10101318        0x0 rtx.o
+ .bss           0x10101318        0x0 main_rtx.o
  *(COMMON)
- COMMON         0x101012c0     0x1010 /tmp/ccpd0FhM.o
-                0x101012c0                old_stack
-                0x101012d0                main_stack
- COMMON         0x101022d0       0x30 process.o
-                0x101022d0                blocked_queue
-                0x101022e8                ready_queue
-                0x101022fc                free_blocks
- COMMON         0x10102300        0x4 memory.o
-                0x10102300                mem_end
- COMMON         0x10102304       0xcc main_rtx.o
-                0x10102304                p
-                0x101023d0                _end = ALIGN (0x8)
-                0x101023d0                __end = _end
+ *fill*         0x10101318        0x8 00
+ COMMON         0x10101320     0x1010 /tmp/ccYr7ACE.o
+                0x10101320                old_stack
+                0x10101330                main_stack
+ COMMON         0x10102330       0x30 process.o
+                0x10102330                blocked_queue
+                0x10102348                ready_queue
+                0x1010235c                free_blocks
+ COMMON         0x10102360        0x4 memory.o
+                0x10102360                mem_end
+ COMMON         0x10102364       0xcc main_rtx.o
+                0x10102364                p
+                0x10102430                _end = ALIGN (0x8)
+                0x10102430                __end = _end
 
 .stab
  *(.stab)
