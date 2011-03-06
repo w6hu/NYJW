@@ -57,6 +57,7 @@ int main()
 		ready_queue[i] = NULL;
 	}
 	
+
 	i = 0;
 	for (i; i < 6; i++) {
 		rtx_dbug_outs((CHAR *)"rtx: Infinite Loop\r\n");
@@ -74,7 +75,7 @@ int main()
 		p[i].waiting_on = -1;
 		
 		int j = 0;
-		for (j; j < 16; j++) {
+		for (j; j < 14; j++) {
 			push(&(p[i]), 0);
 		}
 		

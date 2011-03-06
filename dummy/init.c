@@ -109,7 +109,7 @@ void push (struct PCB* p, UINT32 val) {
 	p->stack = p->stack + 1;
 }
 
-/*
+
 //only used for init when the val for a7 is not known, DO NOT USE ANYWHERE ELSE
 void push_down_first_night (struct PCB* p, UINT32 val) {
 	val = p->stack;
@@ -117,21 +117,20 @@ void push_down_first_night (struct PCB* p, UINT32 val) {
 	int i = 0;
 	val = 0;
 	for (i; i < 16; i++) {
-		push(val);
+		push_test(val);
 	}
 	asm("move.l %%a7, %0" : "=r" (val));
 	p->stack = val;
 }
 
-UINT32 pop () {
+UINT32 pop_test () {
 	UINT32 val;
 	asm("move.l -(%%a7), %0" : "=r" (val));
 	//asm("move.l %%a7, %0" : "=r" (val));
 	return val;
 }
 
-void push (UINT32 val) {
+void push_test (UINT32 val) {
 	asm("move.l %0, %%d0" : : "r" (val));
 	asm("move.l %d0, (%a7)+");
 }
-*/

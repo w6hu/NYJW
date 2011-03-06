@@ -59,12 +59,12 @@ int release_processor_kuma_san()
 	// set the flag so that it would go to selecting next process
 	current_running_process->returning = FALSE;
 	
-	// save PC //TODO how exactly do I load the address ? need some testing to find out
+	// save PC
 	asm("lea 8(%pc), %a0");
 	asm("move.l %%a0, %0" : "=r" (val));
 	current_running_process->pc = val;
 	
-	int last; //= tempEnd%10;
+	int last;
 	int remain = val;
 	//int i = 0; 
 	while (remain != 0) {
