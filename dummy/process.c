@@ -202,6 +202,18 @@ void schedule_next_process()
 	rtx_dbug_outs((CHAR *)"rtx: after the scheduling loop the loop\r\n");
 }
 
+struct PCB* get_process_from_ID(int process_id)
+{
+	int i = 0;
+	extern struct PCB p [6];
+	for (i; i < 6; i++) {
+		if (p[i].id == process_id) {
+			return &(p[i]);
+		}
+	}
+	return NULL;
+}
+
 int get_process_ID() 
 {
 	return current_running_process->id;
@@ -233,41 +245,12 @@ int is_waiting_for(int process_ID, int sender_ID)
 	return FALSE;
 }
 
-//Copied to init.c
-/*
-void put_to_ready(int process_id)
+void set_process_state(int process_id, int process_state)
 {
-	// get the process from process_id
-	int priority = -1;
-	PCB* temp = NULL;
-	PCB* one_pcb = getPCB(process_id);
-
-	// if the process is in the block queue, remove it from the block queue
-	remove_from_block(process_id);
-
-	// get the priority of the process, 
-	// hopefully it is between 0 and 4, otherwise we got array out of bound
-	priority = one_pcb->priority;
-	// get the corresponding ready queue from the pritority
-	temp = ready_queue[priority];
-	
-	if(temp != NULL && temp->ID == process_id)
-		return;
-
-	while(temp != NULL && temp->next_process != NULL)
+	struct PCB* to_be_modified = get_process_from_ID(process_id);
+	if(to_be_modified != NULL)
 	{
-
-		// if the process is alreay in there, don't bother doing anything (sanity check)
-		if(temp->ID == process_id)
-			return;
-
-		temp = temp->next_process;
+		to_be_modified->state = process_state;
 	}
-	
-	// at this point, temp should be the tail of our lovely queue.
-	// add the process into the corresponding queue and update the PCB
-	temp->next_process = one_pcb;
-	one_pcb->next_process = NULL;
-	one_pcb->state = STATE_READY;
 }
-*/
+
