@@ -7,7 +7,42 @@ struct PCB* imma_epeen_process = 0;
 extern struct PCB* ready_queue[5];
 extern struct PCB* blocked_queue[6];
 
-// need to import the ready_queue here ~
+void null_process()
+{
+    while (1) 
+    {
+	    rtx_dbug_outs((CHAR *)"Hey APLLE! Hey Apple! Hey Apple !\r\n");
+        /* execute a rtx primitive to test */
+        release_processor_kuma_san();
+    }
+}
+
+void init_null_process( struct PCB* null_process, UINT32* process_start)
+{
+/*
+	VOID   (*entry)();
+	entry = null_process;
+	
+	rtx_dbug_outs((CHAR *)"rtx: Initializing the null process\r\n");
+	null_process->next = NULL;
+	null_process->id = -2;
+	null_process->state = STATE_READY;
+	null_process->priority = 0;
+	null_process->psw = 9984;   // assuming 9984 is the nomal initial state ... eh ?
+	null_process->pc = entry; //point pc to entry point of code
+	null_process->stack = process_start; // where exactly is the process stack ?
+	null_process->returning = FALSE;
+	null_process->waiting_on = -1;
+		
+	int j = 0;
+	for (j; j < 14; j++) {
+		push(null_process, 0);
+	}
+		
+	// initialize the process to the correct ready queue
+	put_to_ready(null_process);
+	*/
+}
 
 int release_processor_kuma_san()
 {
@@ -272,4 +307,3 @@ void set_process_to_run(int process_id)
 		imma_epeen_process = to_be_run;
 	}
 }
-

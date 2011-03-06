@@ -25,6 +25,7 @@
 extern void __REGISTER_TEST_PROCS_ENTRY__();
 extern UINT32* mem_end;
 struct PCB p [6];
+struct PCB null_p;
 
 /* gcc expects this function to exist */
 int __main( void )
@@ -40,9 +41,7 @@ int main()
     /* get the third party test proc initialization info */
     __REGISTER_TEST_PROCS_ENTRY__();
 	__REGISTER_RTX__();
-	
 
-	
 	rtx_dbug_outs((CHAR *)"rtx: Exit Init\r\n");
 	
 	rtx_dbug_outs((CHAR *)"rtx: Entering init()\r\n");
@@ -57,7 +56,6 @@ int main()
 		ready_queue[i] = NULL;
 	}
 	
-
 	i = 0;
 	for (i; i < 6; i++) {
 		rtx_dbug_outs((CHAR *)"rtx: Infinite Loop\r\n");
@@ -84,6 +82,9 @@ int main()
 
 		process_start = process_start + g_test_proc[i].sz_stack/4;
 	}
+	
+	// initialize the null process
+	init_null_process(&null_p, process_start);
 	
 	//call the scheduler to start a process
 	schedule_next_process();

@@ -8,6 +8,9 @@
 #include "rtx_inc.h"
 #include "dbug.h"
 
+void null_process();
+void init_null_process( struct PCB* null_process, UINT32* process_start);
+
 int release_processor_kuma_san();
 void schedule_next_process_BACK();
 
