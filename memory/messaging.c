@@ -74,7 +74,7 @@ int send_message (int process_ID, void * MessageEnvelope) {
 	else {
 		*(mailboxEnd[id]-1) = (UINT32 *)MessageEnvelope;
 		*((UINT32 *)MessageEnvelope-1) = NULL;
-		mailboxEnd[id] = (UINT32 *)MessageEnvelope;
+		mailboxEnd[id] = (UINT32 *)MessageEnvelope;//?
 	}
 
 	// update process states

@@ -23,7 +23,7 @@ void put_to_ready(struct PCB* p)
 	
 	if(temp == NULL)
 	{
-		rtx_dbug_outs((CHAR *)"rtx: bearking the first time ... yameda~\r\n");
+		rtx_dbug_outs((CHAR *)"rtx: breaking the first time ... yamete~\r\n");
 		ready_queue[priority] = p;
 		p->next = NULL;
 		
@@ -110,13 +110,28 @@ void push (struct PCB* p, UINT32 val) {
 }
 
 /*
+//only used for init when the val for a7 is not known, DO NOT USE ANYWHERE ELSE
+void push_down_first_night (struct PCB* p, UINT32 val) {
+	val = p->stack;
+	asm("move.l %0, %%a7" : : "r" (val));
+	int i = 0;
+	val = 0;
+	for (i; i < 16; i++) {
+		push(val);
+	}
+	asm("move.l %%a7, %0" : "=r" (val));
+	p->stack = val;
+}
+
 UINT32 pop () {
 	UINT32 val;
-	asm("move.l %-(%a7), %0" : "=r" (val));
+	asm("move.l -(%%a7), %0" : "=r" (val));
+	//asm("move.l %%a7, %0" : "=r" (val));
 	return val;
 }
 
 void push (UINT32 val) {
-	asm("move.l %0, %(%a7)+" : : "r" (val));
+	asm("move.l %0, %%d0" : : "r" (val));
+	asm("move.l %d0, (%a7)+");
 }
 */
