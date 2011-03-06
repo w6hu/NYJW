@@ -1,0 +1,193 @@
+
+Allocating common symbols
+Common symbol       size              file
+
+p                   0xcc              main_rtx.o
+blocked_queue       0x18              process.o
+old_stack           0x4               /tmp/ccBqD55j.o
+ready_queue         0x14              process.o
+free_blocks         0x4               process.o
+main_stack          0x1000            /tmp/ccBqD55j.o
+mem_end             0x4               memory.o
+null_p              0x22              main_rtx.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+ram              0x10100000         0x00100000
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD /tmp/ccBqD55j.o
+LOAD process.o
+LOAD init.o
+LOAD memory.o
+LOAD dbug.o
+LOAD rtx.o
+LOAD main_rtx.o
+START GROUP
+LOAD /opt/gcc-coldfire/bin/../lib/gcc/m68k-elf/4.3.2/m5307/libgcc.a
+END GROUP
+                0x00000000                __DYNAMIC = 0x0
+                0x00000000                PROVIDE (hardware_init_hook, 0x0)
+                0x00000000                PROVIDE (_hardware_init_hook, 0x0)
+                0x00000000                PROVIDE (software_init_hook, 0x0)
+                0x00000000                PROVIDE (_software_init_hook, 0x0)
+
+.text           0x10100000     0x15e3
+ *(.text)
+ .text          0x10100000       0x1e /tmp/ccBqD55j.o
+ *fill*         0x1010001e        0x2 00
+ .text          0x10100020      0x7f2 process.o
+                0x10100766                is_waiting_for
+                0x10100040                release_processor_kuma_san
+                0x101007c6                set_process_state
+                0x10100038                init_null_process
+                0x10100020                null_process
+                0x10100720                process_exists
+                0x101006f0                get_process_priority_usagi_san
+                0x10100684                get_process_from_ID
+                0x10100362                schedule_next_process
+                0x101006de                get_process_ID
+                0x101007ec                set_process_to_run
+ *fill*         0x10100812        0x2 00
+ .text          0x10100814      0x286 init.o
+                0x10100a2c                push_down_first_night
+                0x101008ce                put_to_blocked
+                0x10100a8a                push_test
+                0x10100814                put_to_ready
+                0x101009dc                pop
+                0x1010098c                remove_from_blocked
+                0x10100a78                pop_test
+                0x1010094c                remove_from_ready
+                0x10100a06                push
+ *fill*         0x10100a9a        0x2 00
+ .text          0x10100a9c      0x270 memory.o
+                0x10100b02                s_release_memory_block
+                0x10100a9c                s_request_memory_block
+                0x10100c02                initBlock
+ .text          0x10100d0c       0x5c dbug.o
+                0x10100d2c                rtx_dbug_outs
+                0x10100d0c                rtx_dbug_out_char
+ .text          0x10100d68       0xcc rtx.o
+                0x10100e12                get_process_priority
+                0x10100d96                request_memory_block
+                0x10100dfa                set_process_priority
+                0x10100d68                send_message
+                0x10100dae                release_memory_block
+                0x10100d80                receive_message
+                0x10100de2                delayed_send
+                0x10100dc6                release_processor
+ .text          0x10100e34      0x294 main_rtx.o
+                0x10100e34                __main
+                0x10100e3e                main
+                0x101010c8                . = ALIGN (0x4)
+                0x101010c8                __CTOR_LIST__ = .
+                0x101010c8        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
+ *(.ctors)
+                0x101010cc        0x4 LONG 0x0
+                0x101010d0                __CTOR_END__ = .
+                0x101010d0                __DTOR_LIST__ = .
+                0x101010d0        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
+ *(.dtors)
+                0x101010d4        0x4 LONG 0x0
+                0x101010d8                __DTOR_END__ = .
+ *(.rodata*)
+ .rodata        0x101010d8      0x282 process.o
+ .rodata        0x1010135a       0x50 init.o
+ .rodata        0x101013aa       0x7c memory.o
+                0x101013ab                FREE
+                0x101013ad                FAILURE
+                0x101013ac                SUCCESS
+                0x101013aa                USED
+ .rodata        0x10101426       0xd0 rtx.o
+ .rodata        0x101014f6       0xdd main_rtx.o
+ *(.gcc_except_table)
+                0x101015d3                __INIT_SECTION__ = .
+                0x101015d3        0x4 LONG 0x4e560000
+ *(.init)
+                0x101015d7        0x2 SHORT 0x4e5e
+                0x101015d9        0x2 SHORT 0x4e75
+                0x101015db                __FINI_SECTION__ = .
+                0x101015db        0x4 LONG 0x4e560000
+ *(.fini)
+                0x101015df        0x2 SHORT 0x4e5e
+                0x101015e1        0x2 SHORT 0x4e75
+                0x101015e3                _etext = .
+ *(.lit)
+
+.data           0x101015e4        0x0
+ *(.shdata)
+ *(.data)
+ .data          0x101015e4        0x0 /tmp/ccBqD55j.o
+ .data          0x101015e4        0x0 process.o
+ .data          0x101015e4        0x0 init.o
+ .data          0x101015e4        0x0 memory.o
+ .data          0x101015e4        0x0 dbug.o
+ .data          0x101015e4        0x0 rtx.o
+ .data          0x101015e4        0x0 main_rtx.o
+                0x101015e4                _edata = .
+
+.bss            0x101015e4     0x113e
+                0x101015e4                __bss_start = .
+ *(.shbss)
+ *(.bss)
+ .bss           0x101015e4        0x0 /tmp/ccBqD55j.o
+ .bss           0x101015e4        0x8 process.o
+                0x101015e4                current_running_process
+                0x101015e8                imma_epeen_process
+ .bss           0x101015ec        0x4 init.o
+                0x101015ec                used_blocks
+ .bss           0x101015f0        0x0 memory.o
+ .bss           0x101015f0        0x0 dbug.o
+ .bss           0x101015f0        0x0 rtx.o
+ .bss           0x101015f0        0x0 main_rtx.o
+ *(COMMON)
+ COMMON         0x101015f0     0x1010 /tmp/ccBqD55j.o
+                0x101015f0                old_stack
+                0x10101600                main_stack
+ COMMON         0x10102600       0x30 process.o
+                0x10102600                blocked_queue
+                0x10102618                ready_queue
+                0x1010262c                free_blocks
+ COMMON         0x10102630        0x4 memory.o
+                0x10102630                mem_end
+ COMMON         0x10102634       0xee main_rtx.o
+                0x10102634                p
+                0x10102700                null_p
+                0x10102728                _end = ALIGN (0x8)
+                0x10102728                __end = _end
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+__REGISTER_RTX__
+                0x10300000       0x84
+                0x10300000                __REGISTER_RTX_ENTRY__ = <code 345> (.)
+ *(__REGISTER_RTX__)
+ __REGISTER_RTX__
+                0x10300000       0x84 main_rtx.o
+                0x10300000                register_rtx
+                0x10380000                __REGISTER_TEST_PROCS_ENTRY__ = 0x10380000
+                0x10400000                __RTX_TEST_CODE_ENTRY__ = 0x10400000
+
+__RTX_TEST_DATA__
+                0x10500000       0x5c
+ *(__RTX_TEST_DATA__)
+ __RTX_TEST_DATA__
+                0x10500000       0x5c main_rtx.o
+                0x10500020                g_test_proc
+                0x10500000                g_test_fixture
+OUTPUT(rtx.bin elf32-m68k)
+
+.comment        0x00000000       0xea
+ .comment       0x00000000       0x27 process.o
+ .comment       0x00000027       0x27 init.o
+ .comment       0x0000004e       0x27 memory.o
+ .comment       0x00000075       0x27 dbug.o
+ .comment       0x0000009c       0x27 rtx.o
+ .comment       0x000000c3       0x27 main_rtx.o
