@@ -43,7 +43,7 @@ int release_memory_block(void * MemoryBlock)
 int release_processor()
 {
     rtx_dbug_outs((CHAR *)"rtx: release_processor \r\n");
-    return 0;
+    return release_processor_kuma_san();
 }
 
 /*Timing Service*/

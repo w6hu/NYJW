@@ -2,20 +2,25 @@
 
 #define SUCCESS 0
 #define FAILURE 1
+#define NUM_PROCESS 6
 
-extern NUM_PROCESS;
+//extern int NUM_PROCESS;
 
-UINT32 *mailboxStart[NUM_PROCESS] = 0;
-UINT32 *mailboxEnd[NUM_PROCESS] = 0;
+UINT32* mailboxStart[NUM_PROCESS] = 0;
+UINT32* mailboxEnd[NUM_PROCESS] = 0;
 
 // I'm assuming here process_ID is the receiver ID
 int send_message (int process_ID, void * MessageEnvelope) {
 	// error check
-	if (!process_exists(process_ID)) {
+	if (process_exists(process_ID) == 0) {
 		return FAILURE;
 	}
 	
-	int id = get_process_ID - 1;
+	int id = get_process_ID() - 1;
+	
+	// fill in the message hearder
+	*(((* int)MessageEnvelop) + 1) = id;
+	*(((* int)MessageEnvelop) + 2) = process_ID;
 
 	// update mailbox
 	if (mailboxStart[id] = 0) {
@@ -29,7 +34,7 @@ int send_message (int process_ID, void * MessageEnvelope) {
 	}
 
 	// update process states
-	int sender_ID = id;
+	/*int sender_ID = id;
 	//int sender_ID = *((int *)MessageEnvelop + 2);
 	if (is_waiting_for(process_ID, sender_ID)) {
 		put_to_ready(process_ID);
@@ -37,7 +42,7 @@ int send_message (int process_ID, void * MessageEnvelope) {
 			preempt(sender_ID);
 			start_to_run(process_ID);
 		}
-	}
+	}*/
 	return SUCCESS;	
 }
 
@@ -80,6 +85,22 @@ void * receive_message (int * sender_ID) {
 	}
 	
 	// if the message is not there yet, put into blocked queue
-	put_to_block(sender_ID);
+	//put_to_block(sender_ID);
+}
+
+/* Header format
+|				|			|				|
+|  Message Type	| Sender ID	| Receiver ID	| 
+|				|			|				|
+*/ 
+
+
+// some stubs
+int process_exists(process_ID) {
+return 1;
+}
+
+int get_process_ID() {
+return 1;
 }
 

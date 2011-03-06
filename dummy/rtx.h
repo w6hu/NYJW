@@ -12,6 +12,7 @@
 #ifndef _RTX_H_
 #define _RTX_H_
 #include "rtx_inc.h"
+#include "process.h"
 
 
 /* Process Priority. The bigger the number is, the lower the priority is*/

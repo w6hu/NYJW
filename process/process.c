@@ -86,37 +86,43 @@ void schedule_next_process()
 
 			// restore the register d7 ~ d0, a7 ~ a0
 			int val = 0;
-			val = *(pop(current_running_process));
+			val = pop(current_running_process);
 			asm("move.l %0, %%d7" : : "r" (val));
-			val = *(pop(current_running_process));
+			val = pop(current_running_process);
 			asm("move.l %0, %%d6" : : "r" (val));
-			val = *(pop(current_running_process));
+			val = pop(current_running_process);
 			asm("move.l %0, %%d5" : : "r" (val));
-			val = *(pop(current_running_process));
+			val = pop(current_running_process);
 			asm("move.l %0, %%d4" : : "r" (val));
-			val = *(pop(current_running_process));
+			val = pop(current_running_process);
 			asm("move.l %0, %%d3" : : "r" (val));
-			val = *(pop(current_running_process));
+			val = pop(current_running_process);
 			asm("move.l %0, %%d2" : : "r" (val));
-			val = *(pop(current_running_process));
+			val = pop(current_running_process);
 			asm("move.l %0, %%d1" : : "r" (val));
-			val = *(pop(current_running_process));
+			val = pop(current_running_process);
 			asm("move.l %0, %%d0" : : "r" (val));
+<<<<<<< HEAD
 			val = *(pop(current_running_process));
 			asm("move.l %0, %%a7" : : "r" (val));  //TODO can we just use the PCB stack pointer restore it ?
 			val = *(pop(current_running_process));
+=======
+			val = pop(current_running_process);
+			asm("move.l %0, %%a7" : : "r" (val));
+			val = pop(current_running_process);
+>>>>>>> 4d3102cac66f8661cc2c477d51a772d9693b5cfb
 			asm("move.l %0, %%a6" : : "r" (val));
-			val = *(pop(current_running_process));
+			val = pop(current_running_process);
 			asm("move.l %0, %%a5" : : "r" (val));
-			val = *(pop(current_running_process));
+			val = pop(current_running_process);
 			asm("move.l %0, %%a4" : : "r" (val));
-			val = *(pop(current_running_process));
+			val = pop(current_running_process);
 			asm("move.l %0, %%a3" : : "r" (val));
-			val = *(pop(current_running_process));
+			val = pop(current_running_process);
 			asm("move.l %0, %%a2" : : "r" (val));
-			val = *(pop(current_running_process));
+			val = pop(current_running_process);
 			asm("move.l %0, %%a1" : : "r" (val));
-			val = *(pop(current_running_process));
+			val = pop(current_running_process);
 			asm("move.l %0, %%a0" : : "r" (val));
 			// restore the PWS
 			val = current_running_process->psw;

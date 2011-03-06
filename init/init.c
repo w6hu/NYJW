@@ -1,5 +1,8 @@
-#include "rtx_inc.h"
-#include "memory.h"
+#include "init.h"
+#include "../dummy/dbug.h"
+
+extern test_fixture_t g_test_fixture;
+extern test_proc_t g_test_proc[NUM_TEST_PROCS];
 
 UINT32 *free_blocks;
 UINT32 *used_blocks = NULL;
@@ -7,11 +10,15 @@ UINT32 *used_blocks = NULL;
 
 extern UINT32* mem_end; 
 
-void put_to_ready(PCB* p)
+struct PCB* ready_queue[5];
+struct PCB* blocked_queue[6];
+struct PCB p [6] ;
+
+void put_to_ready(struct PCB* p)
 {
 	// get the process from process_id
 	int priority = -1;
-	PCB* temp = NULL;
+	struct PCB* temp = NULL;
 
 	// if the process is in the block queue, remove it from the block queue
 	remove_from_blocked(p);
@@ -25,6 +32,7 @@ void put_to_ready(PCB* p)
 	while(temp != NULL && temp->next != NULL)
 	{
 
+		rtx_dbug_outs((CHAR *)"rtx: Infinite Loop in put to ready\r\n");
 		// if the process is alreay in there, don't bother doing anything (sanity check)
 		if(temp == p)
 			return;
@@ -39,11 +47,11 @@ void put_to_ready(PCB* p)
 	p->state = STATE_READY;
 }
 
-void put_to_blocked(int waiting_on, PCB* p)
+void put_to_blocked(int waiting_on, struct PCB* p)
 {
 	// get the process from process_id
 	int priority = -1;
-	PCB* temp = NULL;
+	struct PCB* temp = NULL;
 
 	remove_from_ready(p);
 
@@ -70,27 +78,26 @@ void put_to_blocked(int waiting_on, PCB* p)
 	p->state = STATE_BLOCKED;
 }
 
-void remove_from_ready(PCB* p) {
+void remove_from_ready(struct PCB* p) {
 	//Assume if a process is removed from the ready-queue, we are moving the first one
-	PCB* queue = ready_queue [p->priority];
-	if (queue != NULL && queue = p)
+	struct PCB* queue = ready_queue [p->priority];
+	if (queue != NULL && queue == p)
 		queue->next = p->next;
 }
 
-void remove_from_blocked(PCB* p) {
+void remove_from_blocked(struct PCB* p) {
 	//Assume if a process is removed from the ready-queue, we are moving the first one
-	for (int i = 0; i < 6; i++) {
-		PCB* queue = blocked_queue [i];
-		if (queue != NULL && queue = p) {
+	int i = 0;
+	for ( i; i < 6; i++) {
+		struct PCB* queue = blocked_queue [i];
+		if (queue != NULL && queue == p) {
 			queue->next = p->next;
 			return;
 		}
 	}
 }
 
-struct PCB* ready_queue[5];
-struct PCB* blocked_queue[6];
-struct PCB p [6] ;
+
 
 UINT32 pop (struct PCB* p) {
 	UINT32 temp = *(p->stack);
@@ -103,25 +110,32 @@ void push (struct PCB* p, UINT32 val) {
 	p->stack = p->stack + 1;
 }
 
-void init () {
+void init (test_fixture_t g_test_fixture, test_proc_t g_test_proc[]) {
+    rtx_dbug_outs((CHAR *)"rtx: Entering init()\r\n");
 	free_blocks = initBlock(NUM_MEM_BLKS);
+	rtx_dbug_outs((CHAR *)"rtx: Created Memory blocks\r\n");
+	/*
 	int i = 0;
-	UNIT32* process_start = mem_end;
+	UINT32* process_start = mem_end;
 
 	for (i; i < 6; i++) {
+		rtx_dbug_outs((CHAR *)"rtx: Infinite Loop\r\n");
 		p[i].next = NULL;
 		p[i].id = g_test_proc[i].pid;
+		rtx_dbug_outs((CHAR *)"rtx: Got PID\r\n");
 		p[i].state = STATE_READY;
 		p[i].priority = g_test_proc[i].priority;
 		p[i].psw = 0;   // assuming 0 is the nomal initial state ... eh ?
+		rtx_dbug_outs((CHAR *)"rtx: Getting pc\r\n");
 		p[i].pc = g_test_proc[i].entry; //point pc to entry point of code
-		p[i].stack = process_start + 5; // where exactly is the process stack ?
+		rtx_dbug_outs((CHAR *)"rtx: pc set\r\n");
+		p[i].stack = process_start; // where exactly is the process stack ?
 		
 		// initialize the process to the correct ready queue
-		put_to_ready(&(p[i]));
+		//put_to_ready(&(p[i]));
 
-		process_start = process_start + 5 + g_test_proc[i].sz_stack/4;
-	}
+		process_start = process_start + g_test_proc[i].sz_stack/4;
+	}*/
 
 	
 }
