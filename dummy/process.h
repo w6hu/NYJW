@@ -11,4 +11,7 @@
 int release_processor_kuma_san();
 void schedule_next_process_BACK();
 
+int get_process_ID();
+int process_exists(int process_id);
+
 #endif

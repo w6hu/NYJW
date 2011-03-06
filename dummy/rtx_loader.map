@@ -1,0 +1,115 @@
+
+Allocating common symbols
+Common symbol       size              file
+
+old_stack           0x4               /tmp/cccg6Pc8.o
+free_blocks         0x4               dbug.o
+main_stack          0x1000            /tmp/cccg6Pc8.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+ram              0x10200000         0x00100000
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD /tmp/cccg6Pc8.o
+LOAD dbug.o
+LOAD rtx_loader.o
+START GROUP
+LOAD /opt/gcc-coldfire/bin/../lib/gcc/m68k-elf/4.3.2/m5307/libgcc.a
+END GROUP
+                0x00000000                __DYNAMIC = 0x0
+                0x00000000                PROVIDE (hardware_init_hook, 0x0)
+                0x00000000                PROVIDE (_hardware_init_hook, 0x0)
+                0x00000000                PROVIDE (software_init_hook, 0x0)
+                0x00000000                PROVIDE (_software_init_hook, 0x0)
+
+.text           0x10200000      0x1a8
+ *(.text)
+ .text          0x10200000       0x1e /tmp/cccg6Pc8.o
+ *fill*         0x1020001e        0x2 00
+ .text          0x10200020       0x5c dbug.o
+                0x10200040                rtx_dbug_outs
+                0x10200020                rtx_dbug_out_char
+ .text          0x1020007c       0x58 rtx_loader.o
+                0x1020007c                main
+                0x102000d4                . = ALIGN (0x4)
+                0x102000d4                __CTOR_LIST__ = .
+                0x102000d4        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
+ *(.ctors)
+                0x102000d8        0x4 LONG 0x0
+                0x102000dc                __CTOR_END__ = .
+                0x102000dc                __DTOR_LIST__ = .
+                0x102000dc        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
+ *(.dtors)
+                0x102000e0        0x4 LONG 0x0
+                0x102000e4                __DTOR_END__ = .
+ *(.rodata*)
+ .rodata        0x102000e4       0xb4 rtx_loader.o
+ *(.gcc_except_table)
+                0x10200198                __INIT_SECTION__ = .
+                0x10200198        0x4 LONG 0x4e560000
+ *(.init)
+                0x1020019c        0x2 SHORT 0x4e5e
+                0x1020019e        0x2 SHORT 0x4e75
+                0x102001a0                __FINI_SECTION__ = .
+                0x102001a0        0x4 LONG 0x4e560000
+ *(.fini)
+                0x102001a4        0x2 SHORT 0x4e5e
+                0x102001a6        0x2 SHORT 0x4e75
+                0x102001a8                _etext = .
+ *(.lit)
+
+.data           0x102001a8        0x0
+ *(.shdata)
+ *(.data)
+ .data          0x102001a8        0x0 /tmp/cccg6Pc8.o
+ .data          0x102001a8        0x0 dbug.o
+ .data          0x102001a8        0x0 rtx_loader.o
+                0x102001a8                _edata = .
+
+.bss            0x102001a8     0x101c
+                0x102001a8                __bss_start = .
+ *(.shbss)
+ *(.bss)
+ .bss           0x102001a8        0x0 /tmp/cccg6Pc8.o
+ .bss           0x102001a8        0x0 dbug.o
+ .bss           0x102001a8        0x0 rtx_loader.o
+ *(COMMON)
+ *fill*         0x102001a8        0x8 00
+ COMMON         0x102001b0     0x1010 /tmp/cccg6Pc8.o
+                0x102001b0                old_stack
+                0x102001c0                main_stack
+ COMMON         0x102011c0        0x4 dbug.o
+                0x102011c0                free_blocks
+                0x102011c8                _end = ALIGN (0x8)
+                0x102011c8                __end = _end
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+                0x10100000                __RTX_ENTRY__ = 0x10100000
+                0x10300000                __REGISTER_RTX_ENTRY__ = 0x10300000
+                0x10380000                __REGISTER_TEST_PROCS_ENTRY__ = 0x10380000
+
+__RTX_TEST_CODE__
+                0x10400000        0x0
+                0x10400000                __RTX_TEST_CODE_ENTRY__ = <code 345> (.)
+ *(__RTX_TEST_CODE__)
+
+__RTX_TEST_DATA__
+                0x10500000       0x5c
+ *(__RTX_TEST_DATA__)
+ __RTX_TEST_DATA__
+                0x10500000       0x5c rtx_loader.o
+                0x10500020                g_test_proc
+                0x10500000                g_test_fixture
+OUTPUT(rtx_loader.bin elf32-m68k)
+
+.comment        0x00000000       0x4e
+ .comment       0x00000000       0x27 dbug.o
+ .comment       0x00000027       0x27 rtx_loader.o

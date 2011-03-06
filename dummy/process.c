@@ -53,9 +53,32 @@ int release_processor_kuma_san()
 	current_running_process->returning = FALSE;
 	
 	// save PC //TODO how exactly do I load the address ? need some testing to find out
-	asm("lea 0(%pc), %a0");
+	asm("lea 8(%pc), %a0");
 	asm("move.l %%a0, %0" : "=r" (val));
 	current_running_process->pc = val;
+	
+	int last; //= tempEnd%10;
+	int remain = val;
+	//int i = 0; 
+	while (remain != 0) {
+		//rtx_dbug_out_char((CHAR)(last+48));
+		last = remain%10;
+		remain = remain/10;
+		rtx_dbug_out_char((CHAR)(last+48));            
+	}
+	rtx_dbug_outs((CHAR *) "\r\n");	
+	
+	rtx_dbug_outs((CHAR *)"rtx: Kuma san Konnichiha !!\r\n");
+	last; //= tempEnd%10;
+	remain = current_running_process->id;
+	//int i = 0; 
+	while (remain != 0) {
+		//rtx_dbug_out_char((CHAR)(last+48));
+		last = remain%10;
+		remain = remain/10;
+		rtx_dbug_out_char((CHAR)(last+48));            
+	}
+	rtx_dbug_outs((CHAR *) "\r\n");	
 	
 	// if the process is not returning, then we look for another one
 	if(current_running_process->returning == FALSE)
@@ -67,6 +90,8 @@ int release_processor_kuma_san()
 	
 		schedule_next_process();
 	}
+	
+	rtx_dbug_outs((CHAR *) "Kuma San Oyasumi ~ =3=/~\r\n");		
 	
 	//other wise just return to the calling process and continue
 	return RTX_SUCCESS;
@@ -138,7 +163,19 @@ void schedule_next_process()
 			// restore the PC
 			val = current_running_process->pc;
 			asm("move.l %0, %%a1" : : "r" (val));
-			rtx_dbug_outs((CHAR *)"rtx: How can you NOT do this to me ~ I am lonely <3 13!\r\n");
+			rtx_dbug_outs((CHAR *)"rtx: How can you NOT do this to me ~ I am lonely <3 3!\r\n");
+		
+			int last; //= tempEnd%10;
+			int remain = val;
+			//int i = 0; 
+			while (remain != 0) {
+				//rtx_dbug_out_char((CHAR)(last+48));
+				last = remain%10;
+				remain = remain/10;
+				rtx_dbug_out_char((CHAR)(last+48));            
+			}
+			rtx_dbug_outs((CHAR *) "\r\n");			
+			
 			asm("jmp (%a1)");
 		
 			// this is hopefully not run at all ;
@@ -148,6 +185,20 @@ void schedule_next_process()
 		}
 	}
 	rtx_dbug_outs((CHAR *)"rtx: after the scheduling loop the loop\r\n");
+}
+
+int get_process_ID() {
+	return current_running_process->id;
+}
+int process_exists(int process_id){
+	int i = 0;
+	extern struct PCB p [6];
+	for (i; i < 6; i++) {
+		if (p[i].id == process_id) {
+			return TRUE;
+		}
+	}
+	return FALSE;
 }
 
 //Copied to init.c
