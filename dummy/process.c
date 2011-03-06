@@ -89,7 +89,9 @@ void schedule_next_process()
 			ready_queue[i] = to_be_run->next;
 			to_be_run->next = 0;
 			to_be_run->returning = FALSE;
-/*
+			
+	rtx_dbug_outs((CHAR *)"rtx: found\r\n");
+	
 			// restore the register d7 ~ d0, a7 ~ a0
 			int val = 0;
 			val = pop(current_running_process);
@@ -108,10 +110,10 @@ void schedule_next_process()
 			asm("move.l %0, %%d1" : : "r" (val));
 			val = pop(current_running_process);
 			asm("move.l %0, %%d0" : : "r" (val));
-			val = pop(current_running_process);
-			asm("move.l %0, %%a7" : : "r" (val));
-			val = pop(current_running_process);
-			asm("move.l %0, %%a6" : : "r" (val));
+			//val = pop(current_running_process);
+			//asm("move.l %0, %%a7" : : "r" (val));
+		//	val = pop(current_running_process);
+		//	asm("move.l %0, %%a6" : : "r" (val));
 			val = pop(current_running_process);
 			asm("move.l %0, %%a5" : : "r" (val));
 			val = pop(current_running_process);
@@ -123,16 +125,16 @@ void schedule_next_process()
 			val = pop(current_running_process);
 			asm("move.l %0, %%a1" : : "r" (val));
 			val = pop(current_running_process);
-			asm("move.l %0, %%a0" : : "r" (val));*/
-		/*	// restore the PWS
-			val = current_running_process->psw;
-			asm("move.l %0, %%sr" : : "r" (val));
+			asm("move.l %0, %%a0" : : "r" (val));
+			// restore the PWS
+//			val = current_running_process->psw;
+//			asm("move.l %0, %%sr" : : "r" (val));
 			// restore the PC
-			val = current_running_process->pc;
-			asm("move.l %0, %%pc" : : "r" (val));
-			*/
-			// this is hopefully not run at all ;)
-			break;
+//			val = current_running_process->pc;
+//			asm("jmp %0" : : "r" (val));
+						
+			// this is hopefully not run at all ;
+			//break;
 		}
 	}
 	rtx_dbug_outs((CHAR *)"rtx: after the loop the loop\r\n");

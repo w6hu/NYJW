@@ -6,8 +6,8 @@
 
 //extern int NUM_PROCESS;
 
-UINT32* mailboxStart[NUM_PROCESS] = 0;
-UINT32* mailboxEnd[NUM_PROCESS] = 0;
+UINT32 *mailboxStart[NUM_PROCESS] = 0;
+UINT32 *mailboxEnd[NUM_PROCESS] = 0;
 
 // I'm assuming here process_ID is the receiver ID
 int send_message (int process_ID, void * MessageEnvelope) {

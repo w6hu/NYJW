@@ -94,7 +94,7 @@ void *initBlock(int num_blocks)
 	*temp_end = NULL;
 
 	//Mark end of memory blocks to be used in init
-	*mem_end = temp_end + 148/4;
+	mem_end = temp_end + 148/4;
 	
 	return &__end;
 }

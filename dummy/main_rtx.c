@@ -75,7 +75,7 @@ int main()
 		
 		int j = 0;
 		for (j; j < 16; j++) {
-			push(&(p[i]), 2);
+			push(&(p[i]), 1234);
 		}
 		
 		// initialize the process to the correct ready queue

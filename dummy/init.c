@@ -21,6 +21,15 @@ void put_to_ready(struct PCB* p)
 	// get the corresponding ready queue from the pritority
 	temp = ready_queue[priority];
 	
+	if(temp == NULL)
+	{
+		rtx_dbug_outs((CHAR *)"rtx: bearking the first time ... yameda~\r\n");
+		ready_queue[priority] = p;
+		p->next = NULL;
+		
+		return;
+	}
+	
 	while(temp != NULL && temp->next != NULL)
 	{
 
