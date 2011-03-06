@@ -202,10 +202,13 @@ void schedule_next_process()
 	rtx_dbug_outs((CHAR *)"rtx: after the scheduling loop the loop\r\n");
 }
 
-int get_process_ID() {
+int get_process_ID() 
+{
 	return current_running_process->id;
 }
-int process_exists(int process_id){
+
+int process_exists(int process_id)
+{
 	int i = 0;
 	extern struct PCB p [6];
 	for (i; i < 6; i++) {
@@ -213,6 +216,20 @@ int process_exists(int process_id){
 			return TRUE;
 		}
 	}
+	return FALSE;
+}
+
+int is_waiting_for(int process_ID, int sender_ID)
+{
+	// sanity check
+	if(process_exists(process_ID) && process_exists(sender_ID))
+	{
+		if(current_running_process->id == sender_ID)
+		{
+			return (current_running_process->waiting_on == process_ID);
+		}
+	}
+	
 	return FALSE;
 }
 

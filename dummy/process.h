@@ -13,5 +13,6 @@ void schedule_next_process_BACK();
 
 int get_process_ID();
 int process_exists(int process_id);
+int is_waiting_for(int process_ID, int sender_ID);
 
 #endif
