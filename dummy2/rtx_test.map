@@ -1,0 +1,124 @@
+
+Allocating common symbols
+Common symbol       size              file
+
+old_stack           0x4               /tmp/ccy319W1.o
+main_stack          0x1000            /tmp/ccy319W1.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+ram              0x10400000         0x00100000
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD /tmp/ccy319W1.o
+LOAD dbug.o
+LOAD rtx_test_dummy.o
+START GROUP
+LOAD /usr/local/coldfire/lib/gcc/m68k-elf/3.4.6/m5307/libgcc.a
+END GROUP
+                0x00000000                __DYNAMIC = 0x0
+                0x00000000                PROVIDE (hardware_init_hook, 0x0)
+                0x00000000                PROVIDE (_hardware_init_hook, 0x0)
+                0x00000000                PROVIDE (software_init_hook, 0x0)
+                0x00000000                PROVIDE (_software_init_hook, 0x0)
+
+.text           0x10400000      0x20d
+ *(.text)
+ .text          0x10400000       0x1e /tmp/ccy319W1.o
+ *fill*         0x1040001e        0x2 00
+ .text          0x10400020       0x5e dbug.o
+                0x10400040                rtx_dbug_outs
+                0x10400020                rtx_dbug_out_char
+ *fill*         0x1040007e        0x2 00
+ .text          0x10400080       0xcc rtx_test_dummy.o
+                0x10400080                test1
+                0x10400116                test6
+                0x104000da                test4
+                0x10400134                main
+                0x1040009e                test2
+                0x104000f8                test5
+                0x104000bc                test3
+                0x1040014c                . = ALIGN (0x4)
+                0x1040014c                __CTOR_LIST__ = .
+                0x1040014c        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
+ *(.ctors)
+                0x10400150        0x4 LONG 0x0
+                0x10400154                __CTOR_END__ = .
+                0x10400154                __DTOR_LIST__ = .
+                0x10400154        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
+ *(.dtors)
+                0x10400158        0x4 LONG 0x0
+                0x1040015c                __DTOR_END__ = .
+ *(.rodata*)
+ .rodata        0x1040015c       0xa1 rtx_test_dummy.o
+ *(.gcc_except_table)
+                0x104001fd                __INIT_SECTION__ = .
+                0x104001fd        0x4 LONG 0x4e560000
+ *(.init)
+                0x10400201        0x2 SHORT 0x4e5e
+                0x10400203        0x2 SHORT 0x4e75
+                0x10400205                __FINI_SECTION__ = .
+                0x10400205        0x4 LONG 0x4e560000
+ *(.fini)
+                0x10400209        0x2 SHORT 0x4e5e
+                0x1040020b        0x2 SHORT 0x4e75
+                0x1040020d                _etext = .
+ *(.lit)
+
+.data           0x10400210        0x0
+ *(.shdata)
+ *(.data)
+ .data          0x10400210        0x0 /tmp/ccy319W1.o
+ .data          0x10400210        0x0 dbug.o
+ .data          0x10400210        0x0 rtx_test_dummy.o
+                0x10400210                _edata = .
+
+.bss            0x10400210     0x1010
+                0x10400210                __bss_start = .
+ *(.shbss)
+ *(.bss)
+ .bss           0x10400210        0x0 /tmp/ccy319W1.o
+ .bss           0x10400210        0x0 dbug.o
+ .bss           0x10400210        0x0 rtx_test_dummy.o
+ *(COMMON)
+ COMMON         0x10400210     0x1010 /tmp/ccy319W1.o
+                0x10400210                old_stack
+                0x10400220                main_stack
+                0x10401220                _end = ALIGN (0x8)
+                0x10401220                __end = _end
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+__REGISTER_RTX__
+                0x10300000        0x0
+                0x10300000                __REGISTER_RTX_ENTRY__ = <code 342> (.)
+ *(__REGISTER_RTX__)
+                0x10380000                __REGISTER_TEST_PROCS_ENTRY__ = 0x10380000
+
+__REGISTER_TEST_PROCS__
+                0x10380000       0xbc
+                0x10380000                __REGISTER_TEST_PROCS_ENTRY__ = <code 342> (.)
+ *(__REGISTER_TEST_PROCS__)
+ __REGISTER_TEST_PROCS__
+                0x10380000       0xbc rtx_test_dummy.o
+                0x10380000                register_test_proc
+
+__RTX_TEST_DATA__
+                0x10500000       0x5c
+ *(__RTX_TEST_DATA__)
+ __RTX_TEST_DATA__
+                0x10500000       0x5c rtx_test_dummy.o
+                0x10500020                g_test_proc
+                0x10500000                g_test_fixture
+OUTPUT(rtx_test_dummy.bin elf32-m68k)
+
+.comment        0x00000000       0x24
+ .comment       0x00000000       0x12 dbug.o
+ .comment       0x00000012       0x12 rtx_test_dummy.o
