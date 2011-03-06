@@ -10,6 +10,6 @@
 UINT32* mem_end; 
  
 /* Prototypes */
-void* s_request_memory_block(); 
-int s_release_memory_block( void* memory_block );
+void* s_request_memory_block_yishi(); 
+int s_release_memory_block_yishi( void* memory_block );
 void *initBlock(int num_blocks);
