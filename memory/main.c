@@ -29,10 +29,37 @@ int main( VOID )
 	
 	free_blocks = initBlock(NUM_MEM_BLKS);
 	
-	void* msg1 = s_request_memory_block();
-	int result = send_message(2, msg1);
-	rtx_dbug_out_char(result + 48);
+	init_mailboxes();
 	
+	void* msg1 = s_request_memory_block();
+	void* msg2 = s_request_memory_block();
+	
+	rtx_dbug_outs("send message");
+	
+	*((UINT32 *)msg1 + 10) = 2;
+	*((UINT32 *)msg1 + 11) = 3;
+	*((UINT32 *)msg2 + 10) = 4;
+	*((UINT32 *)msg2 + 11) = 5;
+	
+	int result = send_message(2, msg1);
+	int result2 = send_message(3, msg2);
+	rtx_dbug_out_char(result + 48);
+	rtx_dbug_out_char('\r');
+	rtx_dbug_out_char('\n');
+	rtx_dbug_out_char(result2 + 48);
+	rtx_dbug_out_char('\r');
+	rtx_dbug_out_char('\n');
+	
+	rtx_dbug_outs("receive message");
+	
+	int val  = 1;
+	int *sender_id = &val; 
+	void* reMsg1 = receive_message(sender_id);
+	if (reMsg1 != NULL) {
+		rtx_dbug_outs("SUCCESS!!\r\n");
+		rtx_dbug_out_char(*((UINT32 *)msg1 + 10)+48);
+		rtx_dbug_out_char(*((UINT32 *)msg1 + 11)+48);
+	}
 	
     return 0;
 }

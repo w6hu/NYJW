@@ -28,8 +28,8 @@ void put_to_blocked(int waiting_on, struct PCB* p);
 void remove_from_ready(struct PCB* p);
 void remove_from_blocked(struct PCB* p);
 
-UINT32 pop (struct PCB* p);
-void push (struct PCB* p, UINT32 val);
+UINT32 pop ();
+void push (UINT32 val);
 
 void init (test_fixture_t g_test_fixture, test_proc_t g_test_proc[]);
 

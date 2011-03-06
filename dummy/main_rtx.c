@@ -65,7 +65,7 @@ int main()
 		rtx_dbug_outs((CHAR *)"rtx: Got PID\r\n");
 		p[i].state = STATE_READY;
 		p[i].priority = g_test_proc[i].priority;
-		p[i].psw = 0;   // assuming 0 is the nomal initial state ... eh ?
+		p[i].psw = 9984;   // assuming 9984 is the nomal initial state ... eh ?
 		rtx_dbug_outs((CHAR *)"rtx: Getting pc\r\n");
 		p[i].pc = g_test_proc[i].entry; //point pc to entry point of code
 		rtx_dbug_outs((CHAR *)"rtx: pc set\r\n");
@@ -75,7 +75,7 @@ int main()
 		
 		int j = 0;
 		for (j; j < 16; j++) {
-			push(&(p[i]), 1234);
+			push(&(p[i]), 0);
 		}
 		
 		// initialize the process to the correct ready queue
@@ -98,7 +98,7 @@ int main()
      * Instead, the scheduler picks the test process to run
      * and the os context switches to the chosen test process
      */
-    g_test_proc[0].entry(); /* DO NOT invoke test proc this way !!*/ 
+    //g_test_proc[0].entry(); /* DO NOT invoke test proc this way !!*/ 
 	
 	
 	

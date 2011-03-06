@@ -98,8 +98,6 @@ void remove_from_blocked(struct PCB* p) {
 	}
 }
 
-
-
 UINT32 pop (struct PCB* p) {
 	UINT32 temp = *(p->stack);
 	p->stack = p->stack - 1;
@@ -110,3 +108,15 @@ void push (struct PCB* p, UINT32 val) {
 	*(p->stack) = val;
 	p->stack = p->stack + 1;
 }
+
+/*
+UINT32 pop () {
+	UINT32 val;
+	asm("move.l %-(%a7), %0" : "=r" (val));
+	return val;
+}
+
+void push (UINT32 val) {
+	asm("move.l %0, %(%a7)+" : : "r" (val));
+}
+*/
