@@ -20,7 +20,20 @@ void test1()
     
     while (1) 
     {
+	
+		rtx_dbug_outs((CHAR *)"rtx_test: JESSIE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\r\n");
         /* execute a rtx primitive to test */
+	/*	asm("move.l %%a7, %0" : "=r" (val));
+		last; //= tempEnd%10;
+		remain = val;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+	rtx_dbug_outs((CHAR *) "\r\n");	*/
         g_test_fixture.release_processor();
     }
 }

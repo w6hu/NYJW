@@ -2,9 +2,9 @@
 Allocating common symbols
 Common symbol       size              file
 
-old_stack           0x4               /tmp/ccozAleg.o
+old_stack           0x4               /tmp/ccSz3cLU.o
 free_blocks         0x4               dbug.o
-main_stack          0x1000            /tmp/ccozAleg.o
+main_stack          0x1000            /tmp/ccSz3cLU.o
 
 Memory Configuration
 
@@ -14,7 +14,7 @@ ram              0x10400000         0x00100000
 
 Linker script and memory map
 
-LOAD /tmp/ccozAleg.o
+LOAD /tmp/ccSz3cLU.o
 LOAD dbug.o
 LOAD rtx_test_dummy.o
 START GROUP
@@ -26,71 +26,73 @@ END GROUP
                 0x00000000                PROVIDE (software_init_hook, 0x0)
                 0x00000000                PROVIDE (_software_init_hook, 0x0)
 
-.text           0x10400000      0x1fd
+.text           0x10400000      0x245
  *(.text)
- .text          0x10400000       0x1e /tmp/ccozAleg.o
+ .text          0x10400000       0x1e /tmp/ccSz3cLU.o
  *fill*         0x1040001e        0x2 00
  .text          0x10400020       0x5c dbug.o
                 0x10400040                rtx_dbug_outs
                 0x10400020                rtx_dbug_out_char
- .text          0x1040007c       0xc0 rtx_test_dummy.o
+ .text          0x1040007c       0xce rtx_test_dummy.o
                 0x1040007c                test1
-                0x10400108                test6
-                0x104000d0                test4
-                0x10400124                main
-                0x10400098                test2
-                0x104000ec                test5
-                0x104000b4                test3
-                0x1040013c                . = ALIGN (0x4)
-                0x1040013c                __CTOR_LIST__ = .
-                0x1040013c        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
+                0x10400116                test6
+                0x104000de                test4
+                0x10400132                main
+                0x104000a6                test2
+                0x104000fa                test5
+                0x104000c2                test3
+                0x1040014c                . = ALIGN (0x4)
+ *fill*         0x1040014a        0x2 00
+                0x1040014c                __CTOR_LIST__ = .
+                0x1040014c        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
  *(.ctors)
-                0x10400140        0x4 LONG 0x0
-                0x10400144                __CTOR_END__ = .
-                0x10400144                __DTOR_LIST__ = .
-                0x10400144        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
+                0x10400150        0x4 LONG 0x0
+                0x10400154                __CTOR_END__ = .
+                0x10400154                __DTOR_LIST__ = .
+                0x10400154        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
  *(.dtors)
-                0x10400148        0x4 LONG 0x0
-                0x1040014c                __DTOR_END__ = .
+                0x10400158        0x4 LONG 0x0
+                0x1040015c                __DTOR_END__ = .
  *(.rodata*)
- .rodata        0x1040014c       0xa1 rtx_test_dummy.o
+ .rodata        0x1040015c       0xd9 rtx_test_dummy.o
  *(.gcc_except_table)
-                0x104001ed                __INIT_SECTION__ = .
-                0x104001ed        0x4 LONG 0x4e560000
+                0x10400235                __INIT_SECTION__ = .
+                0x10400235        0x4 LONG 0x4e560000
  *(.init)
-                0x104001f1        0x2 SHORT 0x4e5e
-                0x104001f3        0x2 SHORT 0x4e75
-                0x104001f5                __FINI_SECTION__ = .
-                0x104001f5        0x4 LONG 0x4e560000
+                0x10400239        0x2 SHORT 0x4e5e
+                0x1040023b        0x2 SHORT 0x4e75
+                0x1040023d                __FINI_SECTION__ = .
+                0x1040023d        0x4 LONG 0x4e560000
  *(.fini)
-                0x104001f9        0x2 SHORT 0x4e5e
-                0x104001fb        0x2 SHORT 0x4e75
-                0x104001fd                _etext = .
+                0x10400241        0x2 SHORT 0x4e5e
+                0x10400243        0x2 SHORT 0x4e75
+                0x10400245                _etext = .
  *(.lit)
 
-.data           0x10400200        0x0
+.data           0x10400248        0x0
  *(.shdata)
  *(.data)
- .data          0x10400200        0x0 /tmp/ccozAleg.o
- .data          0x10400200        0x0 dbug.o
- .data          0x10400200        0x0 rtx_test_dummy.o
-                0x10400200                _edata = .
+ .data          0x10400248        0x0 /tmp/ccSz3cLU.o
+ .data          0x10400248        0x0 dbug.o
+ .data          0x10400248        0x0 rtx_test_dummy.o
+                0x10400248                _edata = .
 
-.bss            0x10400200     0x1014
-                0x10400200                __bss_start = .
+.bss            0x10400248     0x101c
+                0x10400248                __bss_start = .
  *(.shbss)
  *(.bss)
- .bss           0x10400200        0x0 /tmp/ccozAleg.o
- .bss           0x10400200        0x0 dbug.o
- .bss           0x10400200        0x0 rtx_test_dummy.o
+ .bss           0x10400248        0x0 /tmp/ccSz3cLU.o
+ .bss           0x10400248        0x0 dbug.o
+ .bss           0x10400248        0x0 rtx_test_dummy.o
  *(COMMON)
- COMMON         0x10400200     0x1010 /tmp/ccozAleg.o
-                0x10400200                old_stack
-                0x10400210                main_stack
- COMMON         0x10401210        0x4 dbug.o
-                0x10401210                free_blocks
-                0x10401218                _end = ALIGN (0x8)
-                0x10401218                __end = _end
+ *fill*         0x10400248        0x8 00
+ COMMON         0x10400250     0x1010 /tmp/ccSz3cLU.o
+                0x10400250                old_stack
+                0x10400260                main_stack
+ COMMON         0x10401260        0x4 dbug.o
+                0x10401260                free_blocks
+                0x10401268                _end = ALIGN (0x8)
+                0x10401268                __end = _end
 
 .stab
  *(.stab)
