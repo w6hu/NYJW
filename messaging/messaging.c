@@ -3,7 +3,8 @@
 #define SUCCESS 0
 #define FAILURE 1
 
-extern NUM_PROCESS;
+//extern int NUM_PROCESS;
+int NUM_PROCESS = 6;
 
 UINT32 *mailboxStart[NUM_PROCESS] = 0;
 UINT32 *mailboxEnd[NUM_PROCESS] = 0;
@@ -11,11 +12,11 @@ UINT32 *mailboxEnd[NUM_PROCESS] = 0;
 // I'm assuming here process_ID is the receiver ID
 int send_message (int process_ID, void * MessageEnvelope) {
 	// error check
-	if (!process_exists(process_ID)) {
+	if (process_exists(process_ID) == 0) {
 		return FAILURE;
 	}
 	
-	int id = get_process_ID - 1;
+	int id = get_process_ID() - 1;
 
 	// update mailbox
 	if (mailboxStart[id] = 0) {
@@ -81,5 +82,16 @@ void * receive_message (int * sender_ID) {
 	
 	// if the message is not there yet, put into blocked queue
 	put_to_block(sender_ID);
+}
+
+
+
+// some stubs
+int process_exists(process_ID) {
+return 1;
+}
+
+int get_process_ID() {
+return 1;
 }
 

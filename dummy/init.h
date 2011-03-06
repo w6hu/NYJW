@@ -1,7 +1,7 @@
 #ifndef _RTX_INIT_H_
 #define _RTX_INIT_H_
 
-#include "../memory/memory.h"
+#include "rtx_inc.h"
 
 struct queue {
 	UINT8 pid [6];
@@ -21,6 +21,7 @@ struct PCB {
 	int state;			
 	int priority;
 	int returning;
+	int waiting_on;
 };
 
 void put_to_ready(struct PCB* p);
@@ -31,6 +32,7 @@ void remove_from_blocked(struct PCB* p);
 UINT32 pop (struct PCB* p);
 void push (struct PCB* p, UINT32 val);
 
-void init (test_fixture_t g_test_fixture, test_proc_t g_test_proc[]);
+struct PCB* ready_queue[5];
+struct PCB* blocked_queue[6];
 
 #endif

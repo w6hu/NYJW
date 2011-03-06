@@ -2,9 +2,9 @@
 Allocating common symbols
 Common symbol       size              file
 
-old_stack           0x4               /tmp/ccwB3SLp.o
+old_stack           0x4               /tmp/cc3u3T9o.o
 free_blocks         0x4               dbug.o
-main_stack          0x1000            /tmp/ccwB3SLp.o
+main_stack          0x1000            /tmp/cc3u3T9o.o
 
 Memory Configuration
 
@@ -14,7 +14,7 @@ ram              0x10200000         0x00100000
 
 Linker script and memory map
 
-LOAD /tmp/ccwB3SLp.o
+LOAD /tmp/cc3u3T9o.o
 LOAD dbug.o
 LOAD rtx_loader.o
 START GROUP
@@ -28,7 +28,7 @@ END GROUP
 
 .text           0x10200000      0x1a8
  *(.text)
- .text          0x10200000       0x1e /tmp/ccwB3SLp.o
+ .text          0x10200000       0x1e /tmp/cc3u3T9o.o
  *fill*         0x1020001e        0x2 00
  .text          0x10200020       0x5c dbug.o
                 0x10200040                rtx_dbug_outs
@@ -65,7 +65,7 @@ END GROUP
 .data           0x102001a8        0x0
  *(.shdata)
  *(.data)
- .data          0x102001a8        0x0 /tmp/ccwB3SLp.o
+ .data          0x102001a8        0x0 /tmp/cc3u3T9o.o
  .data          0x102001a8        0x0 dbug.o
  .data          0x102001a8        0x0 rtx_loader.o
                 0x102001a8                _edata = .
@@ -74,12 +74,12 @@ END GROUP
                 0x102001a8                __bss_start = .
  *(.shbss)
  *(.bss)
- .bss           0x102001a8        0x0 /tmp/ccwB3SLp.o
+ .bss           0x102001a8        0x0 /tmp/cc3u3T9o.o
  .bss           0x102001a8        0x0 dbug.o
  .bss           0x102001a8        0x0 rtx_loader.o
  *(COMMON)
  *fill*         0x102001a8        0x8 00
- COMMON         0x102001b0     0x1010 /tmp/ccwB3SLp.o
+ COMMON         0x102001b0     0x1010 /tmp/cc3u3T9o.o
                 0x102001b0                old_stack
                 0x102001c0                main_stack
  COMMON         0x102011c0        0x4 dbug.o
@@ -102,7 +102,12 @@ __RTX_TEST_CODE__
  *(__RTX_TEST_CODE__)
 
 __RTX_TEST_DATA__
+                0x10500000       0x5c
  *(__RTX_TEST_DATA__)
+ __RTX_TEST_DATA__
+                0x10500000       0x5c rtx_loader.o
+                0x10500020                g_test_proc
+                0x10500000                g_test_fixture
 OUTPUT(rtx_loader.bin elf32-m68k)
 
 .comment        0x00000000       0x4e

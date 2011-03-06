@@ -1,18 +1,10 @@
 #include "init.h"
-#include "../dummy/dbug.h"
-
-extern test_fixture_t g_test_fixture;
-extern test_proc_t g_test_proc[NUM_TEST_PROCS];
+#include "dbug.h"
 
 UINT32 *free_blocks;
 UINT32 *used_blocks = NULL;
 
-
 extern UINT32* mem_end; 
-
-struct PCB* ready_queue[5];
-struct PCB* blocked_queue[6];
-struct PCB p [6] ;
 
 void put_to_ready(struct PCB* p)
 {
@@ -108,34 +100,4 @@ UINT32 pop (struct PCB* p) {
 void push (struct PCB* p, UINT32 val) {
 	*(p->stack) = val;
 	p->stack = p->stack + 1;
-}
-
-void init (test_fixture_t g_test_fixture, test_proc_t g_test_proc[]) {
-    rtx_dbug_outs((CHAR *)"rtx: Entering init()\r\n");
-	free_blocks = initBlock(NUM_MEM_BLKS);
-	rtx_dbug_outs((CHAR *)"rtx: Created Memory blocks\r\n");
-	/*
-	int i = 0;
-	UINT32* process_start = mem_end;
-
-	for (i; i < 6; i++) {
-		rtx_dbug_outs((CHAR *)"rtx: Infinite Loop\r\n");
-		p[i].next = NULL;
-		p[i].id = g_test_proc[i].pid;
-		rtx_dbug_outs((CHAR *)"rtx: Got PID\r\n");
-		p[i].state = STATE_READY;
-		p[i].priority = g_test_proc[i].priority;
-		p[i].psw = 0;   // assuming 0 is the nomal initial state ... eh ?
-		rtx_dbug_outs((CHAR *)"rtx: Getting pc\r\n");
-		p[i].pc = g_test_proc[i].entry; //point pc to entry point of code
-		rtx_dbug_outs((CHAR *)"rtx: pc set\r\n");
-		p[i].stack = process_start; // where exactly is the process stack ?
-		
-		// initialize the process to the correct ready queue
-		//put_to_ready(&(p[i]));
-
-		process_start = process_start + g_test_proc[i].sz_stack/4;
-	}*/
-
-	
 }

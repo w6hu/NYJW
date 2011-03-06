@@ -12,7 +12,7 @@
 #ifndef _RTX_H_
 #define _RTX_H_
 #include "rtx_inc.h"
-
+#include "rtx_test.h"
 
 /* Process Priority. The bigger the number is, the lower the priority is*/
 #define HIGH    0
@@ -20,6 +20,7 @@
 #define LOW     2
 #define LOWEST  3
 
+#define NUM_TEST_PROCS 6
 
 /* Primitives as specified in the project description*/
 /* Interprocess Communications*/
@@ -39,5 +40,8 @@ int delayed_send(int process_ID, void * MessageEnvelope, int delay);
 /*Process Priority*/
 int set_process_priority (int process_ID, int priority);
 int get_process_priority (int process_ID);
+
+test_fixture_t g_test_fixture;
+test_proc_t g_test_proc[6];
 
 #endif /* _RTX_H_ */

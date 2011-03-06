@@ -13,6 +13,7 @@
 #include "rtx.h"
 #include "rtx_test.h"
 #include "dbug.h"
+#include "../init/init.h"
 
 /* test proc initializaiton info. registration function provided by test suite.
  * test suite needs to register its test proc initilization info with rtx
@@ -42,7 +43,7 @@ int main()
      * and the os context switches to the chosen test process
      */
     g_test_proc[0].entry(); /* DO NOT invoke test proc this way !!*/
-     init( g_test_fixture,g_test_proc); 
+    init(g_test_fixture, g_test_proc); 
 
     return 0;
 }

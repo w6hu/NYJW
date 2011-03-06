@@ -1,13 +1,16 @@
 #include "process.h"
 
 // global variable to keep track of the current process that is running
-PCB* current_running_process = 0;
+struct PCB* current_running_process = 0;
+
+extern struct PCB* ready_queue[5];
+extern struct PCB* blocked_queue[6];
 
 // need to import the ready_queue here ~
 
-int release_processor()
+int release_processor_BACK()
 {
-	int value = 0;
+	int val = 0;
 	// save regiser a0 ~ a7, d0 ~ d7 // should I backup a7??
 	asm("move.l %%a0, %0" : "=r" (val));
 	push(current_running_process, val);
@@ -41,23 +44,23 @@ int release_processor()
 	push(current_running_process, val);
 	asm("move.l %%d7, %0" : "=r" (val));
 	push(current_running_process, val);
-	// save PSW
+	/*// save PSW
 	asm("move.w %%sr, %0" : "=r" (val));
 	current_running_process->psw = val;
 	// set the flag so that it would go to selecting next process
-	current_running_process->returning = false;
+	current_running_process->returning = FALSE;
 	// save PC //TODO how exactly do I load teh address ? need some testing to find out
 	asm("move.w %%pc, %0" : "=r" (val));
 	current_running_process->pc = val;
-	
+	*/
 	// if the process is not returning, then we look for another one
-	if(current_running_process->returning == false)
+	if(current_running_process->returning == FALSE)
 	{
 		if(current_running_process->state == STATE_READY)
-			put_to_ready(current_running_process->id);
+			put_to_ready(current_running_process);
 		else
-			put_to_blocked(current_running_process->id);
-
+			put_to_blocked(current_running_process->waiting_on, current_running_process);
+	
 		schedule_next_process();
 	}
 	
@@ -71,19 +74,22 @@ void schedule_next_process()
 	// look for the next process.
 	// if nothing is selected, the null 
 	// process is there at your service.
-	for(int i=0; i<5; i++)
+	int i=0;
+	rtx_dbug_outs((CHAR *)"rtx: before the loop\r\n");
+	for(i; i<5; i++)
 	{
-		if(ready_queue[i] != null)
+	rtx_dbug_outs((CHAR *)"looping\r\n");
+		if(ready_queue[i] != NULL)
 		{
 			// select the next process
-			PCB* to_be_run = ready_queue[i];
+			struct PCB* to_be_run = ready_queue[i];
 
 			// update ready_queue and PCB data thingy <3
 			current_running_process = to_be_run;
-			ready_queue[i] = to_be_run->next_process;
-			to_be_run->next_process = 0;
-			to_be_run->returning = true;
-
+			ready_queue[i] = to_be_run->next;
+			to_be_run->next = 0;
+			to_be_run->returning = FALSE;
+/*
 			// restore the register d7 ~ d0, a7 ~ a0
 			int val = 0;
 			val = pop(current_running_process);
@@ -117,18 +123,19 @@ void schedule_next_process()
 			val = pop(current_running_process);
 			asm("move.l %0, %%a1" : : "r" (val));
 			val = pop(current_running_process);
-			asm("move.l %0, %%a0" : : "r" (val));
-			// restore the PWS
+			asm("move.l %0, %%a0" : : "r" (val));*/
+		/*	// restore the PWS
 			val = current_running_process->psw;
 			asm("move.l %0, %%sr" : : "r" (val));
 			// restore the PC
 			val = current_running_process->pc;
 			asm("move.l %0, %%pc" : : "r" (val));
-			
+			*/
 			// this is hopefully not run at all ;)
 			break;
 		}
 	}
+	rtx_dbug_outs((CHAR *)"rtx: after the loop the loop\r\n");
 }
 
 //Copied to init.c

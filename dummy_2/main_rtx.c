@@ -13,9 +13,10 @@
 #include "rtx.h"
 #include "rtx_test.h"
 #include "dbug.h"
-#include "memory.h"
-#include "init.h"
-#include "process.h"
+#include "../init/init.h"
+
+extern test_fixture_t g_test_fixture;
+extern test_proc_t g_test_proc[6];
 
 /* test proc initializaiton info. registration function provided by test suite.
  * test suite needs to register its test proc initilization info with rtx
@@ -23,8 +24,6 @@
  */
 
 extern void __REGISTER_TEST_PROCS_ENTRY__();
-extern UINT32* mem_end;
-struct PCB p [6];
 
 /* gcc expects this function to exist */
 int __main( void )
@@ -35,62 +34,11 @@ int __main( void )
 int main() 
 {
 
-    rtx_dbug_outs((CHAR *)"rtx: Entering main()\r\n");
+    rtx_dbug_outs((CHAR *)"rtx: Entering main()2 main_rtx.c\r\n");
 
     /* get the third party test proc initialization info */
     __REGISTER_TEST_PROCS_ENTRY__();
 	__REGISTER_RTX__();
-	
-
-	
-	rtx_dbug_outs((CHAR *)"rtx: Exit Init\r\n");
-	
-	rtx_dbug_outs((CHAR *)"rtx: Entering init()\r\n");
-	free_blocks = initBlock(NUM_MEM_BLKS);
-	rtx_dbug_outs((CHAR *)"rtx: Created Memory blocks\r\n");
-	
-	int i = 0;
-	UINT32* process_start = mem_end;
-	
-	for(i; i<5; i++)
-	{
-		ready_queue[i] = NULL;
-	}
-	
-	i = 0;
-	for (i; i < 6; i++) {
-		rtx_dbug_outs((CHAR *)"rtx: Infinite Loop\r\n");
-		p[i].next = NULL;
-		p[i].id = g_test_proc[i].pid;
-		rtx_dbug_outs((CHAR *)"rtx: Got PID\r\n");
-		p[i].state = STATE_READY;
-		p[i].priority = g_test_proc[i].priority;
-		p[i].psw = 0;   // assuming 0 is the nomal initial state ... eh ?
-		rtx_dbug_outs((CHAR *)"rtx: Getting pc\r\n");
-		p[i].pc = g_test_proc[i].entry; //point pc to entry point of code
-		rtx_dbug_outs((CHAR *)"rtx: pc set\r\n");
-		p[i].stack = process_start; // where exactly is the process stack ?
-		p[i].returning = FALSE;
-		p[i].waiting_on = -1;
-		
-		int j = 0;
-		for (j; j < 16; j++) {
-			push(&(p[i]), 2);
-		}
-		
-		// initialize the process to the correct ready queue
-		put_to_ready(&(p[i]));
-
-		process_start = process_start + g_test_proc[i].sz_stack/4;
-	}
-	
-	//call the scheduler to start a process
-	schedule_next_process();
-	
-	
-	//  if (g_test_proc[0].entry == NULL) {
-	//  rtx_dbug_outs((CHAR *)"rtx: Null\r\n");
-	// }
 
     /* The following  is just to demonstrate how to reference 
      * the third party test process entry point inside rtx.
@@ -98,10 +46,27 @@ int main()
      * Instead, the scheduler picks the test process to run
      * and the os context switches to the chosen test process
      */
+	 //init();
+	  rtx_dbug_outs((CHAR *)"rtx: Exit Init\r\n");
+	  if (g_test_proc[0].entry == NULL) {
+	  
+		/*int temp_end = &(g_test_proc[0].entry);
+		int last; //= tempEnd%10;
+		int remain = temp_end;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+		rtx_dbug_outs((CHAR *) "\r\n");*/
+		
+		rtx_dbug_outs((CHAR *)"rtx: Null\r\n");
+	  }
+	  
     g_test_proc[0].entry(); /* DO NOT invoke test proc this way !!*/ 
-	
-	
-	
+
     return 0;
 }
 
