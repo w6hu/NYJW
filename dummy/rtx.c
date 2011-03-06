@@ -12,7 +12,11 @@
 #include "rtx_inc.h"
 #include "rtx.h"
 #include "dbug.h"
+//#include "../memory/memory.c"
+//#include "../init/init.c"
 
+extern test_fixture_t __attribute__ ((section("__RTX_TEST_DATA__"))) g_test_fixture;
+extern test_proc_t __attribute__ ((section("__RTX_TEST_DATA__"))) g_test_proc[6];
 
 /* Interprocess Communications*/
 int send_message (int process_ID, void * MessageEnvelope)
@@ -30,13 +34,15 @@ void * receive_message(int * sender_ID)
 void * request_memory_block() 
 {
     rtx_dbug_outs((CHAR *)"rtx: request_memory_block \r\n");
-    return NULL;
+    //return NULL;
+	return s_request_memory_block();
 }
 
 int release_memory_block(void * MemoryBlock)
 {
     rtx_dbug_outs((CHAR *)"rtx: release_memory_block \r\n");
-    return 0;
+   // return 0;
+   return s_release_memory_block( MemoryBlock);
 }
 
 /*Process Management*/

@@ -21,9 +21,6 @@
 #define LOW     2
 #define LOWEST  3
 
-#define NUM_TEST_PROCS 6
-
-
 /* global data structure for test fixture */
 typedef struct test_fixture
 {
@@ -50,8 +47,7 @@ typedef struct test_proc
    in section __RTX_TEST_DATA__, see linker script
  */
 
-test_fixture_t __attribute__ ((section("__RTX_TEST_DATA__"))) g_test_fixture;
-
-test_proc_t __attribute__ ((section("__RTX_TEST_DATA__"))) g_test_proc[NUM_TEST_PROCS];
+//test_fixture_t g_test_fixture;
+//test_proc_t g_test_proc[NUM_TEST_PROCS];
 
 #endif /* _RTX_TEST_H_ */

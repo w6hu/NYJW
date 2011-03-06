@@ -1,3 +1,44 @@
-The Lovely Wan and the Pretty Jessie.
-Ishy visted, this is now his !!
-reclaimed by Wan.
+*List of files
+merge.py:           The python script to merge two .s19 files
+mlight.s19:         The merged rtx_loader.s19 and rtx_test_light.s19 file. 
+                    Timer1 interrupt is not enabled
+rtx_loader.s19:     The rtx loader .s19 file
+rtx_test_light.s19: The light weight testing process .s19 file. 
+                    Two testing cases are included. 
+                    The timer1 interrupt is disabled.
+README:             This file
+rtx_test_light.lst: the disassembled light weight test processes code
+
+*How to merge mlight.s19 with your RTX?
+
+1. compile your RTX and generate rtx.s19 file
+2. merge your rtx.s19 file with mlight.s19 file and name it, say Gid_rtx.s19
+
+*How to run the merged file (i.e. Gid_rtx.s19)?
+
+1. download Gid_rtx.s19 to the board
+2. type "go 10200000"
+
+*Sample output:
+
+janusROM> go 10200000
+Transfering Control to 0x10200000
+rtx_loader: calling __REGISTER_TEST_PROCS_ENTRY__()...
+rtx_loader: calling __REGISTER_RTX_ENTRY__()...
+rtx_loader: calling __RTX_ENTRY__()...
+RTXEVAL: Test1 sending REQ #0x64
+RTXEVAL: Test2 received message #0x64 from PID 0x1
+RTXEVAL: Test2 sent message #0x64 to PID 0x3
+RTXEVAL: Test3 received message #0x64 from PID 0x2
+RTXEVAL: Test3 sent message #0x78 to PID 0x2
+RTXEVAL: Test2 received message #0x78 from PID 0x3
+RTXEVAL: Test1 Received result #0x78 from PID 0x2, PASS
+RTXEVAL: Test1 sending REQ #0x65
+RTXEVAL: Test2 received message #0x65 from PID 0x1
+RTXEVAL: Test2 sent message #0x65 to PID 0x6
+RTXEVAL: Test6 received message #0x65 from PID 0x2
+RTXEVAL: Test6 sent message #0x79 to PID 0x2
+RTXEVAL: Test2 received message #0x79 from PID 0x6
+RTXEVAL: Test1 Received result #0x79 from PID 0x2, PASS
+RTXEVAL: Final Evaluation Result is 0x3
+

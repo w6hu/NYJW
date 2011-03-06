@@ -10,8 +10,12 @@
  * @brief:  rtx test suite 
  */
 
+#include "rtx.h"
 #include "rtx_test.h"
 #include "dbug.h"
+
+extern test_fixture_t g_test_fixture;
+extern test_proc_t g_test_proc[6];
 
 /* third party dummy test process 1 */ 
 void test1()
@@ -20,6 +24,9 @@ void test1()
     
     while (1) 
     {
+		  rtx_dbug_outs((CHAR *)"rtx_test: test1a\r\n");
+		  
+		g_test_fixture.request_memory_block();
         /* execute a rtx primitive to test */
         g_test_fixture.release_processor();
     }
@@ -95,6 +102,22 @@ void __attribute__ ((section ("__REGISTER_TEST_PROCS__")))register_test_proc()
     g_test_proc[3].entry = test4;
     g_test_proc[4].entry = test5;
     g_test_proc[5].entry = test6;
+	
+	if (g_test_proc[0].entry == NULL) {
+		rtx_dbug_outs((CHAR *)"rtx: Null!!\r\n");
+	  } else {rtx_dbug_outs((CHAR *)"rtx: Not Null!!\r\n");}
+	  
+	  int temp_end = &(g_test_proc[0].entry);
+		int last; //= tempEnd%10;
+		int remain = temp_end;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+		rtx_dbug_outs((CHAR *) "\r\n");
 }
 
 /**

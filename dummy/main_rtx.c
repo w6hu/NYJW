@@ -13,6 +13,10 @@
 #include "rtx.h"
 #include "rtx_test.h"
 #include "dbug.h"
+#include "../init/init.h"
+
+extern test_fixture_t g_test_fixture;
+extern test_proc_t g_test_proc[6];
 
 /* test proc initializaiton info. registration function provided by test suite.
  * test suite needs to register its test proc initilization info with rtx
@@ -30,10 +34,11 @@ int __main( void )
 int main() 
 {
 
-    rtx_dbug_outs((CHAR *)"rtx: Entering main()\r\n");
+    rtx_dbug_outs((CHAR *)"rtx: Entering main()2 main_rtx.c\r\n");
 
     /* get the third party test proc initialization info */
     __REGISTER_TEST_PROCS_ENTRY__();
+	__REGISTER_RTX__();
 
     /* The following  is just to demonstrate how to reference 
      * the third party test process entry point inside rtx.
@@ -41,6 +46,25 @@ int main()
      * Instead, the scheduler picks the test process to run
      * and the os context switches to the chosen test process
      */
+	 //init();
+	  rtx_dbug_outs((CHAR *)"rtx: Exit Init\r\n");
+	  if (g_test_proc[0].entry == NULL) {
+	  
+		int temp_end = &(g_test_proc[0].entry);
+		int last; //= tempEnd%10;
+		int remain = temp_end;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+		rtx_dbug_outs((CHAR *) "\r\n");
+		
+		rtx_dbug_outs((CHAR *)"rtx: Null\r\n");
+	  }
+	  
     g_test_proc[0].entry(); /* DO NOT invoke test proc this way !!*/ 
 
     return 0;

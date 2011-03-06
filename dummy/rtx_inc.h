@@ -115,4 +115,16 @@
 #define RTX_SUCCESS 0
 #define RTX_ERROR   -1
 
+/*
+ * PSB state Enum
+ */
+#define STATE_READY 0
+#define STATE_BLOCKED 1
+
+//define number of memory blocks
+#define NUM_MEM_BLKS 32
+UINT32 *free_blocks;
+
 #endif
+
+
