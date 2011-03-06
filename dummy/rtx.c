@@ -64,5 +64,5 @@ int set_process_priority (int process_ID, int priority)
 int get_process_priority (int process_ID)
 {
     rtx_dbug_outs((CHAR *)"rtx: get_process_priority \r\n");
-    return 0;
+    return get_process_priority_usagi_san(process_ID);
 }

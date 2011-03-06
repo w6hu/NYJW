@@ -2,6 +2,7 @@
 
 // global variable to keep track of the current process that is running
 struct PCB* current_running_process = 0;
+struct PCB* imma_epeen_process = 0;
 
 extern struct PCB* ready_queue[5];
 extern struct PCB* blocked_queue[6];
@@ -219,6 +220,15 @@ int get_process_ID()
 	return current_running_process->id;
 }
 
+int get_process_priority_usagi_san(int process_id)
+{
+	struct PCB* to_be_accessed = get_process_from_ID(process_id);
+	if(to_be_accessed != NULL)
+	{
+		return to_be_accessed->priority;
+	}
+}
+
 int process_exists(int process_id)
 {
 	int i = 0;
@@ -251,6 +261,15 @@ void set_process_state(int process_id, int process_state)
 	if(to_be_modified != NULL)
 	{
 		to_be_modified->state = process_state;
+	}
+}
+
+void set_process_to_run(int process_id)
+{
+	struct PCB* to_be_run = get_process_from_ID(process_id);
+	if(to_be_run != NULL)
+	{
+		imma_epeen_process = to_be_run;
 	}
 }
 
