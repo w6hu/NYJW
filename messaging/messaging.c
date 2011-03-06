@@ -30,7 +30,7 @@ int send_message (int process_ID, void * MessageEnvelope) {
 	}
 
 	// update process states
-	int sender_ID = id;
+	/*int sender_ID = id;
 	//int sender_ID = *((int *)MessageEnvelop + 2);
 	if (is_waiting_for(process_ID, sender_ID)) {
 		put_to_ready(process_ID);
@@ -38,7 +38,7 @@ int send_message (int process_ID, void * MessageEnvelope) {
 			preempt(sender_ID);
 			start_to_run(process_ID);
 		}
-	}
+	}*/
 	return SUCCESS;	
 }
 
