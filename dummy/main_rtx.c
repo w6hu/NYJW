@@ -26,6 +26,7 @@
 extern void __REGISTER_TEST_PROCS_ENTRY__();
 extern UINT32* mem_end;
 struct PCB p [6];
+struct PCB null_p;
 
 /* gcc expects this function to exist */
 int __main( void )
@@ -41,9 +42,7 @@ int main()
     /* get the third party test proc initialization info */
     __REGISTER_TEST_PROCS_ENTRY__();
 	__REGISTER_RTX__();
-	
 
-	
 	rtx_dbug_outs((CHAR *)"rtx: Exit Init\r\n");
 	
 	rtx_dbug_outs((CHAR *)"rtx: Entering init()\r\n");
@@ -77,21 +76,44 @@ int main()
 		rtx_dbug_outs((CHAR *)"rtx: Getting pc\r\n");
 		p[i].pc = g_test_proc[i].entry; //point pc to entry point of code
 		rtx_dbug_outs((CHAR *)"rtx: pc set\r\n");
+		process_start = process_start + g_test_proc[i].sz_stack/4;
 		p[i].stack = process_start; // where exactly is the process stack ?
 		p[i].returning = FALSE;
 		p[i].waiting_on = -1;
 		
-		int j = 0;
-		for (j; j < 16; j++) {
-			push(&(p[i]), 0);
-		}
-		
+		int val = p[i].stack;
+		asm("move.l %0, %%a7" : : "r" (val));
+		asm("move.l #0, -(%a7)");
+		asm("move.l #0, -(%a7)");
+		asm("move.l #0, -(%a7)");
+		asm("move.l #0, -(%a7)");
+		asm("move.l #0, -(%a7)");
+		asm("move.l #0, -(%a7)");
+		asm("move.l #0, -(%a7)");
+		asm("move.l #0, -(%a7)");
+		asm("move.l #0, -(%a7)");
+		asm("move.l #0, -(%a7)");
+		asm("move.l #0, -(%a7)");
+		asm("move.l #0, -(%a7)");
+		asm("move.l #0, -(%a7)");
+		asm("move.l #0, -(%a7)");
+		asm("move.l #0, -(%a7)");
+		asm("move.l %%a7, %0" : "=r" (val));
+		p[i].stack = val;
+						
 		// initialize the process to the correct ready queue
 		put_to_ready(&(p[i]));
 
-		process_start = process_start + g_test_proc[i].sz_stack/4;
+		
 	}
+<<<<<<< HEAD
 	
+	// initialize the null process
+	init_null_process(&null_p, process_start);
+	
+=======
+	process_start = process_start + 2048/4;
+>>>>>>> 6afe78393d581ad86210c2b657d022daf0d18119
 	//call the scheduler to start a process
 	schedule_next_process();
 	

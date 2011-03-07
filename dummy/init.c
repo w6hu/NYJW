@@ -139,29 +139,75 @@ void push (struct PCB* p, UINT32 val) {
 	p->stack = p->stack + 1;
 }
 
-/*
+
 //only used for init when the val for a7 is not known, DO NOT USE ANYWHERE ELSE
 void push_down_first_night (struct PCB* p, UINT32 val) {
 	val = p->stack;
 	asm("move.l %0, %%a7" : : "r" (val));
+	asm("move.l %d0, %a7");
+	
 	int i = 0;
 	val = 0;
 	for (i; i < 16; i++) {
-		push(val);
+		push_test(val);
 	}
 	asm("move.l %%a7, %0" : "=r" (val));
 	p->stack = val;
 }
 
-UINT32 pop () {
+UINT32 pop_test () {
 	UINT32 val;
 	asm("move.l -(%%a7), %0" : "=r" (val));
 	//asm("move.l %%a7, %0" : "=r" (val));
 	return val;
 }
 
-void push (UINT32 val) {
-	asm("move.l %0, %%d0" : : "r" (val));
-	asm("move.l %d0, (%a7)+");
+void push_test (UINT32 val) {
+	asm("move.l %a7, %d0");
+	rtx_dbug_outs((CHAR *)"rtx: almost there \r\n");
+	asm("move.l %d0, %0" : "=r" (val));
+	int last; //= tempEnd%10;
+	int remain = val;
+	//int i = 0; 
+	while (remain != 0) {
+		//rtx_dbug_out_char((CHAR)(last+48));
+		last = remain%10;
+		remain = remain/10;
+		rtx_dbug_out_char((CHAR)(last+48));            
+	}
+	rtx_dbug_outs((CHAR *) "\r\n");		
+	rtx_dbug_outs((CHAR *)"rtx: push test start\r\n");
+	asm("move.l #0, %d0");
+	asm("move.l %d0, (%a7)");
+	rtx_dbug_outs((CHAR *)"rtx: pushing~~ \r\n");
+	asm("move.l %a7, %d0");
+	rtx_dbug_outs((CHAR *)"rtx: almost there \r\n");
+	asm("move.l %d0, %0" : "=r" (val));
+	last; //= tempEnd%10;
+	remain = val;
+	//int i = 0; 
+	while (remain != 0) {
+		//rtx_dbug_out_char((CHAR)(last+48));
+		last = remain%10;
+		remain = remain/10;
+		rtx_dbug_out_char((CHAR)(last+48));            
+	}
+	rtx_dbug_outs((CHAR *) "\r\n");		
+	
+	asm("add.l #8, %d0");
+	asm("move.l %d0, %0" : "=r" (val));
+	last; //= tempEnd%10;
+	remain = val;
+	//int i = 0; 
+	while (remain != 0) {
+		//rtx_dbug_out_char((CHAR)(last+48));
+		last = remain%10;
+		remain = remain/10;
+		rtx_dbug_out_char((CHAR)(last+48));            
+	}
+	rtx_dbug_outs((CHAR *) "\r\n");		
+	
+	rtx_dbug_outs((CHAR *)"rtx: a little bit more \r\n");
+	asm("move.l %d0, %a7");
+	rtx_dbug_outs((CHAR *)"rtx: push test end\r\n");
 }
-*/

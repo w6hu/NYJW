@@ -7,14 +7,49 @@ struct PCB* imma_epeen_process = 0;
 extern struct PCB* ready_queue[5];
 extern struct PCB* blocked_queue[6];
 
-// need to import the ready_queue here ~
+void null_process()
+{
+    while (1) 
+    {
+	    rtx_dbug_outs((CHAR *)"Hey APLLE! Hey Apple! Hey Apple !\r\n");
+        /* execute a rtx primitive to test */
+        release_processor_kuma_san();
+    }
+}
+
+void init_null_process( struct PCB* null_process, UINT32* process_start)
+{
+/*
+	VOID   (*entry)();
+	entry = null_process;
+	
+	rtx_dbug_outs((CHAR *)"rtx: Initializing the null process\r\n");
+	null_process->next = NULL;
+	null_process->id = -2;
+	null_process->state = STATE_READY;
+	null_process->priority = 0;
+	null_process->psw = 9984;   // assuming 9984 is the nomal initial state ... eh ?
+	null_process->pc = entry; //point pc to entry point of code
+	null_process->stack = process_start; // where exactly is the process stack ?
+	null_process->returning = FALSE;
+	null_process->waiting_on = -1;
+		
+	int j = 0;
+	for (j; j < 14; j++) {
+		push(null_process, 0);
+	}
+		
+	// initialize the process to the correct ready queue
+	put_to_ready(null_process);
+	*/
+}
 
 int release_processor_kuma_san()
 {
 	rtx_dbug_outs((CHAR *)"rtx: Kuma san Ohaiyou !!\r\n");
-	int val = 0;
+	//int val = 0;
 	// save regiser a0 ~ a7, d0 ~ d7 // should I backup a7??
-	asm("move.l %%a0, %0" : "=r" (val));
+	/*asm("move.l %%a0, %0" : "=r" (val));
 	push(current_running_process, val);
 	asm("move.l %%a1, %0" : "=r" (val));
 	push(current_running_process, val);
@@ -43,7 +78,26 @@ int release_processor_kuma_san()
 	asm("move.l %%d6, %0" : "=r" (val));
 	push(current_running_process, val);
 	asm("move.l %%d7, %0" : "=r" (val));
-	push(current_running_process, val);
+	push(current_running_process, val);*/
+	
+	int val = current_running_process->stack;
+	asm("move.l %0, %%a7" : : "r" (val));
+	asm("move.l %a0, -(%a7)");
+	asm("move.l %a1, -(%a7)");
+	asm("move.l %a2, -(%a7)");
+	asm("move.l %a3, -(%a7)");
+	asm("move.l %a4, -(%a7)");
+	asm("move.l %a5, -(%a7)");
+	asm("move.l %d0, -(%a7)");
+	asm("move.l %d1, -(%a7)");
+	asm("move.l %d2, -(%a7)");
+	asm("move.l %d3, -(%a7)");
+	asm("move.l %d4, -(%a7)");
+	asm("move.l %d5, -(%a7)");
+	asm("move.l %d6, -(%a7)");
+	asm("move.l %d7, -(%a7)");
+	asm("move.l %%a7, %0" : "=r" (val));
+	current_running_process->stack = val;
 
 	rtx_dbug_outs((CHAR *)"rtx: Kuma san Konbanha ! !!\r\n");
 	
@@ -59,12 +113,12 @@ int release_processor_kuma_san()
 	// set the flag so that it would go to selecting next process
 	current_running_process->returning = FALSE;
 	
-	// save PC //TODO how exactly do I load the address ? need some testing to find out
+	// save PC
 	asm("lea 8(%pc), %a0");
 	asm("move.l %%a0, %0" : "=r" (val));
 	current_running_process->pc = val;
 	
-	int last; //= tempEnd%10;
+	int last;
 	int remain = val;
 	//int i = 0; 
 	while (remain != 0) {
@@ -90,6 +144,7 @@ int release_processor_kuma_san()
 	// if the process is not returning, then we look for another one
 	if(current_running_process->returning == FALSE)
 	{
+		rtx_dbug_outs((CHAR *)"rtx: Kuma san kowareta~~~ \r\n");
 		if(current_running_process->state == STATE_READY)
 			put_to_ready(current_running_process);
 		else
@@ -126,15 +181,16 @@ void schedule_next_process()
 			current_running_process = to_be_run;
 			ready_queue[i] = to_be_run->next;
 			to_be_run->next = 0;
-			to_be_run->returning = FALSE;
+			to_be_run->returning = TRUE;
 			rtx_dbug_outs((CHAR *)"rtx: One side of the rainbow ~!\r\n");	
 			
 			// get the a7 value before we start popping, as pop would use a7 to do its bidding 
-			int val = 0;
+			//int val = 0;
 			//val = current_running_process->stack;
 			//asm("move.l %0, %%a7" : : "r" (val));
 			
 			// restore the register d7 ~ d0, a7 ~ a0
+			/*
 			val = pop(current_running_process);
 			asm("move.l %0, %%d7" : : "r" (val));
 			val = pop(current_running_process);
@@ -168,7 +224,26 @@ void schedule_next_process()
 			val = pop(current_running_process);
 			asm("move.l %0, %%a1" : : "r" (val));
 			val = pop(current_running_process);
-			asm("move.l %0, %%a0" : : "r" (val));
+			asm("move.l %0, %%a0" : : "r" (val));*/
+			
+			int val = current_running_process->stack;
+			asm("move.l %0, %%a7" : : "r" (val));
+			asm("move.l (%a7)+, %d7");
+			asm("move.l (%a7)+, %d6");
+			asm("move.l (%a7)+, %d5");
+			asm("move.l (%a7)+, %d4");
+			asm("move.l (%a7)+, %d3");
+			asm("move.l (%a7)+, %d2");
+			asm("move.l (%a7)+, %d1");
+			asm("move.l (%a7)+, %d0");
+			asm("move.l (%a7)+, %a5");
+			asm("move.l (%a7)+, %a4");
+			asm("move.l (%a7)+, %a3");
+			asm("move.l (%a7)+, %a2");
+			asm("move.l (%a7)+, %a1");
+			asm("move.l (%a7)+, %a0");
+			asm("move.l %%a7, %0" : "=r" (val));
+			current_running_process->stack = val;
 			rtx_dbug_outs((CHAR *)"rtx: The side that has a pot of gold! ~!\r\n");				
 			rtx_dbug_outs((CHAR *)"rtx: How can you NOT do this to me ~ I am lonely <3 1!\r\n");
 			// restore the PWS
@@ -272,4 +347,3 @@ void set_process_to_run(int process_id)
 		imma_epeen_process = to_be_run;
 	}
 }
-
