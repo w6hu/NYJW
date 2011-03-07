@@ -106,14 +106,13 @@ int main()
 
 		
 	}
-<<<<<<< HEAD
+
 	
 	// initialize the null process
 	init_null_process(&null_p, process_start);
 	
-=======
+
 	process_start = process_start + 2048/4;
->>>>>>> 6afe78393d581ad86210c2b657d022daf0d18119
 	//call the scheduler to start a process
 	schedule_next_process();
 	
