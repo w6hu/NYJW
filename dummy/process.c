@@ -108,13 +108,8 @@ void schedule_next_process()
 {
 	rtx_dbug_outs((CHAR *)"rtx: In scheduler\r\n");
 	int val;
-	if(current_running_process != NULL)
-	{
-		rtx_dbug_outs((CHAR *)"rtx: Kuma san has revived !\r\n");
-		asm("move.l %%a7, %0" : "=r" (val));
-		current_running_process->stack = val;
-	}
-
+	int last;
+	int remain;
 	// look for the next process.
 	// if nothing is selected, the null 
 	// process is there at your service.
@@ -133,17 +128,56 @@ void schedule_next_process()
 			to_be_run->state = STATE_RUNNING;
 			
 			// update ready_queue and PCB data thingy <3
-			current_running_process = to_be_run;
 			ready_queue[i] = to_be_run->next;
 			to_be_run->next = 0;
 
+			if(current_running_process != NULL)
+			{
+				//rtx_dbug_outs((CHAR *)"rtx: Kuma san has revived !\r\n");
+				asm("move.l %%a7, %0" : "=r" (val));
+				current_running_process->stack = val;
+				
+				/*rtx_dbug_outs((CHAR *)"rtx: backing up!\r\n");
+			
+			last = (int)val%10;
+		remain = (int)val;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));
+		}
+		rtx_dbug_outs((CHAR *) "\r\n");*/
+				
+				
+			}
+			
+			
+			current_running_process = to_be_run;
+			
 			val = current_running_process->stack;
+			val = val - 8;
 			
-			rtx_dbug_outs((CHAR *)"rtx: Love is sooo much .... CHARLIE !\r\n");
+			/*rtx_dbug_outs((CHAR *)"rtx: stack getting!\r\n");
 			
-			stack_pointer_switcher(val-8);
-			//asm("move.l %0, %%d0" : : "r" (val-8));
-			//asm( "TRAP #0" );
+			last = (int)val%10;
+		remain = (int)val;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));
+		}
+		rtx_dbug_outs((CHAR *) "\r\n");*/
+			
+			//rtx_dbug_outs((CHAR *)"rtx: Love is sooo much .... CHARLIE !\r\n");
+			
+			
+			//stack_pointer_switcher(val-8);
+			asm("move.l %0, %%d0" : : "r" (val));
+			asm( "TRAP #0" );
 		
 			rtx_dbug_outs((CHAR *)"rtx: Love is sooo much .... CHARLIE !\r\n");
 		
@@ -159,7 +193,8 @@ void schedule_next_process()
 void stack_pointer_switcher()
 {
 	asm("move.l %d0, %a7");
-	asm("move.l 8(%a6), %a6");
+	asm("rts");
+	//asm("move.l %d0, %a6");
 	//asm("move.l 8(%a6), %a7");
 	//asm("move.l 8(%a6), %a6");
 }
