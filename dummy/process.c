@@ -53,6 +53,13 @@ void init_null_process( struct PCB* pcb_null_process, UINT32* process_start)
 VOID c_trap_handler( VOID )
 {
     rtx_dbug_outs( (CHAR *) "Trap Handler!!\n\r" );
+	
+	UINT16 val;
+	asm("move.w #0, %d0");
+	asm("move.w 2(%a7), %d0");
+	asm("move.w %%d0, %0" : "=r" (val));
+	
+	current_running_process->psw = val;
 }
 
 int release_processor_kuma_san()
@@ -75,6 +82,7 @@ int release_processor_kuma_san()
 	asm("move.l %d6, -(%a7)");
 	asm("move.l %d7, -(%a7)");
 
+	put_to_ready(current_running_process);
 	schedule_next_process();
 	
 	asm("move.l (%a7)+, %d7");
@@ -105,6 +113,7 @@ void schedule_next_process()
 	int val;
 	if(current_running_process != NULL)
 	{
+		asm( "TRAP #0" );
 		rtx_dbug_outs((CHAR *)"rtx: Kuma san has revived !\r\n");
 		asm("move.l %%a7, %0" : "=r" (val));
 		current_running_process->stack = val;
@@ -117,7 +126,7 @@ void schedule_next_process()
 	rtx_dbug_outs((CHAR *)"rtx: before the scheduling loop\r\n");
 	for(i; i<5; i++)
 	{
-	rtx_dbug_outs((CHAR *)"looping in scheler\r\n");
+		rtx_dbug_outs((CHAR *)"looping in scheler\r\n");
 		if(ready_queue[i] != NULL)
 		{
 			rtx_dbug_outs((CHAR *)"rtx: Love is sooo much .... CHARLIE !\r\n");
@@ -143,8 +152,9 @@ void schedule_next_process()
 
 void stack_pointer_switcher(UINT32 second_stack_top)
 {
-	asm("move.l 8(%a6), %a7");
-	asm("move.l 8(%a6), %a6");
+	asm("move.l %a6, -(%a7)"); 
+	asm("move.l 8(%a6), %a7");	
+	asm("move.l (%a7)+, %a6");
 }
 
 struct PCB* get_process_from_ID(int process_id)
