@@ -98,17 +98,6 @@ int main()
 		asm("move.l %0, %%a7" : : "r" (val));
 		val = p[i].pc;
 		
-		int last = val%10;
-		int remain = val;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) "\r\n");		
-		
 		asm("move.l %0, %%d0" : : "r" (val));
 		asm("move.l %d0, -(%a7)");
 		asm("move.l %d0, -(%a7)");
@@ -123,7 +112,7 @@ int main()
 
 
 	process_start = process_start + 2048/4;
-//	init_null_process(pcb_null_process, process_start)
+//	init_null_process(&null_p, process_start);
 	current_running_process = 0;
 /*	
 	int newVal = 0;
