@@ -18,7 +18,7 @@ LDFLAGS_RTX = -Trtx.ld -Wl,-Map=rtx.map
 LDFLAGS_RTX_LOADER = -Trtx_loader.ld -Wl,-Map=rtx_loader.map
 LDFLAGS_RTX_TEST = -Trtx_test.ld -Wl,-Map=rtx_test.map
 
-RTX_OBJS = rtx.o dbug.o main_rtx.o
+RTX_OBJS = rtx.o dbug.o memory.o process.o init.o messaging.o main_rtx.o
 RTX_LOADER_OBJS = dbug.o rtx_loader.o
 RTX_TEST_DUMMY_OBJS = dbug.o rtx_test_dummy.o
 
