@@ -22,6 +22,7 @@ struct PCB {
 	int priority;
 	int returning;
 	int waiting_on;
+	int state2;
 };
 
 void put_to_ready(struct PCB* p);

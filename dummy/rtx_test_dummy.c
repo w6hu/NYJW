@@ -20,21 +20,17 @@ void test1()
     
     while (1) 
     {
-	
+		int val;
 		rtx_dbug_outs((CHAR *)"rtx_test: JESSIE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\r\n");
         /* execute a rtx primitive to test */
-	/*	asm("move.l %%a7, %0" : "=r" (val));
-		last; //= tempEnd%10;
-		remain = val;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-	rtx_dbug_outs((CHAR *) "\r\n");	*/
-        g_test_fixture.release_processor();
+		
+		
+		
+        val = g_test_fixture.release_processor();
+		rtx_dbug_outs((CHAR *)"rtx_test: ISHY's shadow");
+		rtx_dbug_out_char((CHAR) val +48);
+		rtx_dbug_outs((CHAR *)"\r\n");
+		rtx_dbug_outs((CHAR *)"rtx_test: ISHY#1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\r\n");
     }
 }
 
@@ -46,6 +42,7 @@ void test2()
     {
         /* execute a rtx primitive to test */
         g_test_fixture.release_processor();
+		rtx_dbug_outs((CHAR *)"rtx_test: ISHY#2!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\r\n");
     }
 }
 /* third party dummy test process 3 */ 
@@ -56,6 +53,7 @@ void test3()
     {
         /* execute a rtx primitive to test */
         g_test_fixture.release_processor();
+		rtx_dbug_outs((CHAR *)"rtx_test: ISHY#3!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\r\n");
     }
 }
 
@@ -67,6 +65,7 @@ void test4()
     {
         /* execute a rtx primitive to test */
         g_test_fixture.release_processor();
+		rtx_dbug_outs((CHAR *)"rtx_test: ISHY#4!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\r\n");
     }
 }
 /* third party dummy test process 5 */ 
@@ -77,6 +76,7 @@ void test5()
     {
         /* execute a rtx primitive to test */
         g_test_fixture.release_processor();
+		rtx_dbug_outs((CHAR *)"rtx_test: ISHY#5!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\r\n");
     }
 }
 /* third party dummy test process 6 */ 
@@ -87,6 +87,7 @@ void test6()
     {
         /* execute a rtx primitive to test */
         g_test_fixture.release_processor();
+		rtx_dbug_outs((CHAR *)"rtx_test: ISHY#6!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\r\n");
     }
 }
 

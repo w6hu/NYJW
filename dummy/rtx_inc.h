@@ -125,4 +125,8 @@
 #define NUM_MEM_BLKS 32
 UINT32 *free_blocks;
 
+#define TO_RUN 0
+#define RUNNING 1
+#define FINISHED 2
+
 #endif

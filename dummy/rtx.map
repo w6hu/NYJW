@@ -2,12 +2,12 @@
 Allocating common symbols
 Common symbol       size              file
 
-p                   0xcc              main_rtx.o
+p                   0xe4              main_rtx.o
 blocked_queue       0x18              process.o
-old_stack           0x4               /tmp/cckAVDUV.o
+old_stack           0x4               /tmp/ccbWAC0e.o
 ready_queue         0x14              process.o
 free_blocks         0x4               process.o
-main_stack          0x1000            /tmp/cckAVDUV.o
+main_stack          0x1000            /tmp/ccbWAC0e.o
 mem_end             0x4               memory.o
 
 Memory Configuration
@@ -18,7 +18,7 @@ ram              0x10100000         0x00100000
 
 Linker script and memory map
 
-LOAD /tmp/cckAVDUV.o
+LOAD /tmp/ccbWAC0e.o
 LOAD process.o
 LOAD init.o
 LOAD memory.o
@@ -34,126 +34,126 @@ END GROUP
                 0x00000000                PROVIDE (software_init_hook, 0x0)
                 0x00000000                PROVIDE (_software_init_hook, 0x0)
 
-.text           0x10100000     0x157a
+.text           0x10100000     0x1383
  *(.text)
- .text          0x10100000       0x1e /tmp/cckAVDUV.o
+ .text          0x10100000       0x1e /tmp/ccbWAC0e.o
  *fill*         0x1010001e        0x2 00
- .text          0x10100020      0x560 process.o
-                0x101004d4                is_waiting_for
+ .text          0x10100020      0x3b2 process.o
+                0x10100326                is_waiting_for
                 0x10100020                release_processor_kuma_san
-                0x10100534                set_process_state
-                0x1010048e                process_exists
-                0x1010045e                get_process_priority_usagi_san
-                0x101003f2                get_process_from_ID
-                0x10100208                schedule_next_process
-                0x1010044c                get_process_ID
-                0x1010055a                set_process_to_run
- .text          0x10100580      0x41e init.o
-                0x10100798                push_down_first_night
-                0x1010063a                put_to_blocked
-                0x101007fe                push_test
-                0x10100580                put_to_ready
-                0x10100748                pop
-                0x101006f8                remove_from_blocked
-                0x101007ec                pop_test
-                0x101006b8                remove_from_ready
-                0x10100772                push
- *fill*         0x1010099e        0x2 00
- .text          0x101009a0      0x270 memory.o
-                0x10100a06                s_release_memory_block
-                0x101009a0                s_request_memory_block
-                0x10100b06                initBlock
- .text          0x10100c10       0x5c dbug.o
-                0x10100c30                rtx_dbug_outs
-                0x10100c10                rtx_dbug_out_char
- .text          0x10100c6c       0xcc rtx.o
-                0x10100d16                get_process_priority
-                0x10100c9a                request_memory_block
-                0x10100cfe                set_process_priority
-                0x10100c6c                send_message
-                0x10100cb2                release_memory_block
-                0x10100c84                receive_message
-                0x10100ce6                delayed_send
-                0x10100cca                release_processor
- .text          0x10100d38      0x2f4 main_rtx.o
-                0x10100d38                __main
-                0x10100d42                main
-                0x1010102c                . = ALIGN (0x4)
-                0x1010102c                __CTOR_LIST__ = .
-                0x1010102c        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
+                0x10100386                set_process_state
+                0x101002e2                process_exists
+                0x101002b2                get_process_priority_usagi_san
+                0x1010024c                get_process_from_ID
+                0x10100114                schedule_next_process
+                0x101002a0                get_process_ID
+                0x101003ac                set_process_to_run
+ *fill*         0x101003d2        0x2 00
+ .text          0x101003d4      0x418 init.o
+                0x101005ec                push_down_first_night
+                0x1010048e                put_to_blocked
+                0x1010064c                push_test
+                0x101003d4                put_to_ready
+                0x1010059c                pop
+                0x1010054c                remove_from_blocked
+                0x1010063a                pop_test
+                0x1010050c                remove_from_ready
+                0x101005c6                push
+ .text          0x101007ec      0x270 memory.o
+                0x10100852                s_release_memory_block
+                0x101007ec                s_request_memory_block
+                0x10100952                initBlock
+ .text          0x10100a5c       0x5c dbug.o
+                0x10100a7c                rtx_dbug_outs
+                0x10100a5c                rtx_dbug_out_char
+ .text          0x10100ab8       0xfc rtx.o
+                0x10100b92                get_process_priority
+                0x10100ae6                request_memory_block
+                0x10100b7a                set_process_priority
+                0x10100ab8                send_message
+                0x10100afe                release_memory_block
+                0x10100ad0                receive_message
+                0x10100b62                delayed_send
+                0x10100b16                release_processor
+ .text          0x10100bb4      0x43a main_rtx.o
+                0x10100bb4                __main
+                0x10100bbe                main
+                0x10100ff0                . = ALIGN (0x4)
+ *fill*         0x10100fee        0x2 00
+                0x10100ff0                __CTOR_LIST__ = .
+                0x10100ff0        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
  *(.ctors)
-                0x10101030        0x4 LONG 0x0
-                0x10101034                __CTOR_END__ = .
-                0x10101034                __DTOR_LIST__ = .
-                0x10101034        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
+                0x10100ff4        0x4 LONG 0x0
+                0x10100ff8                __CTOR_END__ = .
+                0x10100ff8                __DTOR_LIST__ = .
+                0x10100ff8        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
  *(.dtors)
-                0x10101038        0x4 LONG 0x0
-                0x1010103c                __DTOR_END__ = .
+                0x10100ffc        0x4 LONG 0x0
+                0x10101000                __DTOR_END__ = .
  *(.rodata*)
- .rodata        0x1010103c      0x245 process.o
- .rodata        0x10101281       0xc0 init.o
- .rodata        0x10101341       0x7c memory.o
-                0x10101342                FREE
-                0x10101344                FAILURE
-                0x10101343                SUCCESS
-                0x10101341                USED
- .rodata        0x101013bd       0xd0 rtx.o
- .rodata        0x1010148d       0xdd main_rtx.o
+ .rodata        0x10101000       0xb7 process.o
+ .rodata        0x101010b7       0xc0 init.o
+ .rodata        0x10101177       0x7c memory.o
+                0x10101178                FREE
+                0x1010117a                FAILURE
+                0x10101179                SUCCESS
+                0x10101177                USED
+ .rodata        0x101011f3       0xd8 rtx.o
+ .rodata        0x101012cb       0xa8 main_rtx.o
  *(.gcc_except_table)
-                0x1010156a                __INIT_SECTION__ = .
-                0x1010156a        0x4 LONG 0x4e560000
+                0x10101373                __INIT_SECTION__ = .
+                0x10101373        0x4 LONG 0x4e560000
  *(.init)
-                0x1010156e        0x2 SHORT 0x4e5e
-                0x10101570        0x2 SHORT 0x4e75
-                0x10101572                __FINI_SECTION__ = .
-                0x10101572        0x4 LONG 0x4e560000
+                0x10101377        0x2 SHORT 0x4e5e
+                0x10101379        0x2 SHORT 0x4e75
+                0x1010137b                __FINI_SECTION__ = .
+                0x1010137b        0x4 LONG 0x4e560000
  *(.fini)
-                0x10101576        0x2 SHORT 0x4e5e
-                0x10101578        0x2 SHORT 0x4e75
-                0x1010157a                _etext = .
+                0x1010137f        0x2 SHORT 0x4e5e
+                0x10101381        0x2 SHORT 0x4e75
+                0x10101383                _etext = .
  *(.lit)
 
-.data           0x1010157c        0x0
+.data           0x10101384        0x0
  *(.shdata)
  *(.data)
- .data          0x1010157c        0x0 /tmp/cckAVDUV.o
- .data          0x1010157c        0x0 process.o
- .data          0x1010157c        0x0 init.o
- .data          0x1010157c        0x0 memory.o
- .data          0x1010157c        0x0 dbug.o
- .data          0x1010157c        0x0 rtx.o
- .data          0x1010157c        0x0 main_rtx.o
-                0x1010157c                _edata = .
+ .data          0x10101384        0x0 /tmp/ccbWAC0e.o
+ .data          0x10101384        0x0 process.o
+ .data          0x10101384        0x0 init.o
+ .data          0x10101384        0x0 memory.o
+ .data          0x10101384        0x0 dbug.o
+ .data          0x10101384        0x0 rtx.o
+ .data          0x10101384        0x0 main_rtx.o
+                0x10101384                _edata = .
 
-.bss            0x1010157c     0x1124
-                0x1010157c                __bss_start = .
+.bss            0x10101384     0x1134
+                0x10101384                __bss_start = .
  *(.shbss)
  *(.bss)
- .bss           0x1010157c        0x0 /tmp/cckAVDUV.o
- .bss           0x1010157c        0x8 process.o
-                0x1010157c                current_running_process
-                0x10101580                imma_epeen_process
- .bss           0x10101584        0x4 init.o
-                0x10101584                used_blocks
- .bss           0x10101588        0x0 memory.o
- .bss           0x10101588        0x0 dbug.o
- .bss           0x10101588        0x0 rtx.o
- .bss           0x10101588        0x0 main_rtx.o
+ .bss           0x10101384        0x0 /tmp/ccbWAC0e.o
+ .bss           0x10101384        0x8 process.o
+                0x10101384                current_running_process
+                0x10101388                imma_epeen_process
+ .bss           0x1010138c        0x4 init.o
+                0x1010138c                used_blocks
+ .bss           0x10101390        0x0 memory.o
+ .bss           0x10101390        0x0 dbug.o
+ .bss           0x10101390        0x0 rtx.o
+ .bss           0x10101390        0x0 main_rtx.o
  *(COMMON)
- *fill*         0x10101588        0x8 00
- COMMON         0x10101590     0x1010 /tmp/cckAVDUV.o
-                0x10101590                old_stack
-                0x101015a0                main_stack
- COMMON         0x101025a0       0x30 process.o
-                0x101025a0                blocked_queue
-                0x101025b8                ready_queue
-                0x101025cc                free_blocks
- COMMON         0x101025d0        0x4 memory.o
-                0x101025d0                mem_end
- COMMON         0x101025d4       0xcc main_rtx.o
-                0x101025d4                p
-                0x101026a0                _end = ALIGN (0x8)
-                0x101026a0                __end = _end
+ COMMON         0x10101390     0x1010 /tmp/ccbWAC0e.o
+                0x10101390                old_stack
+                0x101013a0                main_stack
+ COMMON         0x101023a0       0x30 process.o
+                0x101023a0                blocked_queue
+                0x101023b8                ready_queue
+                0x101023cc                free_blocks
+ COMMON         0x101023d0        0x4 memory.o
+                0x101023d0                mem_end
+ COMMON         0x101023d4       0xe4 main_rtx.o
+                0x101023d4                p
+                0x101024b8                _end = ALIGN (0x8)
+                0x101024b8                __end = _end
 
 .stab
  *(.stab)
