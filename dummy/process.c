@@ -82,7 +82,10 @@ int release_processor_kuma_san()
 	asm("move.l %d6, -(%a7)");
 	asm("move.l %d7, -(%a7)");
 
-	put_to_ready(current_running_process);
+	// set state and put the process to ready
+	current_running_process->state = STATE_READY;
+	put_to_ready (current_running_process);
+	
 	schedule_next_process();
 	
 	asm("move.l (%a7)+, %d7");
@@ -91,6 +94,7 @@ int release_processor_kuma_san()
 	asm("move.l (%a7)+, %d4");
 	asm("move.l (%a7)+, %d3");
 	asm("move.l (%a7)+, %d2");
+	
 	asm("move.l (%a7)+, %d1");
 	asm("move.l (%a7)+, %d0");
 	asm("move.l (%a7)+, %a6");
@@ -133,13 +137,23 @@ void schedule_next_process()
 			// select the next process
 			struct PCB* to_be_run = ready_queue[i];					
 			
+			// set state to running
+			to_be_run->state = STATE_RUNNING;
+			
 			// update ready_queue and PCB data thingy <3
 			current_running_process = to_be_run;
 			ready_queue[i] = to_be_run->next;
 			to_be_run->next = 0;
 
 			val = current_running_process->stack;
+			
+			rtx_dbug_outs((CHAR *)"rtx: Love is sooo much .... CHARLIE !\r\n");
+			
 			stack_pointer_switcher(val-8);
+			//asm("move.l %0, %%d0" : : "r" (val-8));
+			//asm( "TRAP #0" );
+		
+			rtx_dbug_outs((CHAR *)"rtx: Love is sooo much .... CHARLIE !\r\n");
 		
 			int newVal = 0;
 			asm("move.l %%a7, %0" : "=r" (newVal));
@@ -150,7 +164,7 @@ void schedule_next_process()
 	rtx_dbug_outs((CHAR *)"rtx: after the scheduling loop the loop\r\n");
 }
 
-void stack_pointer_switcher(UINT32 second_stack_top)
+void stack_pointer_switcher()
 {
 	asm("move.l %a6, -(%a7)"); 
 	asm("move.l 8(%a6), %a7");	

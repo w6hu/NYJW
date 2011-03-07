@@ -40,6 +40,9 @@ int main()
 	asm( "move.l #asm_trap_entry,%d0" );
 	asm( "move.l %d0,0x10000080" );
 
+	asm( "move.l #asm_trap_entry,%d0" );
+    asm( "move.l %d0,0x10000080" );
+
     rtx_dbug_outs((CHAR *)"rtx: Entering main()\r\n");
 
     /* get the third party test proc initialization info */

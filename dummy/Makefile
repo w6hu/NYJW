@@ -36,8 +36,8 @@ all: mdummy.s19
 #	$(CC) $(CFLAGS) -c ../init/init.c -o init.o
 
 rtx.s19: trap_entry.s $(RTX_OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS_RTX) -o rtx.bin $(ASM) trap_entry.s $(RTX_OBJS) 
-	$(OBJCPY) --output-format=srec rtx.bin rtx.s19 
+	$(CC) $(CFLAGS) $(LDFLAGS_RTX) -o rtx.bin $(ASM)  trap_entry.s $(RTX_OBJS) 
+	$(OBJCPY) --output-format=srec rtx.bin rtx.s19
 	$(OBJDUMP) -xdC rtx.bin > rtx.lst
 
 rtx_loader.s19: $(RTX_LOADER_OBJS) 
