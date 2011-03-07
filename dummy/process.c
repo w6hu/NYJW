@@ -30,13 +30,29 @@ void init_null_process( struct PCB* pcb_null_process, UINT32* process_start)
 	pcb_null_process->returning = FALSE;
 	pcb_null_process->waiting_on = -1;
 		
-	int j = 0;
-	for (j; j < 14; j++) {
-		push(pcb_null_process, 0);
-	}
+	//back up a7
+	int original_a7;
+	asm("move.l %%a7, %0" : "=r" (original_a7));
 		
+	int val = pcb_null_process->stack;
+	asm("move.l %0, %%a7" : : "r" (val));
+	val = pcb_null_process->pc;
+	
+	asm("move.l %0, %%d0" : : "r" (val));
+	asm("move.l %d0, -(%a7)");
+	asm("move.l %d0, -(%a7)");
+
+	
+	//restore a7
+	asm("move.l %0, %%a7" : : "r" (original_a7));
+					
 	// initialize the process to the correct ready queue
 	put_to_ready(pcb_null_process);
+}
+
+VOID c_trap_handler( VOID )
+{
+    rtx_dbug_outs( (CHAR *) "Trap Handler!!\n\r" );
 }
 
 int release_processor_kuma_san()

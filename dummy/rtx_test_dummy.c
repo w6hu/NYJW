@@ -20,37 +20,9 @@ void test1()
     
     while (1) 
     {
-	
-		rtx_dbug_outs((CHAR *)"rtx_test: JESSIE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\r\n");
-        /* execute a rtx primitive to test */
-
-		void* msg1 = g_test_fixture.request_memory_block();
-		
-		
-		rtx_dbug_outs("request memory address\r\n");
-		int last = (int)msg1%10;
-
-	/*	asm("move.l %%a7, %0" : "=r" (val));
-		last; //= tempEnd%10;
-		remain = val;
-
-		rtx_dbug_outs((CHAR *) "\r\n");
-		
-		
-		*((UINT32 *)msg1 + 10) = 2;
-		*((UINT32 *)msg1 + 11) = 3;
-		//*((UINT32 *)msg2 + 10) = 4;
-		//*((UINT32 *)msg2 + 11) = 5;
-		int result = g_test_fixture.send_message(4, msg1);
-		if (result == RTX_SUCCESS) {
-			rtx_dbug_outs("Success!\r\n");
-		}
-		else {
-			rtx_dbug_outs("Failed!\r\n");
-		}
-	rtx_dbug_outs((CHAR *) "\r\n");	*/
-	
+		rtx_dbug_outs((CHAR *)"rtx_test: TEST 1\r\n");
         g_test_fixture.release_processor();
+		rtx_dbug_outs((CHAR *)"rtx_test: TEST 1 END\r\n");
     }
 }
 
@@ -60,20 +32,10 @@ void test2()
     rtx_dbug_outs((CHAR *)"rtx_test: test2\r\n");
     while (1) 
     {
-		int val  = 1;
-		int *sender_id = &val; 
-		void* reMsg1 = g_test_fixture.receive_message(sender_id);
-		if (reMsg1 != NULL) {
-			rtx_dbug_outs("SUCCESS!!\r\n");
-			rtx_dbug_out_char(*((UINT32 *)reMsg1 + 10)+48);
-			rtx_dbug_out_char(*((UINT32 *)reMsg1 + 11)+48);
-		}
-		else {
-			rtx_dbug_outs("NO Message!!\r\n");
-		}
-	
+		rtx_dbug_outs((CHAR *)"rtx_test: TEST 2\r\n");	
         /* execute a rtx primitive to test */
         g_test_fixture.release_processor();
+		rtx_dbug_outs((CHAR *)"rtx_test: TEST 2 END\r\n");	
     }
 }
 /* third party dummy test process 3 */ 
@@ -82,8 +44,10 @@ void test3()
     rtx_dbug_outs((CHAR *)"rtx_test: test3\r\n");
     while (1) 
     {
+		rtx_dbug_outs((CHAR *)"rtx_test: TEST 3\r\n");
         /* execute a rtx primitive to test */
         g_test_fixture.release_processor();
+		rtx_dbug_outs((CHAR *)"rtx_test: TEST 3 END\r\n");
     }
 }
 
@@ -93,21 +57,10 @@ void test4()
     rtx_dbug_outs((CHAR *)"rtx_test: test4\r\n");
     while (1) 
     {
-		rtx_dbug_outs("Back to beginning of the loop \r\n");
-		int val  = 6;
-		int *sender_id = &val; 
-		void* reMsg1 = g_test_fixture.receive_message(sender_id);
-		if (reMsg1 != NULL) {
-			rtx_dbug_outs("SUCCESS!!\r\n");
-			rtx_dbug_out_char(*((UINT32 *)reMsg1 + 10)+48);
-			rtx_dbug_out_char(*((UINT32 *)reMsg1 + 11)+48);
-		}
-		else {
-			rtx_dbug_outs("NO Message!!\r\n");
-		}
+		rtx_dbug_outs((CHAR *)"rtx_test: TEST 4\r\n");
         /* execute a rtx primitive to test */
         g_test_fixture.release_processor();
-		rtx_dbug_outs("Coming back to P1 \r\n");
+		rtx_dbug_outs((CHAR *)"rtx_test: TEST 4 END\r\n");
     }
 }
 /* third party dummy test process 5 */ 
@@ -116,8 +69,10 @@ void test5()
     rtx_dbug_outs((CHAR *)"rtx_test: test5\r\n");
     while (1) 
     {
+		rtx_dbug_outs((CHAR *)"rtx_test: TEST 5\r\n");
         /* execute a rtx primitive to test */
         g_test_fixture.release_processor();
+		rtx_dbug_outs((CHAR *)"rtx_test: TEST 5 END\r\n");
     }
 }
 /* third party dummy test process 6 */ 
@@ -126,38 +81,9 @@ void test6()
     rtx_dbug_outs((CHAR *)"rtx_test: test6\r\n");
     while (1) 
     {
-        /* execute a rtx primitive to test */
-		
-		void* msg1 = g_test_fixture.request_memory_block();
-		
-		
-		rtx_dbug_outs("request memory address\r\n");
-		int last = (int)msg1%10;
-		int remain = (int)msg1;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) "\r\n");
-		
-		
-		*((UINT32 *)msg1 + 10) = 2;
-		*((UINT32 *)msg1 + 11) = 3;
-		//*((UINT32 *)msg2 + 10) = 4;
-		//*((UINT32 *)msg2 + 11) = 5;
-		int result = g_test_fixture.send_message(4, msg1);
-		if (result == RTX_SUCCESS) {
-			rtx_dbug_outs("Success!\r\n");
-		}
-		else {
-			rtx_dbug_outs("Failed!\r\n");
-		}
-		
-		
+		rtx_dbug_outs((CHAR *)"rtx_test: TEST 6\r\n");
         g_test_fixture.release_processor();
+		rtx_dbug_outs((CHAR *)"rtx_test: TEST 6 END\r\n");
     }
 }
 
