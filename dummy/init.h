@@ -13,8 +13,8 @@ struct queue {
 struct PCB {
 	UINT16 psw;
 	
-	UINT32* pc;	
-	UINT32* stack;
+	UINT32 pc;	
+	UINT32 stack;
 
 	struct PCB* next;
 	int id;

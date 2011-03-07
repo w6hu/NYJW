@@ -99,13 +99,13 @@ void remove_from_blocked(struct PCB* p) {
 }
 
 UINT32 pop (struct PCB* p) {
-	UINT32 temp = *(p->stack);
+	UINT32 temp = p->stack;
 	p->stack = p->stack - 1;
 	return temp;
 }
 
 void push (struct PCB* p, UINT32 val) {
-	*(p->stack) = val;
+	p->stack = val;
 	p->stack = p->stack + 1;
 }
 

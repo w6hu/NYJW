@@ -26,6 +26,7 @@ extern void __REGISTER_TEST_PROCS_ENTRY__();
 extern UINT32* mem_end;
 struct PCB p [6];
 struct PCB null_p;
+extern struct PCB* current_running_process;
 
 /* gcc expects this function to exist */
 int __main( void )
@@ -66,49 +67,104 @@ int main()
 		p[i].priority = g_test_proc[i].priority;
 		p[i].psw = 9984;   // assuming 9984 is the nomal initial state ... eh ?
 		rtx_dbug_outs((CHAR *)"rtx: Getting pc\r\n");
-		p[i].pc = g_test_proc[i].entry; //point pc to entry point of code
+		p[i].pc = *(g_test_proc[i].entry); //point pc to entry point of code
 		rtx_dbug_outs((CHAR *)"rtx: pc set\r\n");
 		process_start = process_start + g_test_proc[i].sz_stack/4;
 		p[i].stack = process_start; // where exactly is the process stack ?
 		p[i].returning = FALSE;
 		p[i].waiting_on = -1;
 		
-		int val = p[i].stack;
+		int val;
+		
+		//back up a7
+		int original_a7;
+		asm("move.l %%a7, %0" : "=r" (original_a7));
+		
+		val = p[i].stack;
 		asm("move.l %0, %%a7" : : "r" (val));
-		asm("move.l #0, -(%a7)");
-		asm("move.l #0, -(%a7)");
-		asm("move.l #0, -(%a7)");
-		asm("move.l #0, -(%a7)");
-		asm("move.l #0, -(%a7)");
-		asm("move.l #0, -(%a7)");
-		asm("move.l #0, -(%a7)");
-		asm("move.l #0, -(%a7)");
-		asm("move.l #0, -(%a7)");
-		asm("move.l #0, -(%a7)");
-		asm("move.l #0, -(%a7)");
-		asm("move.l #0, -(%a7)");
-		asm("move.l #0, -(%a7)");
-		asm("move.l #0, -(%a7)");
-		asm("move.l #0, -(%a7)");
-		asm("move.l %%a7, %0" : "=r" (val));
-		p[i].stack = val;
+		val = p[i].pc;
+		
+		int last = val%10;
+		int remain = val;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+		rtx_dbug_outs((CHAR *) "\r\n");		
+		
+		
+		
+		asm("move.l %0, %%d0" : : "r" (val));
+		asm("move.l %d0, -(%a7)");
+		asm("move.l %d0, -(%a7)");
+		asm("move.l %d0, -(%a7)");
+		asm("move.l %d0, -(%a7)");
+		asm("move.l %d0, -(%a7)");
+		asm("move.l %d0, -(%a7)");
+		asm("move.l %d0, -(%a7)");
+		asm("move.l %d0, -(%a7)");
+		asm("move.l %d0, -(%a7)");
+		asm("move.l %d0, -(%a7)");
+		asm("move.l %d0, -(%a7)");
+		asm("move.l %d0, -(%a7)");
+		
+	
+	//	asm("move.l %%a7, %0" : "=r" (val));
+	//	p[i].stack = val;
+		
+		//restore a7
+		asm("move.l %0, %%a7" : : "r" (original_a7));
 						
 		// initialize the process to the correct ready queue
-		put_to_ready(&(p[i]));
-
-		
+		put_to_ready(&(p[i]));		
 	}
-<<<<<<< HEAD
-	
-	// initialize the null process
-	init_null_process(&null_p, process_start);
-	
-=======
+
 	process_start = process_start + 2048/4;
->>>>>>> 6afe78393d581ad86210c2b657d022daf0d18119
-	//call the scheduler to start a process
+
+	current_running_process = 0;
+	
+	/*int newVal = 0;
+			asm("move.l %%a7, %0" : "=r" (newVal));
+			rtx_dbug_outs((CHAR *)"rtx: Print out A7 before!\r\n");
+			int last = (int)newVal%10;
+		int remain = (int)newVal;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+		rtx_dbug_outs((CHAR *) "\r\n");		*/
+	
+	
+	
 	schedule_next_process();
 	
+	
+	
+	/*newVal = 0;
+			asm("move.l %%a7, %0" : "=r" (newVal));
+			rtx_dbug_outs((CHAR *)"rtx: Print out A7 after!\r\n");
+			last = (int)newVal%10;
+	 remain = (int)newVal;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+		rtx_dbug_outs((CHAR *) "\r\n");		*/
+	
+	
+	rtx_dbug_outs((CHAR *)"rtx: Return from scheduler\r\n");
+	//void * call_funct = schedule_next_process;
+	//asm("move.l %0, %%a0" : : "r" (call_funct));
+	//asm("jsr (%a0)");
 	
 	//  if (g_test_proc[0].entry == NULL) {
 	//  rtx_dbug_outs((CHAR *)"rtx: Null\r\n");
@@ -126,7 +182,6 @@ int main()
 	
     return 0;
 }
-
 
 /* register rtx primitives with test suite */
 
