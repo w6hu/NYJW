@@ -94,7 +94,6 @@ int release_processor_kuma_san()
 	asm("move.l (%a7)+, %d4");
 	asm("move.l (%a7)+, %d3");
 	asm("move.l (%a7)+, %d2");
-	
 	asm("move.l (%a7)+, %d1");
 	asm("move.l (%a7)+, %d0");
 	asm("move.l (%a7)+, %a6");
@@ -114,14 +113,6 @@ int release_processor_kuma_san()
 void schedule_next_process()
 {
 	rtx_dbug_outs((CHAR *)"rtx: In scheduler\r\n");
-	int val;
-	if(current_running_process != NULL)
-	{
-		asm( "TRAP #0" );
-		rtx_dbug_outs((CHAR *)"rtx: Kuma san has revived !\r\n");
-		asm("move.l %%a7, %0" : "=r" (val));
-		current_running_process->stack = val;
-	}
 
 	// look for the next process.
 	// if nothing is selected, the null 
@@ -140,23 +131,25 @@ void schedule_next_process()
 			// set state to running
 			to_be_run->state = STATE_RUNNING;
 			
+			int val=0;
+			if(current_running_process != NULL)
+			{
+				asm( "TRAP #0" );
+				rtx_dbug_outs((CHAR *)"rtx: Kuma san has revived !\r\n");
+				asm("move.l %a7, %d0");
+				asm("move.l %%a7, %0" : "=r" (val));
+				current_running_process->stack = val;
+			}					
+			
 			// update ready_queue and PCB data thingy <3
 			current_running_process = to_be_run;
 			ready_queue[i] = to_be_run->next;
 			to_be_run->next = 0;
 
-			val = current_running_process->stack;
-			
-			rtx_dbug_outs((CHAR *)"rtx: Love is sooo much .... CHARLIE !\r\n");
-			
-			stack_pointer_switcher(val-8);
-			//asm("move.l %0, %%d0" : : "r" (val-8));
-			//asm( "TRAP #0" );
+			val = current_running_process->stack;	
+			stack_pointer_switcher(val-12);
 		
 			rtx_dbug_outs((CHAR *)"rtx: Love is sooo much .... CHARLIE !\r\n");
-		
-			int newVal = 0;
-			asm("move.l %%a7, %0" : "=r" (newVal));
 
 			break;
 		}
@@ -164,11 +157,13 @@ void schedule_next_process()
 	rtx_dbug_outs((CHAR *)"rtx: after the scheduling loop the loop\r\n");
 }
 
-void stack_pointer_switcher()
+void stack_pointer_switcher(UINT32 second_stack_start)
 {
-	asm("move.l %a6, -(%a7)"); 
+	asm("move.l %a6, -(%a7)");
 	asm("move.l 8(%a6), %a7");	
 	asm("move.l (%a7)+, %a6");
+//	asm("move.l (%a7)+, %a0");
+	asm("rts");
 }
 
 struct PCB* get_process_from_ID(int process_id)

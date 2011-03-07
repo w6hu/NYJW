@@ -101,6 +101,7 @@ int main()
 		asm("move.l %0, %%d0" : : "r" (val));
 		asm("move.l %d0, -(%a7)");
 		asm("move.l %d0, -(%a7)");
+		asm("move.l %d0, -(%a7)");
 
 		
 		//restore a7

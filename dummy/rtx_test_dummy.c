@@ -81,41 +81,6 @@ void test6()
     rtx_dbug_outs((CHAR *)"rtx_test: test6\r\n");
     while (1) 
     {
-        /* execute a rtx primitive to test */
-		
-		void* msg1 = g_test_fixture.request_memory_block();
-		
-		
-		rtx_dbug_outs("request memory address\r\n");
-		int last = (int)msg1%10;
-		int remain = (int)msg1;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) "\r\n");
-		
-		
-		*((UINT32 *)msg1 + 10) = 2;
-		*((UINT32 *)msg1 + 11) = 3;
-		//*((UINT32 *)msg2 + 10) = 4;
-		//*((UINT32 *)msg2 + 11) = 5;
-		int result = g_test_fixture.send_message(4, msg1);
-		if (result == RTX_SUCCESS) {
-			rtx_dbug_outs("Success!\r\n");
-		}
-		else {
-			rtx_dbug_outs("Failed!\r\n");
-		}
-		
-		rtx_dbug_outs("P6. before release\r\n");
-		
-        g_test_fixture.release_processor();
-		
-		rtx_dbug_outs("P6. after release\r\n");
 		rtx_dbug_outs((CHAR *)"rtx_test: TEST 6\r\n");
         g_test_fixture.release_processor();
 		rtx_dbug_outs((CHAR *)"rtx_test: TEST 6 END\r\n");
