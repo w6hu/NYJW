@@ -137,6 +137,7 @@ int main()
 		put_to_ready(&(p[i]));		
 	}
 
+
 	process_start = process_start + 2048/4;
 
 	current_running_process = 0;
@@ -157,6 +158,9 @@ int main()
 	*/
 	
 	
+
+	process_start = process_start + 2048/4;
+	//call the scheduler to start a process
 	schedule_next_process();
 	
 	
