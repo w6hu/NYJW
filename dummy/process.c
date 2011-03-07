@@ -120,6 +120,13 @@ void schedule_next_process()
 
 			val = current_running_process->stack;
 			stack_pointer_switcher(val-16);
+		
+			int newVal = 0;
+			asm("move.l %%a7, %0" : "=r" (newVal));
+		
+			asm( "move.l #asm_trap_entry,%d0" );
+			asm( "move.l %d0,0x10000080" );
+		    asm( "TRAP #0" );
 
 			break;
 		}
@@ -127,34 +134,7 @@ void schedule_next_process()
 	rtx_dbug_outs((CHAR *)"rtx: after the scheduling loop the loop\r\n");
 }
 
-void stack_pointer_switcher(UINT32 second_stack_top)
-{
-		int last = (int)second_stack_top%10;
-		int remain = (int)second_stack_top;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) "\r\n");
-	asm("move.l 8(%a6), %a7");
-	
-	int val;
-	asm("move.l %%a7, %0" : "=r" (val));
-		last = (int)val%10;
-		remain = (int)val;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) "\r\n");
-	
-}
+
 
 struct PCB* get_process_from_ID(int process_id)
 {

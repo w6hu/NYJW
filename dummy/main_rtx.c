@@ -16,7 +16,7 @@
 #include "memory.h"
 #include "init.h"
 #include "process.h"
-#include "messaging.h"
+//#include "messaging.h"
 
 /* test proc initializaiton info. registration function provided by test suite.
  * test suite needs to register its test proc initilization info with rtx
@@ -35,6 +35,13 @@ int __main( void )
     return 0;
 }
 
+void stack_pointer_switcher(UINT32 second_stack_top)
+{
+
+	asm("move.l 8(%a6), %a7");
+	asm("move.l 8(%a6), %a6");
+}
+
 int main() 
 {
 
@@ -50,7 +57,7 @@ int main()
 	free_blocks = initBlock(NUM_MEM_BLKS);
 	rtx_dbug_outs((CHAR *)"rtx: Created Memory blocks\r\n");
 
-	init_mailboxes();
+	//init_mailboxes();
 	rtx_dbug_outs((CHAR *)"rtx: Created Mailboxes\r\n");
 	
 	int i = 0;
@@ -133,8 +140,8 @@ int main()
 	process_start = process_start + 2048/4;
 
 	current_running_process = 0;
-	
-	/*int newVal = 0;
+/*	
+	int newVal = 0;
 			asm("move.l %%a7, %0" : "=r" (newVal));
 			rtx_dbug_outs((CHAR *)"rtx: Print out A7 before!\r\n");
 			int last = (int)newVal%10;
@@ -146,19 +153,19 @@ int main()
 			remain = remain/10;
 			rtx_dbug_out_char((CHAR)(last+48));            
 		}
-		rtx_dbug_outs((CHAR *) "\r\n");		*/
-	
+		rtx_dbug_outs((CHAR *) "\r\n");		
+	*/
 	
 	
 	schedule_next_process();
 	
 	
-	
-	/*newVal = 0;
+	/*
+	int newVal = 0;
 			asm("move.l %%a7, %0" : "=r" (newVal));
 			rtx_dbug_outs((CHAR *)"rtx: Print out A7 after!\r\n");
-			last = (int)newVal%10;
-	 remain = (int)newVal;
+			int last = (int)newVal%10;
+			int remain = (int)newVal;
 		//int i = 0; 
 		while (remain != 0) {
 			//rtx_dbug_out_char((CHAR)(last+48));
@@ -166,8 +173,8 @@ int main()
 			remain = remain/10;
 			rtx_dbug_out_char((CHAR)(last+48));            
 		}
-		rtx_dbug_outs((CHAR *) "\r\n");		*/
-	
+		rtx_dbug_outs((CHAR *) "\r\n");		
+	*/
 	
 	rtx_dbug_outs((CHAR *)"rtx: Return from scheduler\r\n");
 	//void * call_funct = schedule_next_process;
