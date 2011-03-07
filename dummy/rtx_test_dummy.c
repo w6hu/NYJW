@@ -156,8 +156,11 @@ void test6()
 			rtx_dbug_outs("Failed!\r\n");
 		}
 		
+		rtx_dbug_outs("P6. before release\r\n");
 		
         g_test_fixture.release_processor();
+		
+		rtx_dbug_outs("P6. after release\r\n");
     }
 }
 

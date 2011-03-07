@@ -70,6 +70,7 @@ int send_message_jessie (int process_ID, void * MessageEnvelope) {
 			// still problem here
 			//preempt(sender_ID);
 			//start_to_run(process_ID);
+			rtx_dbug_outs("release in send_message_jessie\r\n");
 			release_processor_kuma_san();
 		}
 	}
