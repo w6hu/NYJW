@@ -35,15 +35,10 @@ int __main( void )
     return 0;
 }
 
-void stack_pointer_switcher(UINT32 second_stack_top)
-{
-
-	asm("move.l 8(%a6), %a7");
-	asm("move.l 8(%a6), %a6");
-}
-
 int main() 
 {
+	asm( "move.l #asm_trap_entry,%d0" );
+	asm( "move.l %d0,0x10000080" );
 
     rtx_dbug_outs((CHAR *)"rtx: Entering main()\r\n");
 
@@ -62,6 +57,7 @@ int main()
 	
 	int i = 0;
 	UINT32* process_start = mem_end;
+
 	
 	for(i; i<5; i++)
 	{
@@ -110,25 +106,10 @@ int main()
 		}
 		rtx_dbug_outs((CHAR *) "\r\n");		
 		
-		
-		
 		asm("move.l %0, %%d0" : : "r" (val));
 		asm("move.l %d0, -(%a7)");
 		asm("move.l %d0, -(%a7)");
-		asm("move.l %d0, -(%a7)");
-		asm("move.l %d0, -(%a7)");
-		asm("move.l %d0, -(%a7)");
-		asm("move.l %d0, -(%a7)");
-		asm("move.l %d0, -(%a7)");
-		asm("move.l %d0, -(%a7)");
-		asm("move.l %d0, -(%a7)");
-		asm("move.l %d0, -(%a7)");
-		asm("move.l %d0, -(%a7)");
-		asm("move.l %d0, -(%a7)");
-		
-	
-	//	asm("move.l %%a7, %0" : "=r" (val));
-	//	p[i].stack = val;
+
 		
 		//restore a7
 		asm("move.l %0, %%a7" : : "r" (original_a7));
@@ -139,7 +120,7 @@ int main()
 
 
 	process_start = process_start + 2048/4;
-
+//	init_null_process(pcb_null_process, process_start)
 	current_running_process = 0;
 /*	
 	int newVal = 0;

@@ -13,11 +13,12 @@ AR=m68k-elf-ar
 ARFLAGS=
 OBJCPY=m68k-elf-objcopy
 OBJDUMP=m68k-elf-objdump
-ASM=./start.s trap_entry.s
+ASM=./start.s
 LDFLAGS_RTX = -Trtx.ld -Wl,-Map=rtx.map
 LDFLAGS_RTX_LOADER = -Trtx_loader.ld -Wl,-Map=rtx_loader.map
 LDFLAGS_RTX_TEST = -Trtx_test.ld -Wl,-Map=rtx_test.map
 
+#RTX_OBJS = dbug.o memory.o init.o rtx.o main_rtx.o
 RTX_OBJS = rtx.o dbug.o memory.o process.o init.o messaging.o main_rtx.o
 RTX_LOADER_OBJS = dbug.o rtx_loader.o
 RTX_TEST_DUMMY_OBJS = dbug.o rtx_test_dummy.o
@@ -35,8 +36,8 @@ all: mdummy.s19
 #	$(CC) $(CFLAGS) -c ../init/init.c -o init.o
 
 rtx.s19: trap_entry.s $(RTX_OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS_RTX) -o rtx.bin $(ASM) $(RTX_OBJS) 
-	$(OBJCPY) --output-format=srec rtx.bin rtx.s19
+	$(CC) $(CFLAGS) $(LDFLAGS_RTX) -o rtx.bin $(ASM) trap_entry.s $(RTX_OBJS) 
+	$(OBJCPY) --output-format=srec rtx.bin rtx.s19 
 	$(OBJDUMP) -xdC rtx.bin > rtx.lst
 
 rtx_loader.s19: $(RTX_LOADER_OBJS) 

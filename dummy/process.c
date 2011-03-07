@@ -18,11 +18,7 @@ void null_process()
 }
 
 void init_null_process( struct PCB* pcb_null_process, UINT32* process_start)
-{
-
-	//VOID   (*entry)();
-	//entry = null_process;
-	
+{	
 	rtx_dbug_outs((CHAR *)"rtx: Initializing the null process\r\n");
 	pcb_null_process->next = NULL;
 	pcb_null_process->id = -2;
@@ -41,7 +37,6 @@ void init_null_process( struct PCB* pcb_null_process, UINT32* process_start)
 		
 	// initialize the process to the correct ready queue
 	put_to_ready(pcb_null_process);
-	//*/
 }
 
 int release_processor_kuma_san()
@@ -119,14 +114,10 @@ void schedule_next_process()
 			to_be_run->next = 0;
 
 			val = current_running_process->stack;
-			stack_pointer_switcher(val-16);
+			stack_pointer_switcher(val-8);
 		
 			int newVal = 0;
 			asm("move.l %%a7, %0" : "=r" (newVal));
-		
-			asm( "move.l #asm_trap_entry,%d0" );
-			asm( "move.l %d0,0x10000080" );
-		    asm( "TRAP #0" );
 
 			break;
 		}
@@ -134,7 +125,11 @@ void schedule_next_process()
 	rtx_dbug_outs((CHAR *)"rtx: after the scheduling loop the loop\r\n");
 }
 
-
+void stack_pointer_switcher(UINT32 second_stack_top)
+{
+	asm("move.l 8(%a6), %a7");
+	asm("move.l 8(%a6), %a6");
+}
 
 struct PCB* get_process_from_ID(int process_id)
 {
