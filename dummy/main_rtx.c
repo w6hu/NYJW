@@ -120,7 +120,7 @@ int main()
 
 
 	process_start = process_start + 2048/4;
-//	init_null_process(pcb_null_process, process_start)
+//	init_null_process(&null_p, process_start);
 	current_running_process = 0;
 /*	
 	int newVal = 0;
