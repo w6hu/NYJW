@@ -15,7 +15,7 @@ const BYTE FREE = 0;
 const BYTE SUCCESS = 0;
 const BYTE FAILURE = 1;
 
-void* s_request_memory_block()
+void* s_request_memory_block_yishi()
 {
 	if(*free_blocks == NULL)	
 		return NULL;
@@ -33,7 +33,7 @@ void* s_request_memory_block()
  * @param: address of a memory block
  * @return: 0 on sucess, non-zero otherwise
  */
-int s_release_memory_block( void* memory_block )
+int s_release_memory_block_yishi( void* memory_block )
 {
 	
 	rtx_dbug_outs((CHAR *)"rtx: release_memory_block \r\n");

@@ -16,6 +16,7 @@
 #include "memory.h"
 #include "init.h"
 #include "process.h"
+#include "messaging.h"
 
 /* test proc initializaiton info. registration function provided by test suite.
  * test suite needs to register its test proc initilization info with rtx
@@ -48,6 +49,9 @@ int main()
 	rtx_dbug_outs((CHAR *)"rtx: Entering init()\r\n");
 	free_blocks = initBlock(NUM_MEM_BLKS);
 	rtx_dbug_outs((CHAR *)"rtx: Created Memory blocks\r\n");
+
+	init_mailboxes();
+	rtx_dbug_outs((CHAR *)"rtx: Created Mailboxes\r\n");
 	
 	int i = 0;
 	UINT32* process_start = mem_end;
@@ -55,6 +59,10 @@ int main()
 	for(i; i<5; i++)
 	{
 		ready_queue[i] = NULL;
+	}
+	
+	for (i=0; i < NUM_PROCESS; i++) {
+		blocked_queue[i] = NULL;
 	}
 	
 	i = 0;

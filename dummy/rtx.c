@@ -9,34 +9,33 @@
  * @brief:  Dummy rtx primitive stub implementation 
  */
 
-#include "rtx_inc.h"
 #include "rtx.h"
-#include "dbug.h"
-
 
 /* Interprocess Communications*/
 int send_message (int process_ID, void * MessageEnvelope)
 {
     rtx_dbug_outs((CHAR *)"rtx: send_message \r\n");
+	send_message_jessie (process_ID, MessageEnvelope);
     return 0;
 }
 
 void * receive_message(int * sender_ID)
 {
     rtx_dbug_outs((CHAR *)"rtx: receive_message \r\n");
+	return receive_message_jessie(sender_ID);
 }
 
 /*Memory Management*/
 void * request_memory_block() 
 {
     rtx_dbug_outs((CHAR *)"rtx: request_memory_block \r\n");
-    return NULL;
+	return s_request_memory_block_yishi(); 
 }
 
 int release_memory_block(void * MemoryBlock)
 {
     rtx_dbug_outs((CHAR *)"rtx: release_memory_block \r\n");
-    return 0;
+	return s_release_memory_block_yishi(MemoryBlock);
 }
 
 /*Process Management*/
