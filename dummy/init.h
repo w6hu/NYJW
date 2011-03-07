@@ -27,7 +27,7 @@ struct PCB {
 void put_to_ready(struct PCB* p);
 void put_to_blocked(int waiting_on, struct PCB* p);
 void remove_from_ready(struct PCB* p);
-void remove_from_blocked(struct PCB* p);
+void remove_from_blocked(int waiting_for, struct PCB* p);
 
 UINT32 pop (struct PCB* p);
 void push (struct PCB* p, UINT32 val);

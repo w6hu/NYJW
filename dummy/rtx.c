@@ -22,22 +22,20 @@ int send_message (int process_ID, void * MessageEnvelope)
 void * receive_message(int * sender_ID)
 {
     rtx_dbug_outs((CHAR *)"rtx: receive_message \r\n");
-	receive_message_jessie(sender_ID);
+	return receive_message_jessie(sender_ID);
 }
 
 /*Memory Management*/
 void * request_memory_block() 
 {
     rtx_dbug_outs((CHAR *)"rtx: request_memory_block \r\n");
-	request_memory_block_yishi(); 
-    return NULL;
+	return s_request_memory_block_yishi(); 
 }
 
 int release_memory_block(void * MemoryBlock)
 {
     rtx_dbug_outs((CHAR *)"rtx: release_memory_block \r\n");
-	release_memory_block_yishi(MemoryBlock)
-    return 0;
+	return s_release_memory_block_yishi(MemoryBlock);
 }
 
 /*Process Management*/

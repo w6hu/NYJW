@@ -61,6 +61,10 @@ int main()
 		ready_queue[i] = NULL;
 	}
 	
+	for (i=0; i < NUM_PROCESS; i++) {
+		blocked_queue[i] = NULL;
+	}
+	
 	i = 0;
 	for (i; i < 6; i++) {
 		rtx_dbug_outs((CHAR *)"rtx: Infinite Loop\r\n");

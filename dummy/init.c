@@ -8,12 +8,13 @@ extern UINT32* mem_end;
 
 void put_to_ready(struct PCB* p)
 {
+	rtx_dbug_outs((CHAR *)"rtx: Inside Put to ready\r\n");
 	// get the process from process_id
 	int priority = -1;
 	struct PCB* temp = NULL;
 
 	// if the process is in the block queue, remove it from the block queue
-	remove_from_blocked(p);
+	//remove_from_blocked(p);
 
 	// get the priority of the process, 
 	// hopefully it is between 0 and 4, otherwise we got array out of bound
@@ -49,18 +50,31 @@ void put_to_ready(struct PCB* p)
 }
 
 void put_to_blocked(int waiting_on, struct PCB* p)
-{
+{	
+	// set the status in PCB
+	p->waiting_on = waiting_on;
+	p->state = STATE_BLOCKED;
+	
+	// process starts from 1, but array starts from 0;
+	waiting_on--;
 	// get the process from process_id
 	int priority = -1;
 	struct PCB* temp = NULL;
 
-	remove_from_ready(p);
+	//remove_from_ready(p);
 
 	// get the priority of the process, 
 	// hopefully it is between 0 and 4, otherwise we got array out of bound
+	
+	rtx_dbug_outs((CHAR *)"rtx: Inside of put_to_blocked\r\n");
+	
 	priority = p->priority;
 	// get the corresponding blocked queue
+	rtx_dbug_outs((CHAR *)"rtx: Inside of put_to_blocked2\r\n");
+	rtx_dbug_out_char(waiting_on + 48);
 	temp = blocked_queue[waiting_on];
+	
+	rtx_dbug_outs((CHAR *)"rtx: Finding the tail of blocked queue\r\n");
 	
 	while(temp != NULL && temp->next != NULL)
 	{
@@ -71,6 +85,8 @@ void put_to_blocked(int waiting_on, struct PCB* p)
 
 		temp = temp->next;
 	}
+	
+	rtx_dbug_outs((CHAR *)"rtx: Found the tail of blocked queue\r\n");
 	
 	// at this point, temp should be the tail of our lovely queue.
 	// add the process into the corresponding queue and update the PCB
@@ -86,16 +102,30 @@ void remove_from_ready(struct PCB* p) {
 		queue->next = p->next;
 }
 
-void remove_from_blocked(struct PCB* p) {
+void remove_from_blocked(int waiting_on, struct PCB* p) {
+	rtx_dbug_outs((CHAR *)"rtx: Remove from blocked\r\n");
+	
+	waiting_on--;
+	
 	//Assume if a process is removed from the ready-queue, we are moving the first one
 	int i = 0;
-	for ( i; i < 6; i++) {
-		struct PCB* queue = blocked_queue [i];
-		if (queue != NULL && queue == p) {
+	
+	// reset the states in PCB
+	p->state = STATE_READY;
+	p->waiting_on = -1;
+	struct PCB* queue = blocked_queue [waiting_on];
+	while (queue != NULL) {
+		if(queue == p) {
 			queue->next = p->next;
-			return;
+			rtx_dbug_outs((CHAR *)"rtx: Found the process to remove\r\n");
+			break;
+		}
+		else {
+			queue = queue->next;
 		}
 	}
+	
+	put_to_ready(p);
 }
 
 UINT32 pop (struct PCB* p) {

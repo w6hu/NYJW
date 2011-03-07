@@ -248,7 +248,7 @@ int is_waiting_for(int process_ID, int sender_ID)
 	{
 		if(current_running_process->id == sender_ID)
 		{
-			return (current_running_process->waiting_on == process_ID);
+			return (get_process_from_ID(process_ID)->waiting_on == sender_ID);
 		}
 	}
 	

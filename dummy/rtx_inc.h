@@ -126,6 +126,6 @@
 #define NUM_MEM_BLKS 32
 UINT32 *free_blocks;
 
-#define NUM_PROCESSES 6
+#define NUM_PROCESS 6
 
 #endif
