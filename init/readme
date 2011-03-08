@@ -1,9 +1,0 @@
-Well.... I hope this doesn't end badly....
-
-Here's what I did:
-- created a ready_queue and 6 blocked queues, and methods to add/get the processId for the next avail process
-- a process structure (based on the one they defined in the dummy test process)
-- and as Ishy requested, push and pop methods for the stack in the processes
-
-What I didn't do:
-- error checking (boundary checking and etc.), dont see a point in doing that until I know my code is logically correct.
