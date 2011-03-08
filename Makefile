@@ -67,4 +67,6 @@ Gid_rtx.s19: mlight.s19 rtx.s19
 
 .PHONY: clean
 clean:
+	mv mlight.s19 mlight
 	rm -f *.bin *.s19 *.o *.map *.lst
+	mv mlight mlight.s19
