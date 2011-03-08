@@ -3,7 +3,7 @@
 // global variable to keep track of the current process that is running
 struct PCB* current_running_process = 0;
 struct PCB* imma_epeen_process = 0;
-
+extern struct PCB p [6];
 extern struct PCB* ready_queue[5];
 extern struct PCB* blocked_queue[6];
 
@@ -169,7 +169,6 @@ void stack_pointer_switcher(UINT32 second_stack_start)
 struct PCB* get_process_from_ID(int process_id)
 {
 	int i = 0;
-	extern struct PCB p [6];
 	for (i; i < 6; i++) {
 		if (p[i].id == process_id) {
 			return &(p[i]);
@@ -181,7 +180,6 @@ struct PCB* get_process_from_ID(int process_id)
 int get_process_number_from_ID(int process_id)
 {
 	int i = 0;
-	extern struct PCB p [6];
 	for (i; i < 6; i++) {
 		if (p[i].id == process_id) {
 			return i;

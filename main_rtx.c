@@ -28,6 +28,8 @@ extern UINT32* mem_end;
 struct PCB p [6];
 struct PCB null_p;
 extern struct PCB* current_running_process;
+struct PCB* ready_queue[5];
+struct PCB* blocked_queue[6];
 
 /* gcc expects this function to exist */
 int __main( void )
@@ -67,95 +69,17 @@ int main()
 	
 	i = 0;
 	for (i; i < 6; i++) {
-<<<<<<< HEAD:dummy/main_rtx.c
-		//rtx_dbug_outs((CHAR *)"rtx: Infinite Loop\r\n");
-		p[i].next = NULL;
-		p[i].id = g_test_proc[i].pid;
-		//rtx_dbug_outs((CHAR *)"rtx: Got PID\r\n");
-		p[i].state = STATE_READY;
-		p[i].priority = g_test_proc[i].priority;
-		p[i].psw = 9984;   // assuming 9984 is the nomal initial state ... eh ?
-		//rtx_dbug_outs((CHAR *)"rtx: Getting pc\r\n");
-		p[i].pc = g_test_proc[i].entry; //point pc to entry point of code
-		//rtx_dbug_outs((CHAR *)"rtx: pc set\r\n");
-=======
 		p[i].next = NULL;
 		p[i].id = g_test_proc[i].pid;
 		p[i].state = STATE_READY;
 		p[i].priority = g_test_proc[i].priority;
 		p[i].psw = 9984;   // assuming 9984 is the nomal initial state ... eh ?
 		p[i].pc = *(g_test_proc[i].entry); //point pc to entry point of code
->>>>>>> fa31aca30822f9945ee9a485ffeebc46cdfa9804:main_rtx.c
 		process_start = process_start + g_test_proc[i].sz_stack/4;
 		p[i].stack = process_start; // where exactly is the process stack ?
-		p[i].state2 = TO_RUN;
-		
-			
-	
 		p[i].returning = FALSE;
-		p[i].state2 = TO_RUN;
 		p[i].waiting_on = -1;
 		
-<<<<<<< HEAD:dummy/main_rtx.c
-		if (p[i].id == 1) {
-			int val = p[i].stack;
-			asm("move.l %0, %%a7" : : "r" (val));
-			asm("move.l #0, -(%a7)");
-			asm("move.l #1, -(%a7)");
-			asm("move.l #2, -(%a7)");
-			asm("move.l #3, -(%a7)");
-			asm("move.l #4, -(%a7)");
-			asm("move.l #5, -(%a7)");
-			asm("move.l #6, -(%a7)");
-			asm("move.l #7, -(%a7)");
-			asm("move.l #8, -(%a7)");
-			asm("move.l #9, -(%a7)");
-			asm("move.l #10, -(%a7)");
-			asm("move.l #11, -(%a7)");
-			asm("move.l #12, -(%a7)");
-			asm("move.l #13, -(%a7)");
-			asm("move.l #14, -(%a7)");
-			asm("move.l %%a7, %0" : "=r" (val));
-			p[i].stack = val;
-		} else {
-			int val = p[i].stack;
-			asm("move.l %0, %%a7" : : "r" (val));
-			asm("move.l #0, -(%a7)");
-			asm("move.l #0, -(%a7)");
-			asm("move.l #0, -(%a7)");
-			asm("move.l #0, -(%a7)");
-			asm("move.l #0, -(%a7)");
-			asm("move.l #0, -(%a7)");
-			asm("move.l #0, -(%a7)");
-			asm("move.l #0, -(%a7)");
-			asm("move.l #0, -(%a7)");
-			asm("move.l #0, -(%a7)");
-			asm("move.l #0, -(%a7)");
-			asm("move.l #0, -(%a7)");
-			asm("move.l #0, -(%a7)");
-			asm("move.l #0, -(%a7)");
-			asm("move.l #0, -(%a7)");
-			asm("move.l %%a7, %0" : "=r" (val));
-			p[i].stack = val;
-		}
-		
-		rtx_dbug_outs((CHAR *)"rtx: init P");
-		rtx_dbug_out_char((CHAR)(p[i].id+48));
-		rtx_dbug_outs((CHAR *) "\r\n");	
-		int last;
-		int remain = p[i].stack;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) "\r\n");	
-						
-		// initialize the process to the correct ready queue
-		put_to_ready(&(p[i]));
-=======
 		int val;
 		
 		//back up a7
@@ -170,7 +94,6 @@ int main()
 		asm("move.l %d0, -(%a7)");
 		asm("move.l %d0, -(%a7)");
 		asm("move.l %d0, -(%a7)");
->>>>>>> fa31aca30822f9945ee9a485ffeebc46cdfa9804:main_rtx.c
 
 		
 		//restore a7
@@ -187,17 +110,8 @@ int main()
 
 	process_start = process_start + 2048/4;
 	//call the scheduler to start a process
-	//rtx_dbug_outs((CHAR *)"rtx: lalala\r\n");
 	schedule_next_process();
-<<<<<<< HEAD:dummy/main_rtx.c
-	//rtx_dbug_outs((CHAR *)"rtx: alalal\r\n");
 	
-	//  if (g_test_proc[0].entry == NULL) {
-	//  rtx_dbug_outs((CHAR *)"rtx: Null\r\n");
-	// }
-=======
-	
->>>>>>> fa31aca30822f9945ee9a485ffeebc46cdfa9804:main_rtx.c
 
     /* The following  is just to demonstrate how to reference 
      * the third party test process entry point inside rtx.
