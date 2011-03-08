@@ -1,0 +1,17 @@
+An inititial commit for process stuffs.
+There are still a lot TODOs in there, plus I am not sure
+if the assembly code will work or not; can't tell until I actually 
+test it.  
+
+TODO:
+	- Need some way to forcibility run a process to override the default
+	  behaviour in schedule_next_process(), which only chooses the next
+	  highest priority process. 
+	
+	- The assembly move instructions.  Currently I am using a normal move
+	  instruction to move stuff to and from the PC.  This might not work
+	  at all ...... 
+	  
+	- Right now we save and resotre the a7 as just another register, but do
+	  we need to do that ? Given that the PCB already has a stack pointer.  Or 
+	  do we even need to know the a7 ????

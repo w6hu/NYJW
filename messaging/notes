@@ -1,0 +1,23 @@
+functions needed:
+
+process managing:
+	- get_process_priority(int)
+		- return the process priority (already in the requirement)
+	- process_exists(int)  
+		- check whether a process exists given the process ID
+	- put_to_ready(int)
+		- put the given process to the ready queue
+	- preempt(int)
+		- preempt the given process
+	- start_to_run(int)
+		- start the run the given process(should already be in ready queue)
+	- put_to_block(int)
+		- put the process into the corresponding blocked queue based on the value given
+
+message managing:
+	- is_waiting_for (int receiver, int sender)
+		- check if receiver is waiting for message from sender
+		- by storing things in PCB?
+
+problems:
+	- what if processes keep sending garbage messages (say P1 send message to P2 but P2 is not waiting message from P1, then those messages never get picked up and eventually takes up all memory space?)
