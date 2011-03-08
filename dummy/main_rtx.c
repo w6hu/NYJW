@@ -52,7 +52,7 @@ int main()
 	free_blocks = initBlock(NUM_MEM_BLKS);
 	rtx_dbug_outs((CHAR *)"rtx: Created Memory blocks\r\n");
 
-	//init_mailboxes();
+	init_mailboxes();
 	rtx_dbug_outs((CHAR *)"rtx: Created Mailboxes\r\n");
 	
 	int i = 0;
@@ -70,10 +70,12 @@ int main()
 	
 	i = 0;
 	for (i; i < 6; i++) {
-		rtx_dbug_outs((CHAR *)"rtx: Infinite Loop\r\n");
+		//rtx_dbug_outs((CHAR *)"rtx: Infinite Loop\r\n");
 		p[i].next = NULL;
 		p[i].id = g_test_proc[i].pid;
-		rtx_dbug_outs((CHAR *)"rtx: Got PID\r\n");
+		rtx_dbug_outs((CHAR *)"rtx: Got PID=");
+		rtx_debug_out_char(p[i].id+48);
+		rtx_dbug_outs((CHAR *)"\r\n");
 		p[i].state = STATE_READY;
 		p[i].priority = g_test_proc[i].priority;
 		p[i].psw = 9984;   // assuming 9984 is the nomal initial state ... eh ?
@@ -120,47 +122,13 @@ int main()
 
 
 	process_start = process_start + 2048/4;
-//	init_null_process(&null_p, process_start);
+	init_null_process(&null_p, process_start);
 	current_running_process = 0;
-/*	
-	int newVal = 0;
-			asm("move.l %%a7, %0" : "=r" (newVal));
-			rtx_dbug_outs((CHAR *)"rtx: Print out A7 before!\r\n");
-			int last = (int)newVal%10;
-		int remain = (int)newVal;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) "\r\n");		
-	*/
-	
-	
 
 	process_start = process_start + 2048/4;
-	//call the scheduler to start a process
 	schedule_next_process();
 	
-	
-	/*
-	int newVal = 0;
-			asm("move.l %%a7, %0" : "=r" (newVal));
-			rtx_dbug_outs((CHAR *)"rtx: Print out A7 after!\r\n");
-			int last = (int)newVal%10;
-			int remain = (int)newVal;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) "\r\n");		
-	*/
-	
+
 	rtx_dbug_outs((CHAR *)"rtx: Return from scheduler\r\n");
 	//void * call_funct = schedule_next_process;
 	//asm("move.l %0, %%a0" : : "r" (call_funct));
@@ -170,15 +138,7 @@ int main()
 	//  rtx_dbug_outs((CHAR *)"rtx: Null\r\n");
 	// }
 
-    /* The following  is just to demonstrate how to reference 
-     * the third party test process entry point inside rtx.
-     * Your rtx should NOT call the test process directly!!! 
-     * Instead, the scheduler picks the test process to run
-     * and the os context switches to the chosen test process
-     */
-    //g_test_proc[0].entry(); /* DO NOT invoke test proc this way !!*/ 
-	
-	
+    
 	
     return 0;
 }

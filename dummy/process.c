@@ -29,10 +29,10 @@ void init_null_process( struct PCB* pcb_null_process, UINT32* process_start)
 	pcb_null_process->stack = process_start; // where exactly is the process stack ?
 	pcb_null_process->returning = FALSE;
 	pcb_null_process->waiting_on = -1;
-		
+	
 	int j = 0;
-	for (j; j < 14; j++) {
-		push(pcb_null_process, 0);
+	for (j; j < 2; j++) {
+		push(pcb_null_process, null_process);
 	}
 		
 	// initialize the process to the correct ready queue

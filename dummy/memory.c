@@ -78,7 +78,7 @@ void *initBlock(int num_blocks)
 	
 	for(i; i<num_blocks; i++)
 	{
-		rtx_dbug_outs((CHAR *)"rtx: Looping~~\r\n");
+		//rtx_dbug_outs((CHAR *)"rtx: Looping~~\r\n");
 		UINT32	*prev = temp_end; 
 		*temp_end = temp_end + 148/4;
 
