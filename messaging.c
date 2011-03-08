@@ -42,7 +42,20 @@ int send_message_jessie (int process_ID, void * MessageEnvelope) {
 	// update mailbox
 	if (mailboxStart[id] == 0) {
 		mailboxStart[id] = (UINT32 *)MessageEnvelope;
-		mailboxEnd[id] = (UINT32 *)MessageEnvelope;		
+		mailboxEnd[id] = (UINT32 *)MessageEnvelope;
+		
+		rtx_dbug_outs("send message address\r\n");
+		int last = (int)MessageEnvelope%10;
+		int remain = (int)MessageEnvelope;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+		rtx_dbug_outs((CHAR *) "\r\n");
+		
 	}
 	else {
 		*(mailboxEnd[id]-1) = (UINT32 *)MessageEnvelope;
@@ -57,7 +70,7 @@ int send_message_jessie (int process_ID, void * MessageEnvelope) {
 			// still problem here
 			//preempt(sender_ID);
 			//start_to_run(process_ID);
-		
+			rtx_dbug_outs("release in send_message_jessie\r\n");
 			release_processor_kuma_san();
 		}
 	}
@@ -67,8 +80,9 @@ int send_message_jessie (int process_ID, void * MessageEnvelope) {
 // If a message is not in the inbox yet, the process is put into the blocked queue
 void * receive_message_jessie (int * sender_ID) {
 	// error check
+	rtx_dbug_outs("recieve message jessie\r\n");
 	if (process_exists(*sender_ID) == FALSE) {
-		rtx_dbug_outs((CHAR *)"rtx_test: sender dne\r\n");
+		rtx_dbug_outs("sender dne\r\n");
 		return NULL;
 	}
 	
@@ -80,11 +94,28 @@ void * receive_message_jessie (int * sender_ID) {
 	while (TRUE) {
 	message  = mailboxStart[sender_box];
 	
-	
-	
+	rtx_dbug_outs("first message address\r\n");
+			int last = (int)message%10;
+		int remain = (int)message;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+		rtx_dbug_outs((CHAR *) "\r\n");
 	
 	while (message != 0) {
-		// if there is a message waiting*/		
+		// if there is a message waiting*/
+		
+		rtx_dbug_outs("receiver id in message: ");
+		rtx_dbug_out_char((int)(*(message + 2))+48);
+		rtx_dbug_outs("\r\n");
+		rtx_dbug_outs("receiver id requested: ");
+		rtx_dbug_out_char(id + 48);
+		rtx_dbug_outs("\r\n");
+		
 		
 		if ((int)(*(message + 2)) == id) {
 			// take it out of the mailbox
@@ -107,14 +138,26 @@ void * receive_message_jessie (int * sender_ID) {
 		// else check next message
 		else {
 			message = *(UINT32 *)(message-1);
-	
+			
+			/*rtx_dbug_outs("new message address\r\n");
+			int last = (int)message%10;
+		int remain = (int)message;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));
+		}
+		rtx_dbug_outs((CHAR *) "\r\n");*/
+		
 		}
 		
 	}
-	
+	rtx_dbug_outs("going to put into blocked queue\r\n");
 	// if the message is not there yet, put into blocked queue
 	put_to_blocked(*sender_ID, get_process_from_ID(id));
-
+	rtx_dbug_outs("put into blocked queue\r\n");
 	release_processor_kuma_san();
 	}
 }

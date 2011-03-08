@@ -205,7 +205,6 @@ int get_process_priority_usagi_san(int process_id)
 int process_exists(int process_id)
 {
 	int i = 0;
-	extern struct PCB p [6];
 	for (i; i < 6; i++) {
 		if (p[i].id == process_id) {
 			return TRUE;

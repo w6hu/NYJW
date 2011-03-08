@@ -20,6 +20,17 @@ int send_message (int process_ID, void * MessageEnvelope)
 
 void * receive_message(int * sender_ID)
 {
+	rtx_dbug_outs((CHAR *)"rtx: receive_message \r\n");
+	int last; //= tempEnd%10;
+	int remain = sender_ID;
+	//int i = 0; 
+	while (remain != 0) {
+		//rtx_dbug_out_char((CHAR)(last+48));
+		last = remain%10;
+		remain = remain/10;
+		rtx_dbug_out_char((CHAR)(last+48));            
+	}
+	rtx_dbug_outs((CHAR *) "\r\n");
     rtx_dbug_outs((CHAR *)"rtx: receive_message \r\n");
 	return receive_message_jessie(sender_ID);
 }
@@ -27,8 +38,20 @@ void * receive_message(int * sender_ID)
 /*Memory Management*/
 void * request_memory_block() 
 {
+
     rtx_dbug_outs((CHAR *)"rtx: request_memory_block \r\n");
-	return s_request_memory_block_yishi(); 
+	void* block = s_request_memory_block_yishi();
+	int last; //= tempEnd%10;
+	int remain = block;
+	//int i = 0; 
+	while (remain != 0) {
+		//rtx_dbug_out_char((CHAR)(last+48));
+		last = remain%10;
+		remain = remain/10;
+		rtx_dbug_out_char((CHAR)(last+48));            
+	}
+	rtx_dbug_outs((CHAR *) "\r\n");
+	return block; 
 }
 
 int release_memory_block(void * MemoryBlock)

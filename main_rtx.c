@@ -71,12 +71,33 @@ int main()
 	for (i; i < 6; i++) {
 		p[i].next = NULL;
 		p[i].id = g_test_proc[i].pid;
+		
+		int last; //= tempEnd%10;
+	int remain = p[i].id;
+	//int i = 0; 
+	while (remain != 0) {
+		//rtx_dbug_out_char((CHAR)(last+48));
+		last = remain%10;
+		remain = remain/10;
+		rtx_dbug_out_char((CHAR)(last+48));            
+	}
+	rtx_dbug_outs((CHAR *) "\r\n");
 		p[i].state = STATE_READY;
 		p[i].priority = g_test_proc[i].priority;
 		p[i].psw = 9984;   // assuming 9984 is the nomal initial state ... eh ?
 		p[i].pc = *(g_test_proc[i].entry); //point pc to entry point of code
 		process_start = process_start + g_test_proc[i].sz_stack/4;
 		p[i].stack = process_start; // where exactly is the process stack ?
+			last; //= tempEnd%10;
+	remain = p[i].stack;
+	//int i = 0; 
+	while (remain != 0) {
+		//rtx_dbug_out_char((CHAR)(last+48));
+		last = remain%10;
+		remain = remain/10;
+		rtx_dbug_out_char((CHAR)(last+48));            
+	}
+	rtx_dbug_outs((CHAR *) "\r\n");
 		p[i].returning = FALSE;
 		p[i].waiting_on = -1;
 		
