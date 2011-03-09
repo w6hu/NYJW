@@ -11,16 +11,13 @@ void null_process()
 {
     while (1) 
     {
-	    rtx_dbug_outs((CHAR *)"Hey APLLE! Hey APLLE! Hey APLLE!\r\n");
         /* execute a rtx primitive to test */
         release_processor_kuma_san();
-	    rtx_dbug_outs((CHAR *)"WHAT !?\r\n");
     }
 }
 
 void init_null_process( struct PCB* pcb_null_process, UINT32* process_start)
 {	
-	rtx_dbug_outs((CHAR *)"rtx: Initializing the null process\r\n");
 	pcb_null_process->next = NULL;
 	pcb_null_process->id = -2;
 	//pcb_null_process->state = STATE_READY;
@@ -54,9 +51,7 @@ void init_null_process( struct PCB* pcb_null_process, UINT32* process_start)
 }
 
 int release_processor_kuma_san()
-{
-	rtx_dbug_outs((CHAR *)"rtx: Kuma san Ohaiyou !!\r\n");
-	
+{	
 	// set state and put the process to ready
 	if(current_running_process->state == STATE_RUNNING)
 		put_to_ready (current_running_process);
@@ -69,19 +64,14 @@ int release_processor_kuma_san()
 
 void schedule_next_process()
 {
-	rtx_dbug_outs((CHAR *)"rtx: In scheduler\r\n");
-
 	// look for the next process.
 	// if nothing is selected, the null 
 	// process is there at your service.
 	int i=0;
-	rtx_dbug_outs((CHAR *)"rtx: before the scheduling loop\r\n");
 	for(i; i<5; i++)
 	{
 		if(ready_queue[i] != NULL)
-		{
-			rtx_dbug_outs((CHAR *)"rtx: Found a ready process, begin to switch .... !\r\n");
-			
+		{			
 			prev_running_process = current_running_process;
 			
 			// select the next process
@@ -94,7 +84,6 @@ void schedule_next_process()
 			break;
 		}
 	}
-	rtx_dbug_outs((CHAR *)"rtx: after the scheduling loop the loop\r\n");
 }
 
 VOID stack_pointer_switcher( VOID )
@@ -191,11 +180,3 @@ void set_process_state(int process_id, int process_state)
 	}
 }
 
-/*void set_process_to_run(int process_id)
-{
-	struct PCB* to_be_run = get_process_from_ID(process_id);
-	if(to_be_run != NULL)
-	{
-		imma_epeen_process = to_be_run;
-	}
-}*/
