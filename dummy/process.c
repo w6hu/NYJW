@@ -31,22 +31,11 @@ void init_null_process( struct PCB* pcb_null_process, UINT32* process_start)
 	pcb_null_process->returning = FALSE;
 	pcb_null_process->waiting_on = -1;
 		
-	//back up a7
-	int original_a7;
-	asm("move.l %%a7, %0" : "=r" (original_a7));
+	int j = 0;
+	for (j; j < 14; j++) {
+		push(pcb_null_process, 0);
+	}
 		
-	int val = pcb_null_process->stack;
-	asm("move.l %0, %%a7" : : "r" (val));
-	val = pcb_null_process->pc;
-	
-	asm("move.l %0, %%d0" : : "r" (val));
-	asm("move.l %d0, -(%a7)");
-	asm("move.l %d0, -(%a7)");
-
-	
-	//restore a7
-	asm("move.l %0, %%a7" : : "r" (original_a7));
-					
 	// initialize the process to the correct ready queue
 	put_to_ready(pcb_null_process);
 }
@@ -55,14 +44,12 @@ int release_processor_kuma_san()
 {
 	rtx_dbug_outs((CHAR *)"rtx: Kuma san Ohaiyou !!\r\n");
 	
-
 	// set state and put the process to ready
 	// TODO does this make sense ?
 	if(current_running_process->state == STATE_RUNNING)
 		put_to_ready (current_running_process);
 	
 	schedule_next_process();
-	
 	
 	//other wise just return to the calling process and continue
 	return RTX_SUCCESS;
@@ -81,7 +68,6 @@ void schedule_next_process()
 	rtx_dbug_outs((CHAR *)"rtx: before the scheduling loop\r\n");
 	for(i; i<5; i++)
 	{
-//		rtx_dbug_outs((CHAR *)"looping in scheler\r\n");
 		if(ready_queue[i] != NULL)
 		{
 			rtx_dbug_outs((CHAR *)"rtx: Found a ready process, begin to switch .... !\r\n");
@@ -93,14 +79,7 @@ void schedule_next_process()
 			ready_queue[i] = current_running_process->next;
 			current_running_process->next = NULL;
 			
-			if(current_running_process->state != STATE_NEW)
-				rtx_dbug_outs((CHAR *)"rtx: Something wrong\r\n");
-			
 			asm( "TRAP #0" );			
-
-//			stack_pointer_switcher(val-12);
-		
-			rtx_dbug_outs((CHAR *)"rtx: Love is sooo much .... CHARLIE !\r\n");
 
 			break;
 		}
@@ -108,16 +87,7 @@ void schedule_next_process()
 	rtx_dbug_outs((CHAR *)"rtx: after the scheduling loop the loop\r\n");
 }
 
-void stack_pointer_switcher(UINT32 second_stack_start)
-{
-	asm("move.l %a6, -(%a7)");
-	asm("move.l 8(%a6), %a7");	
-	asm("move.l (%a7)+, %a6");
-//	asm("move.l (%a7)+, %a0");
-	asm("rts");
-}
-
-VOID c_trap_handler( VOID )
+VOID stack_pointer_switcher( VOID )
 {
 	asm("move.l %a6, -(%a7)");
 	

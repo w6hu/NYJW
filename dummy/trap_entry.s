@@ -17,7 +17,7 @@ asm_trap_entry:
 	move.l %a5, -(%a7)
 	move.l %a6, -(%a7)
 		
-	jsr c_trap_handler
+	jsr stack_pointer_switcher
 	
 	move.l (%a7)+, %a6
 	move.l (%a7)+, %a5

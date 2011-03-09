@@ -2,9 +2,9 @@
 Allocating common symbols
 Common symbol       size              file
 
-old_stack           0x4               /tmp/cc1PfFoM.o
+old_stack           0x4               /tmp/ccWB2JbA.o
 free_blocks         0x4               dbug.o
-main_stack          0x1000            /tmp/cc1PfFoM.o
+main_stack          0x1000            /tmp/ccWB2JbA.o
 
 Memory Configuration
 
@@ -14,7 +14,7 @@ ram              0x10200000         0x00100000
 
 Linker script and memory map
 
-LOAD /tmp/cc1PfFoM.o
+LOAD /tmp/ccWB2JbA.o
 LOAD dbug.o
 LOAD rtx_loader.o
 START GROUP
@@ -28,7 +28,7 @@ END GROUP
 
 .text           0x10200000      0x1a8
  *(.text)
- .text          0x10200000       0x1e /tmp/cc1PfFoM.o
+ .text          0x10200000       0x1e /tmp/ccWB2JbA.o
  *fill*         0x1020001e        0x2 00
  .text          0x10200020       0x5c dbug.o
                 0x10200040                rtx_dbug_outs
@@ -65,7 +65,7 @@ END GROUP
 .data           0x102001a8        0x0
  *(.shdata)
  *(.data)
- .data          0x102001a8        0x0 /tmp/cc1PfFoM.o
+ .data          0x102001a8        0x0 /tmp/ccWB2JbA.o
  .data          0x102001a8        0x0 dbug.o
  .data          0x102001a8        0x0 rtx_loader.o
                 0x102001a8                _edata = .
@@ -74,12 +74,12 @@ END GROUP
                 0x102001a8                __bss_start = .
  *(.shbss)
  *(.bss)
- .bss           0x102001a8        0x0 /tmp/cc1PfFoM.o
+ .bss           0x102001a8        0x0 /tmp/ccWB2JbA.o
  .bss           0x102001a8        0x0 dbug.o
  .bss           0x102001a8        0x0 rtx_loader.o
  *(COMMON)
  *fill*         0x102001a8        0x8 00
- COMMON         0x102001b0     0x1010 /tmp/cc1PfFoM.o
+ COMMON         0x102001b0     0x1010 /tmp/ccWB2JbA.o
                 0x102001b0                old_stack
                 0x102001c0                main_stack
  COMMON         0x102011c0        0x4 dbug.o

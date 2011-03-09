@@ -58,9 +58,10 @@ void test2()
 		}
 		rtx_dbug_outs((CHAR *) "\r\n");
 		rtx_dbug_outs((CHAR *)"rtx_test: TEST 2\r\n");	
+
         /* execute a rtx primitive to test */
         g_test_fixture.release_processor();
-		rtx_dbug_outs((CHAR *)"rtx_test: TEST 2 END\r\n");	
+		rtx_dbug_outs((CHAR *)"rtx_test: TEST 2 END\r\n");
     }
 }
 /* third party dummy test process 3 */ 

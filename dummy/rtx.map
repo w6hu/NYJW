@@ -5,11 +5,11 @@ Common symbol       size              file
 p                   0xcc              main_rtx.o
 mailboxStart        0x18              messaging.o
 blocked_queue       0x18              rtx.o
-old_stack           0x4               /tmp/cc283Fcv.o
+old_stack           0x4               /tmp/cc9rv1fv.o
 ready_queue         0x14              rtx.o
 mailboxEnd          0x18              messaging.o
 free_blocks         0x4               rtx.o
-main_stack          0x1000            /tmp/cc283Fcv.o
+main_stack          0x1000            /tmp/cc9rv1fv.o
 mem_end             0x4               rtx.o
 null_p              0x22              main_rtx.o
 
@@ -21,8 +21,8 @@ ram              0x10100000         0x00100000
 
 Linker script and memory map
 
-LOAD /tmp/cc283Fcv.o
-LOAD /tmp/ccsZUK2P.o
+LOAD /tmp/cc9rv1fv.o
+LOAD /tmp/ccciNq4P.o
 LOAD rtx.o
 LOAD dbug.o
 LOAD memory.o
@@ -39,11 +39,11 @@ END GROUP
                 0x00000000                PROVIDE (software_init_hook, 0x0)
                 0x00000000                PROVIDE (_software_init_hook, 0x0)
 
-.text           0x10100000     0x1b0a
+.text           0x10100000     0x1ac1
  *(.text)
- .text          0x10100000       0x1e /tmp/cc283Fcv.o
+ .text          0x10100000       0x1e /tmp/cc9rv1fv.o
  *fill*         0x1010001e        0x2 00
- .text          0x10100020       0x44 /tmp/ccsZUK2P.o
+ .text          0x10100020       0x44 /tmp/ccciNq4P.o
                 0x10100020                asm_trap_entry
  .text          0x10100064       0xdc rtx.o
                 0x1010011e                get_process_priority
@@ -61,124 +61,123 @@ END GROUP
                 0x10100302                initBlock
                 0x1010019c                s_request_memory_block_yishi
                 0x10100202                s_release_memory_block_yishi
- .text          0x1010040c      0x3f0 process.o
-                0x1010074a                is_waiting_for
-                0x101004d0                release_processor_kuma_san
-                0x101007b0                set_process_state
+ .text          0x1010040c      0x398 process.o
+                0x101006f2                is_waiting_for
+                0x101004bc                release_processor_kuma_san
+                0x10100758                set_process_state
                 0x10100424                init_null_process
-                0x101005ee                stack_pointer_switcher
+                0x101005a8                stack_pointer_switcher
                 0x1010040c                null_process
-                0x10100704                process_exists
-                0x101006d4                get_process_priority_usagi_san
-                0x10100668                get_process_from_ID
-                0x1010050c                schedule_next_process
-                0x10100600                c_trap_handler
-                0x101006c2                get_process_ID
-                0x101007d6                set_process_to_run
- .text          0x101007fc      0x4ae init.o
-                0x10100aae                push_down_first_night
-                0x101008ba                put_to_blocked
-                0x10100b0a                push_test
-                0x101007fc                put_to_ready
-                0x10100a62                pop
-                0x101009d8                remove_from_blocked
-                0x10100af8                pop_test
-                0x10100998                remove_from_ready
-                0x10100a8a                push
- *fill*         0x10100caa        0x2 00
- .text          0x10100cac      0x4d6 messaging.o
-                0x10100cac                init_mailboxes
-                0x10100ce6                send_message_jessie
-                0x10100ed4                receive_message_jessie
- *fill*         0x10101182        0x2 00
- .text          0x10101184      0x350 main_rtx.o
-                0x10101184                __main
-                0x1010118e                main
-                0x101014d4                . = ALIGN (0x4)
-                0x101014d4                __CTOR_LIST__ = .
-                0x101014d4        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
+                0x101006ac                process_exists
+                0x1010067c                get_process_priority_usagi_san
+                0x10100610                get_process_from_ID
+                0x101004f8                schedule_next_process
+                0x1010066a                get_process_ID
+                0x1010077e                set_process_to_run
+ .text          0x101007a4      0x4ae init.o
+                0x10100a56                push_down_first_night
+                0x10100862                put_to_blocked
+                0x10100ab2                push_test
+                0x101007a4                put_to_ready
+                0x10100a0a                pop
+                0x10100980                remove_from_blocked
+                0x10100aa0                pop_test
+                0x10100940                remove_from_ready
+                0x10100a32                push
+ *fill*         0x10100c52        0x2 00
+ .text          0x10100c54      0x4c8 messaging.o
+                0x10100c54                init_mailboxes
+                0x10100c8e                send_message_jessie
+                0x10100e6e                receive_message_jessie
+ .text          0x1010111c      0x3ca main_rtx.o
+                0x1010111c                __main
+                0x10101126                main
+                0x101014e8                . = ALIGN (0x4)
+ *fill*         0x101014e6        0x2 00
+                0x101014e8                __CTOR_LIST__ = .
+                0x101014e8        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
  *(.ctors)
-                0x101014d8        0x4 LONG 0x0
-                0x101014dc                __CTOR_END__ = .
-                0x101014dc                __DTOR_LIST__ = .
-                0x101014dc        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
+                0x101014ec        0x4 LONG 0x0
+                0x101014f0                __CTOR_END__ = .
+                0x101014f0                __DTOR_LIST__ = .
+                0x101014f0        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
  *(.dtors)
-                0x101014e0        0x4 LONG 0x0
-                0x101014e4                __DTOR_END__ = .
+                0x101014f4        0x4 LONG 0x0
+                0x101014f8                __DTOR_END__ = .
  *(.rodata*)
- .rodata        0x101014e4       0xd0 rtx.o
- .rodata        0x101015b4       0x7c memory.o
-                0x101015b5                FREE
-                0x101015b7                FAILURE
-                0x101015b6                SUCCESS
-                0x101015b4                USED
- .rodata        0x10101630      0x138 process.o
- .rodata        0x10101768      0x1aa init.o
- .rodata        0x10101912       0xd5 messaging.o
- .rodata        0x101019e7      0x113 main_rtx.o
+ .rodata        0x101014f8       0xd0 rtx.o
+ .rodata        0x101015c8       0x7c memory.o
+                0x101015c9                FREE
+                0x101015cb                FAILURE
+                0x101015ca                SUCCESS
+                0x101015c8                USED
+ .rodata        0x10101644       0xf9 process.o
+ .rodata        0x1010173d      0x1aa init.o
+ .rodata        0x101018e7       0xb4 messaging.o
+ .rodata        0x1010199b      0x116 main_rtx.o
  *(.gcc_except_table)
-                0x10101afa                __INIT_SECTION__ = .
-                0x10101afa        0x4 LONG 0x4e560000
+                0x10101ab1                __INIT_SECTION__ = .
+                0x10101ab1        0x4 LONG 0x4e560000
  *(.init)
-                0x10101afe        0x2 SHORT 0x4e5e
-                0x10101b00        0x2 SHORT 0x4e75
-                0x10101b02                __FINI_SECTION__ = .
-                0x10101b02        0x4 LONG 0x4e560000
+                0x10101ab5        0x2 SHORT 0x4e5e
+                0x10101ab7        0x2 SHORT 0x4e75
+                0x10101ab9                __FINI_SECTION__ = .
+                0x10101ab9        0x4 LONG 0x4e560000
  *(.fini)
-                0x10101b06        0x2 SHORT 0x4e5e
-                0x10101b08        0x2 SHORT 0x4e75
-                0x10101b0a                _etext = .
+                0x10101abd        0x2 SHORT 0x4e5e
+                0x10101abf        0x2 SHORT 0x4e75
+                0x10101ac1                _etext = .
  *(.lit)
 
-.data           0x10101b0c        0x0
+.data           0x10101ac4        0x0
  *(.shdata)
  *(.data)
- .data          0x10101b0c        0x0 /tmp/cc283Fcv.o
- .data          0x10101b0c        0x0 /tmp/ccsZUK2P.o
- .data          0x10101b0c        0x0 rtx.o
- .data          0x10101b0c        0x0 dbug.o
- .data          0x10101b0c        0x0 memory.o
- .data          0x10101b0c        0x0 process.o
- .data          0x10101b0c        0x0 init.o
- .data          0x10101b0c        0x0 messaging.o
- .data          0x10101b0c        0x0 main_rtx.o
-                0x10101b0c                _edata = .
+ .data          0x10101ac4        0x0 /tmp/cc9rv1fv.o
+ .data          0x10101ac4        0x0 /tmp/ccciNq4P.o
+ .data          0x10101ac4        0x0 rtx.o
+ .data          0x10101ac4        0x0 dbug.o
+ .data          0x10101ac4        0x0 memory.o
+ .data          0x10101ac4        0x0 process.o
+ .data          0x10101ac4        0x0 init.o
+ .data          0x10101ac4        0x0 messaging.o
+ .data          0x10101ac4        0x0 main_rtx.o
+                0x10101ac4                _edata = .
 
-.bss            0x10101b0c     0x1176
-                0x10101b0c                __bss_start = .
+.bss            0x10101ac4     0x117e
+                0x10101ac4                __bss_start = .
  *(.shbss)
  *(.bss)
- .bss           0x10101b0c        0x0 /tmp/cc283Fcv.o
- .bss           0x10101b0c        0x0 /tmp/ccsZUK2P.o
- .bss           0x10101b0c        0x0 rtx.o
- .bss           0x10101b0c        0x0 dbug.o
- .bss           0x10101b0c        0x0 memory.o
- .bss           0x10101b0c        0xc process.o
-                0x10101b0c                current_running_process
-                0x10101b10                prev_running_process
-                0x10101b14                imma_epeen_process
- .bss           0x10101b18        0x4 init.o
-                0x10101b18                used_blocks
- .bss           0x10101b1c        0x0 messaging.o
- .bss           0x10101b1c        0x0 main_rtx.o
+ .bss           0x10101ac4        0x0 /tmp/cc9rv1fv.o
+ .bss           0x10101ac4        0x0 /tmp/ccciNq4P.o
+ .bss           0x10101ac4        0x0 rtx.o
+ .bss           0x10101ac4        0x0 dbug.o
+ .bss           0x10101ac4        0x0 memory.o
+ .bss           0x10101ac4        0xc process.o
+                0x10101ac4                current_running_process
+                0x10101ac8                prev_running_process
+                0x10101acc                imma_epeen_process
+ .bss           0x10101ad0        0x4 init.o
+                0x10101ad0                used_blocks
+ .bss           0x10101ad4        0x0 messaging.o
+ .bss           0x10101ad4        0x0 main_rtx.o
  *(COMMON)
- *fill*         0x10101b1c        0x4 00
- COMMON         0x10101b20     0x1010 /tmp/cc283Fcv.o
-                0x10101b20                old_stack
-                0x10101b30                main_stack
- COMMON         0x10102b30       0x34 rtx.o
-                0x10102b30                blocked_queue
-                0x10102b48                ready_queue
-                0x10102b5c                free_blocks
-                0x10102b60                mem_end
- COMMON         0x10102b64       0x30 messaging.o
-                0x10102b64                mailboxStart
-                0x10102b7c                mailboxEnd
- COMMON         0x10102b94       0xee main_rtx.o
-                0x10102b94                p
-                0x10102c60                null_p
-                0x10102c88                _end = ALIGN (0x8)
-                0x10102c88                __end = _end
+ *fill*         0x10101ad4        0xc 00
+ COMMON         0x10101ae0     0x1010 /tmp/cc9rv1fv.o
+                0x10101ae0                old_stack
+                0x10101af0                main_stack
+ COMMON         0x10102af0       0x34 rtx.o
+                0x10102af0                blocked_queue
+                0x10102b08                ready_queue
+                0x10102b1c                free_blocks
+                0x10102b20                mem_end
+ COMMON         0x10102b24       0x30 messaging.o
+                0x10102b24                mailboxStart
+                0x10102b3c                mailboxEnd
+ COMMON         0x10102b54       0xee main_rtx.o
+                0x10102b54                p
+                0x10102c20                null_p
+                0x10102c48                _end = ALIGN (0x8)
+                0x10102c48                __end = _end
 
 .stab
  *(.stab)

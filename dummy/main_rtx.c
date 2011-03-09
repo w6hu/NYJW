@@ -41,6 +41,7 @@ int main()
 	// set up the trap
 	asm( "move.l #asm_trap_entry,%d0" );
 	asm( "move.l %d0,0x10000080" );
+
 	asm( "move.l #asm_trap_entry,%d0" );
     asm( "move.l %d0,0x10000080" );
 
@@ -99,6 +100,17 @@ int main()
 		val = p[i].stack;
 		asm("move.l %0, %%a7" : : "r" (val));
 		val = p[i].pc;
+		
+		int last = val%10;
+		int remain = val;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+		rtx_dbug_outs((CHAR *) "\r\n");		
 		
 		asm("move.l %0, %%d0" : : "r" (val));
 		asm("move.l %d0, -(%a7)");

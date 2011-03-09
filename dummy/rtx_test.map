@@ -3,10 +3,10 @@ Allocating common symbols
 Common symbol       size              file
 
 blocked_queue       0x18              rtx_test_dummy.o
-old_stack           0x4               /tmp/ccrw9z7s.o
+old_stack           0x4               /tmp/cc0EjWPi.o
 ready_queue         0x14              rtx_test_dummy.o
 free_blocks         0x4               dbug.o
-main_stack          0x1000            /tmp/ccrw9z7s.o
+main_stack          0x1000            /tmp/cc0EjWPi.o
 mem_end             0x4               rtx_test_dummy.o
 
 Memory Configuration
@@ -17,7 +17,7 @@ ram              0x10400000         0x00100000
 
 Linker script and memory map
 
-LOAD /tmp/ccrw9z7s.o
+LOAD /tmp/cc0EjWPi.o
 LOAD dbug.o
 LOAD rtx_test_dummy.o
 START GROUP
@@ -31,7 +31,7 @@ END GROUP
 
 .text           0x10400000      0x700
  *(.text)
- .text          0x10400000       0x1e /tmp/ccrw9z7s.o
+ .text          0x10400000       0x1e /tmp/cc0EjWPi.o
  *fill*         0x1040001e        0x2 00
  .text          0x10400020       0x5c dbug.o
                 0x10400040                rtx_dbug_outs
@@ -75,7 +75,7 @@ END GROUP
 .data           0x10400700        0x0
  *(.shdata)
  *(.data)
- .data          0x10400700        0x0 /tmp/ccrw9z7s.o
+ .data          0x10400700        0x0 /tmp/cc0EjWPi.o
  .data          0x10400700        0x0 dbug.o
  .data          0x10400700        0x0 rtx_test_dummy.o
                 0x10400700                _edata = .
@@ -84,13 +84,13 @@ END GROUP
                 0x10400700                __bss_start = .
  *(.shbss)
  *(.bss)
- .bss           0x10400700        0x0 /tmp/ccrw9z7s.o
+ .bss           0x10400700        0x0 /tmp/cc0EjWPi.o
  .bss           0x10400700        0x0 dbug.o
  .bss           0x10400700        0x4 rtx_test_dummy.o
                 0x10400700                test
  *(COMMON)
  *fill*         0x10400704        0xc 00
- COMMON         0x10400710     0x1010 /tmp/ccrw9z7s.o
+ COMMON         0x10400710     0x1010 /tmp/cc0EjWPi.o
                 0x10400710                old_stack
                 0x10400720                main_stack
  COMMON         0x10401720        0x4 dbug.o
