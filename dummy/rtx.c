@@ -15,14 +15,13 @@
 int send_message (int process_ID, void * MessageEnvelope)
 {
     rtx_dbug_outs((CHAR *)"rtx: send_message \r\n");
-	//send_message_jessie (process_ID, MessageEnvelope);
-    return 0;
+	return send_message_jessie (process_ID, MessageEnvelope);
 }
 
 void * receive_message(int * sender_ID)
 {
     rtx_dbug_outs((CHAR *)"rtx: receive_message \r\n");
-	return 0; //receive_message_jessie(sender_ID);
+	return receive_message_jessie(sender_ID);
 }
 
 /*Memory Management*/

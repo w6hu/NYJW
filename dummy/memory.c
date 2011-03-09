@@ -35,8 +35,18 @@ void* s_request_memory_block_yishi()
  */
 int s_release_memory_block_yishi( void* memory_block )
 {
+	// check if the address is valid
+	int last = (int)memory_block%10;
+		int remain = (int)memory_block;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+		rtx_dbug_outs((CHAR *) "\r\n");
 	
-	rtx_dbug_outs((CHAR *)"rtx: release_memory_block \r\n");
 	UINT32 *memory_address;
 	memory_address = (UINT32 *)memory_block - 5;
 	memory_block = memory_address;
@@ -61,6 +71,7 @@ int s_release_memory_block_yishi( void* memory_block )
 	*((UINT32 *)memory_block + 1) = 0;
 	free_blocks = memory_block;
 	*((int *)memory_block+2) = FREE;
+	rtx_dbug_outs((CHAR *) "Finished releasing memory\r\n");
 	return SUCCESS;
 }
 

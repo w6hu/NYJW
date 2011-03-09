@@ -29,6 +29,8 @@ struct PCB p [6];
 struct PCB null_p;
 extern struct PCB* current_running_process;
 extern struct PCB* prev_running_process;
+struct PCB* ready_queue[5];
+struct PCB* blocked_queue[1];
 
 /* gcc expects this function to exist */
 int __main( void )
@@ -57,7 +59,7 @@ int main()
 	free_blocks = initBlock(NUM_MEM_BLKS);
 	rtx_dbug_outs((CHAR *)"rtx: Created Memory blocks\r\n");
 
-	// init_mailboxes();
+	init_mailboxes();
 	rtx_dbug_outs((CHAR *)"rtx: Created Mailboxes\r\n");
 	
 	int i = 0;
@@ -71,8 +73,21 @@ int main()
 		ready_queue[i] = NULL;
 	}
 	
-	for (i=0; i < NUM_PROCESS; i++) {
-		blocked_queue[i] = NULL;
+	i=0;
+	for (i; i < 1; i++) {
+		blocked_queue[i] = 0;
+		rtx_dbug_outs((CHAR *)"rtx: initialize blocked_queue\r\n");
+		int a = &blocked_queue[i];
+		int last = (int)a%10;
+		int remain = (int)a;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+		rtx_dbug_outs((CHAR *) "\r\n");	
 	}
 	
 	i = 0;

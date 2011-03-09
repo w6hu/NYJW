@@ -12,9 +12,10 @@ void null_process();
 void init_null_process( struct PCB* null_process, UINT32* process_start);
 
 int release_processor_kuma_san();
-void schedule_next_process_BACK();
+void schedule_next_process();
 
 struct PCB* get_process_from_ID(int process_id);
+int get_process_number_from_ID(int process_id);
 int get_process_ID();
 int get_process_priority_usagi_san(int process_id);
 int process_exists(int process_id);

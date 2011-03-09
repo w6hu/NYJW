@@ -36,7 +36,4 @@ UINT32 pop_test ();
 void push_test (UINT32 val);
 void push_down_first_night (struct PCB* p, UINT32 val);
 
-struct PCB* ready_queue[5];
-struct PCB* blocked_queue[6];
-
 #endif
