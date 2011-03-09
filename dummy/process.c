@@ -12,9 +12,10 @@ void null_process()
 {
     while (1) 
     {
-	    rtx_dbug_outs((CHAR *)"Hey APLLE! Hey Apple! Hey Apple !\r\n");
+	    rtx_dbug_outs((CHAR *)"Hey APLLE! Hey APLLE! Hey APLLE!\r\n");
         /* execute a rtx primitive to test */
         release_processor_kuma_san();
+	    rtx_dbug_outs((CHAR *)"WHAT !?\r\n");
     }
 }
 
@@ -24,20 +25,33 @@ void init_null_process( struct PCB* pcb_null_process, UINT32* process_start)
 	pcb_null_process->next = NULL;
 	pcb_null_process->id = -2;
 	pcb_null_process->state = STATE_READY;
-	pcb_null_process->priority = 0;
+	pcb_null_process->priority = 4;
 	pcb_null_process->psw = 9984;   // assuming 9984 is the nomal initial state ... eh ?
 	pcb_null_process->pc = null_process; //point pc to entry point of code
 	pcb_null_process->stack = process_start; // where exactly is the process stack ?
 	pcb_null_process->returning = FALSE;
 	pcb_null_process->waiting_on = -1;
 		
-	int j = 0;
-	for (j; j < 14; j++) {
-		push(pcb_null_process, 0);
-	}
+	int val;
+	//back up a7
+	int original_a7;
+	asm("move.l %%a7, %0" : "=r" (original_a7));	
+	val = pcb_null_process->stack;
+	asm("move.l %0, %%a7" : : "r" (val));
+	val = pcb_null_process->pc;			
+	asm("move.l %0, %%d0" : : "r" (val));
+	asm("move.l %d0, -(%a7)");
+	asm("move.l %d0, -(%a7)");
+	asm("move.l %d0, -(%a7)");
+	asm("move.l %d0, -(%a7)");
+	pcb_null_process->stack -= 4;
+
+	//restore a7
+	asm("move.l %0, %%a7" : : "r" (original_a7));
 		
 	// initialize the process to the correct ready queue
 	put_to_ready(pcb_null_process);
+	pcb_null_process->state = STATE_NEW;	
 }
 
 int release_processor_kuma_san()
@@ -45,7 +59,6 @@ int release_processor_kuma_san()
 	rtx_dbug_outs((CHAR *)"rtx: Kuma san Ohaiyou !!\r\n");
 	
 	// set state and put the process to ready
-	// TODO does this make sense ?
 	if(current_running_process->state == STATE_RUNNING)
 		put_to_ready (current_running_process);
 	

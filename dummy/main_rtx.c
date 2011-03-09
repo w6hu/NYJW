@@ -92,26 +92,12 @@ int main()
 		p[i].waiting_on = -1;
 		
 		int val;
-		
 		//back up a7
 		int original_a7;
-		asm("move.l %%a7, %0" : "=r" (original_a7));
-		
+		asm("move.l %%a7, %0" : "=r" (original_a7));	
 		val = p[i].stack;
 		asm("move.l %0, %%a7" : : "r" (val));
-		val = p[i].pc;
-		
-		int last = val%10;
-		int remain = val;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) "\r\n");		
-		
+		val = p[i].pc;			
 		asm("move.l %0, %%d0" : : "r" (val));
 		asm("move.l %d0, -(%a7)");
 		asm("move.l %d0, -(%a7)");
@@ -119,7 +105,6 @@ int main()
 		asm("move.l %d0, -(%a7)");
 		p[i].stack -= 4;
 
-		
 		//restore a7
 		asm("move.l %0, %%a7" : : "r" (original_a7));
 						
@@ -131,7 +116,7 @@ int main()
 
 
 	process_start = process_start + 2048/4;
-//	init_null_process(&null_p, process_start);
+	init_null_process(&null_p, process_start);
 /*	
 	int newVal = 0;
 			asm("move.l %%a7, %0" : "=r" (newVal));
