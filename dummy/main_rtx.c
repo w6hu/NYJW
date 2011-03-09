@@ -28,6 +28,7 @@ extern UINT32* mem_end;
 struct PCB p [6];
 struct PCB null_p;
 extern struct PCB* current_running_process;
+extern struct PCB* prev_running_process;
 
 /* gcc expects this function to exist */
 int __main( void )
@@ -37,9 +38,9 @@ int __main( void )
 
 int main() 
 {
+	// set up the trap
 	asm( "move.l #asm_trap_entry,%d0" );
 	asm( "move.l %d0,0x10000080" );
-
 	asm( "move.l #asm_trap_entry,%d0" );
     asm( "move.l %d0,0x10000080" );
 
@@ -55,13 +56,15 @@ int main()
 	free_blocks = initBlock(NUM_MEM_BLKS);
 	rtx_dbug_outs((CHAR *)"rtx: Created Memory blocks\r\n");
 
-	//init_mailboxes();
+	// init_mailboxes();
 	rtx_dbug_outs((CHAR *)"rtx: Created Mailboxes\r\n");
 	
 	int i = 0;
 	UINT32* process_start = mem_end;
-
+	current_running_process = NULL;
+	prev_running_process = NULL;
 	
+	// initialize the ready and block queue
 	for(i; i<5; i++)
 	{
 		ready_queue[i] = NULL;
@@ -77,7 +80,6 @@ int main()
 		p[i].next = NULL;
 		p[i].id = g_test_proc[i].pid;
 		rtx_dbug_outs((CHAR *)"rtx: Got PID\r\n");
-		p[i].state = STATE_READY;
 		p[i].priority = g_test_proc[i].priority;
 		p[i].psw = 9984;   // assuming 9984 is the nomal initial state ... eh ?
 		rtx_dbug_outs((CHAR *)"rtx: Getting pc\r\n");
@@ -102,19 +104,22 @@ int main()
 		asm("move.l %d0, -(%a7)");
 		asm("move.l %d0, -(%a7)");
 		asm("move.l %d0, -(%a7)");
+		asm("move.l %d0, -(%a7)");
+		p[i].stack -= 4;
 
 		
 		//restore a7
 		asm("move.l %0, %%a7" : : "r" (original_a7));
 						
 		// initialize the process to the correct ready queue
+		// put_to_ready set the state to ready, so reset it to new
 		put_to_ready(&(p[i]));		
+		p[i].state = STATE_NEW;		
 	}
 
 
 	process_start = process_start + 2048/4;
 //	init_null_process(&null_p, process_start);
-	current_running_process = 0;
 /*	
 	int newVal = 0;
 			asm("move.l %%a7, %0" : "=r" (newVal));

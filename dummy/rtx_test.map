@@ -1,0 +1,136 @@
+
+Allocating common symbols
+Common symbol       size              file
+
+blocked_queue       0x18              rtx_test_dummy.o
+old_stack           0x4               /tmp/ccrw9z7s.o
+ready_queue         0x14              rtx_test_dummy.o
+free_blocks         0x4               dbug.o
+main_stack          0x1000            /tmp/ccrw9z7s.o
+mem_end             0x4               rtx_test_dummy.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+ram              0x10400000         0x00100000
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD /tmp/ccrw9z7s.o
+LOAD dbug.o
+LOAD rtx_test_dummy.o
+START GROUP
+LOAD /opt/gcc-coldfire/bin/../lib/gcc/m68k-elf/4.3.2/m5307/libgcc.a
+END GROUP
+                0x00000000                __DYNAMIC = 0x0
+                0x00000000                PROVIDE (hardware_init_hook, 0x0)
+                0x00000000                PROVIDE (_hardware_init_hook, 0x0)
+                0x00000000                PROVIDE (software_init_hook, 0x0)
+                0x00000000                PROVIDE (_software_init_hook, 0x0)
+
+.text           0x10400000      0x700
+ *(.text)
+ .text          0x10400000       0x1e /tmp/ccrw9z7s.o
+ *fill*         0x1040001e        0x2 00
+ .text          0x10400020       0x5c dbug.o
+                0x10400040                rtx_dbug_outs
+                0x10400020                rtx_dbug_out_char
+ .text          0x1040007c      0x4c2 rtx_test_dummy.o
+                0x1040007c                test1
+                0x10400460                test6
+                0x104002d4                test4
+                0x10400526                main
+                0x10400148                test2
+                0x1040039a                test5
+                0x1040020e                test3
+                0x10400540                . = ALIGN (0x4)
+ *fill*         0x1040053e        0x2 00
+                0x10400540                __CTOR_LIST__ = .
+                0x10400540        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
+ *(.ctors)
+                0x10400544        0x4 LONG 0x0
+                0x10400548                __CTOR_END__ = .
+                0x10400548                __DTOR_LIST__ = .
+                0x10400548        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
+ *(.dtors)
+                0x1040054c        0x4 LONG 0x0
+                0x10400550                __DTOR_END__ = .
+ *(.rodata*)
+ .rodata        0x10400550      0x1a0 rtx_test_dummy.o
+ *(.gcc_except_table)
+                0x104006f0                __INIT_SECTION__ = .
+                0x104006f0        0x4 LONG 0x4e560000
+ *(.init)
+                0x104006f4        0x2 SHORT 0x4e5e
+                0x104006f6        0x2 SHORT 0x4e75
+                0x104006f8                __FINI_SECTION__ = .
+                0x104006f8        0x4 LONG 0x4e560000
+ *(.fini)
+                0x104006fc        0x2 SHORT 0x4e5e
+                0x104006fe        0x2 SHORT 0x4e75
+                0x10400700                _etext = .
+ *(.lit)
+
+.data           0x10400700        0x0
+ *(.shdata)
+ *(.data)
+ .data          0x10400700        0x0 /tmp/ccrw9z7s.o
+ .data          0x10400700        0x0 dbug.o
+ .data          0x10400700        0x0 rtx_test_dummy.o
+                0x10400700                _edata = .
+
+.bss            0x10400700     0x1054
+                0x10400700                __bss_start = .
+ *(.shbss)
+ *(.bss)
+ .bss           0x10400700        0x0 /tmp/ccrw9z7s.o
+ .bss           0x10400700        0x0 dbug.o
+ .bss           0x10400700        0x4 rtx_test_dummy.o
+                0x10400700                test
+ *(COMMON)
+ *fill*         0x10400704        0xc 00
+ COMMON         0x10400710     0x1010 /tmp/ccrw9z7s.o
+                0x10400710                old_stack
+                0x10400720                main_stack
+ COMMON         0x10401720        0x4 dbug.o
+                0x10401720                free_blocks
+ COMMON         0x10401724       0x30 rtx_test_dummy.o
+                0x10401724                blocked_queue
+                0x1040173c                ready_queue
+                0x10401750                mem_end
+                0x10401758                _end = ALIGN (0x8)
+                0x10401758                __end = _end
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+__REGISTER_RTX__
+                0x10300000        0x0
+                0x10300000                __REGISTER_RTX_ENTRY__ = <code 345> (.)
+ *(__REGISTER_RTX__)
+                0x10380000                __REGISTER_TEST_PROCS_ENTRY__ = 0x10380000
+
+__REGISTER_TEST_PROCS__
+                0x10380000       0xce
+                0x10380000                __REGISTER_TEST_PROCS_ENTRY__ = <code 345> (.)
+ *(__REGISTER_TEST_PROCS__)
+ __REGISTER_TEST_PROCS__
+                0x10380000       0xce rtx_test_dummy.o
+                0x10380000                register_test_proc
+
+__RTX_TEST_DATA__
+                0x10500000       0x5c
+ *(__RTX_TEST_DATA__)
+ __RTX_TEST_DATA__
+                0x10500000       0x5c rtx_test_dummy.o
+                0x10500020                g_test_proc
+                0x10500000                g_test_fixture
+OUTPUT(rtx_test_dummy.bin elf32-m68k)
+
+.comment        0x00000000       0x4e
+ .comment       0x00000000       0x27 dbug.o
+ .comment       0x00000027       0x27 rtx_test_dummy.o

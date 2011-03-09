@@ -122,6 +122,7 @@
 #define STATE_READY 0
 #define STATE_BLOCKED 1
 #define STATE_RUNNING 2
+#define STATE_NEW 3
 
 //define number of memory blocks
 #define NUM_MEM_BLKS 32
