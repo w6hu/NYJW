@@ -20,11 +20,8 @@ void init_null_process( struct PCB* pcb_null_process, UINT32* process_start)
 {	
 	pcb_null_process->next = NULL;
 	pcb_null_process->id = -2;
-	//pcb_null_process->state = STATE_READY;
 	pcb_null_process->priority = 4;
-	pcb_null_process->psw = 9984;   // assuming 9984 is the nomal initial state ... eh ?
-	pcb_null_process->pc = null_process; //point pc to entry point of code
-	pcb_null_process->stack = process_start; // where exactly is the process stack ?
+	pcb_null_process->stack = process_start;
 	pcb_null_process->returning = FALSE;
 	pcb_null_process->waiting_on = -1;
 		
@@ -34,13 +31,16 @@ void init_null_process( struct PCB* pcb_null_process, UINT32* process_start)
 	asm("move.l %%a7, %0" : "=r" (original_a7));	
 	val = pcb_null_process->stack;
 	asm("move.l %0, %%a7" : : "r" (val));
-	val = pcb_null_process->pc;			
+	val = null_process;			
 	asm("move.l %0, %%d0" : : "r" (val));
 	asm("move.l %d0, -(%a7)");
-	asm("move.l %d0, -(%a7)");
-	asm("move.l %d0, -(%a7)");
-	asm("move.l %d0, -(%a7)");
-	pcb_null_process->stack -= 4;
+	val = 1796;			
+	asm("move.w %0, %%d0" : : "r" (val));
+	asm("move.w %d0, -(%a7)");
+	val = 16512;			
+	asm("move.w %0, %%d0" : : "r" (val));
+	asm("move.w %d0, -(%a7)");
+	pcb_null_process->stack -= 8;
 
 	//restore a7
 	asm("move.l %0, %%a7" : : "r" (original_a7));
@@ -90,6 +90,9 @@ VOID stack_pointer_switcher( VOID )
 {
 	asm("move.l %a6, -(%a7)");
 	
+	// we need a swtich statement to see what the calling function is,
+	// since all other primitives are going to be calling this thing now
+	
 	int val;
 	if(prev_running_process != NULL)
 	{
@@ -102,8 +105,22 @@ VOID stack_pointer_switcher( VOID )
 
 	if(current_running_process->state == STATE_NEW)
 	{
+/*		
+		asm("move.l %%a7, %0" : "=r" (val));
+		int last; //= tempEnd%10;
+		int remain = val;
+		//int i = 0; 
+		rtx_dbug_outs((CHAR *) "\r\n");
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+		rtx_dbug_outs((CHAR *) "\r\n");
+*/	
 		current_running_process->state = STATE_RUNNING;
-		asm("rts");
+		asm("rte");
 	}
 	
 	current_running_process->state = STATE_RUNNING;
