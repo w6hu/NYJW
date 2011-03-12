@@ -41,7 +41,11 @@ int release_memory_block(void * MemoryBlock)
 int release_processor()
 {
     //rtx_dbug_outs((CHAR *)"rtx: release_processor \r\n");
-    return release_processor_kuma_san();
+	int val = CALLER_RELEASE_PROCESSOR;
+	asm("move.l %0, %%d0" : : "r" (val));
+	asm( "TRAP #0" );
+	
+    return;
 }
 
 /*Timing Service*/

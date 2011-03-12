@@ -56,13 +56,20 @@ int release_processor_kuma_san()
 	if(current_running_process->state == STATE_RUNNING)
 		put_to_ready (current_running_process);
 	
-	schedule_next_process();
+	schedule_next_process_neko_san();
 	
 	//other wise just return to the calling process and continue
 	return RTX_SUCCESS;
 }
 
 void schedule_next_process()
+{
+	int val = CALLER_SCHEDULER;
+	asm("move.l %0, %%d0" : : "r" (val));
+	asm( "TRAP #0" );
+}
+
+void schedule_next_process_neko_san()
 {
 	// look for the next process.
 	// if nothing is selected, the null 
@@ -79,7 +86,7 @@ void schedule_next_process()
 			ready_queue[i] = current_running_process->next;
 			current_running_process->next = NULL;
 			
-			asm( "TRAP #0" );			
+			stack_pointer_switcher();			
 
 			break;
 		}
@@ -104,27 +111,42 @@ VOID stack_pointer_switcher( VOID )
 	asm("move.l %0, %%a7" :  : "r" (val));	
 
 	if(current_running_process->state == STATE_NEW)
-	{
-/*		
-		asm("move.l %%a7, %0" : "=r" (val));
-		int last; //= tempEnd%10;
-		int remain = val;
-		//int i = 0; 
-		rtx_dbug_outs((CHAR *) "\r\n");
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) "\r\n");
-*/	
+	{	
+		// as this hack simply jump out of the trap, so 
+		// need to reset automic here
+		
 		current_running_process->state = STATE_RUNNING;
 		asm("rte");
 	}
 	
 	current_running_process->state = STATE_RUNNING;
 	asm("move.l (%a7)+, %a6");	
+}
+
+VOID trap_call_animal( VOID )
+{
+	// set automic here
+	
+	// get the caller id
+	int val;
+	asm("move.l %%d0, %0" : "=r" (val));
+	// giant swtich to decide where to go
+	if(val == CALLER_SCHEDULER)
+	{
+		schedule_next_process_neko_san();
+	}
+	else if(val == CALLER_RELEASE_PROCESSOR)
+	{
+		release_processor_kuma_san();
+	}
+	else if(0)
+	{
+	}
+	else
+	{
+	}
+	
+	// reset sutomic here
 }
 
 struct PCB* get_process_from_ID(int process_id)

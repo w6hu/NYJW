@@ -23,7 +23,7 @@ RTX_OBJS = rtx.o dbug.o memory.o process.o init.o messaging.o main_rtx.o
 RTX_LOADER_OBJS = dbug.o rtx_loader.o
 RTX_TEST_DUMMY_OBJS = dbug.o rtx_test_dummy.o
 
-all: Gid_rtx.s19 
+all: mdummy.s19 
 
 
 # Note, GCC builds things in order, it's important to put yhe

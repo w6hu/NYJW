@@ -124,6 +124,15 @@
 #define STATE_RUNNING 2
 #define STATE_NEW 3
 
+/* 
+ * Caller Identifier
+*/
+#define CALLER_SCHEDULER 0
+#define CALLER_RELEASE_PROCESSOR 1
+#define CALLER_SEND_MESSAGE 2
+#define CALLER_RECEIVE_MESSAGE 3
+
+
 //define number of memory blocks
 #define NUM_MEM_BLKS 32
 UINT32 *free_blocks;
