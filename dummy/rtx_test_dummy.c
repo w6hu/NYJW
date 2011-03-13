@@ -35,6 +35,18 @@ void test1()
 		}
 		rtx_dbug_outs((CHAR *) "\r\n");
 		rtx_dbug_outs((CHAR *)"rtx_test: TEST 1\r\n");
+		
+        int return_val = g_test_fixture.delayed_send(1234, 2234, 3234);
+		last = (int)return_val%10;
+		remain = (int)return_val;
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+		rtx_dbug_outs((CHAR *) "  -----> Return value\r\n");
+		
         g_test_fixture.release_processor();
 		rtx_dbug_outs((CHAR *)"rtx_test: TEST 1 END\r\n");
     }

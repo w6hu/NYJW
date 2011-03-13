@@ -129,6 +129,11 @@ VOID trap_call_animal( VOID )
 	
 	// get the caller id
 	int val;
+	int parm1;
+	int parm2;
+	int parm3;
+	int return_val;
+	
 	asm("move.l %%d0, %0" : "=r" (val));
 	// giant swtich to decide where to go
 	if(val == CALLER_SCHEDULER)
@@ -139,11 +144,51 @@ VOID trap_call_animal( VOID )
 	{
 		release_processor_kuma_san();
 	}
-	else if(0)
+	else if(val == CALLER_RELEASE_MEMORY_BLOCK)
 	{
+		asm("move.l +96(%%a7), %0" : "=r" (parm1));
+		return_val = s_release_memory_block_yishi((void*)parm1);	
+		asm("move.l %0, +96(%%a7)" : : "r" (return_val));		
 	}
-	else
+	else if(val == CALLER_REQUEST_MEMORY_BLOCK)
 	{
+		asm("move.l +96(%%a7), %0" : "=r" (parm1));
+		return_val = (int)s_request_memory_block_yishi();	
+		asm("move.l %0, +96(%%a7)" : : "r" (return_val));	
+	}
+	else if(val == CALLER_SEND_MESSAGE)
+	{
+		asm("move.l +96(%%a7), %0" : "=r" (parm2));
+		asm("move.l +100(%%a7), %0" : "=r" (parm1));
+		return_val = send_message_jessie(parm1, (void*)parm2);	
+		asm("move.l %0, +96(%%a7)" : : "r" (return_val));
+	}
+	else if(val == CALLER_RECEIVE_MESSAGE)
+	{
+		asm("move.l +96(%%a7), %0" : "=r" (parm1));
+		return_val = receive_message_jessie(parm1);	
+		asm("move.l %0, +96(%%a7)" : : "r" (return_val));	
+	}
+	else if(val == CALLER_DELAYED_SEND)
+	{
+		asm("move.l +96(%%a7), %0" : "=r" (parm3));
+		asm("move.l +100(%%a7), %0" : "=r" (parm2));
+		asm("move.l +104(%%a7), %0" : "=r" (parm1));
+		return_val = delayed_send_umi_san(parm1, (void*)parm2, parm3);	
+		asm("move.l %0, +96(%%a7)" : : "r" (return_val));
+	}
+	else if(val == CALLER_GET_PRIORITY)
+	{
+		asm("move.l +96(%%a7), %0" : "=r" (parm1));
+		return_val = get_process_priority_usagi_san(parm1);	
+		asm("move.l %0, +96(%%a7)" : : "r" (return_val));	
+	}
+	else if(val == CALLER_SET_PRIORITY)
+	{
+		asm("move.l +96(%%a7), %0" : "=r" (parm2));
+		asm("move.l +100(%%a7), %0" : "=r" (parm1));
+		return_val = set_process_priority_yama_san(parm1, parm2);	
+		asm("move.l %0, +96(%%a7)" : : "r" (return_val));
 	}
 	
 	// reset sutomic here
@@ -185,6 +230,33 @@ int get_process_priority_usagi_san(int process_id)
 	{
 		return to_be_accessed->priority;
 	}
+}
+
+int set_process_priority_yama_san(int process_ID, int priority)
+{
+		int last = (int)process_ID%10;
+		int remain = (int)process_ID;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+		rtx_dbug_outs((CHAR *) " -------> parm1\r\n");
+		
+		last = (int)priority%10;
+		remain = (int)priority;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+		rtx_dbug_outs((CHAR *) " -------> parm2\r\n");		
+
+		return 168;
 }
 
 int process_exists(int process_id)

@@ -26,6 +26,7 @@ void* s_request_memory_block_yishi()
 	
 	free_blocks = *free_blocks;
 	*(free_blocks+1) = NULL;
+
 	return (void*)(allocated_block+5);
 }
 
