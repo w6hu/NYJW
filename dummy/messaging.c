@@ -57,11 +57,23 @@ int send_message_jessie (int process_ID, void * MessageEnvelope) {
 }
 
 // If a message is not in the inbox yet, the process is put into the blocked queue
-void * receive_message_jessie (int * sender_ID) {
+void * receive_message_jessie (int * sender_ID, int a_boolean) {
 	// check if the message has arrived yet
 	int receiver_ID = get_process_ID();
 	int receiver_box = get_process_number_from_ID(receiver_ID);
 	UINT32* message = 0;
+	
+		int last = (int)a_boolean%10;
+		int remain = (int)a_boolean;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+		rtx_dbug_outs((CHAR *) " -------> parm1\r\n");	
+	
 	
 	// keep looping and receive message until a message comes in
 	while (TRUE) {

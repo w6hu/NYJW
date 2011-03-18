@@ -12,6 +12,8 @@ void null_process()
     while (1) 
     {
         /* execute a rtx primitive to test */
+		
+		rtx_dbug_outs((CHAR *)"Running null process\r\n");		
         release_processor_kuma_san();
     }
 }
@@ -78,7 +80,7 @@ void schedule_next_process_neko_san()
 	for(i; i<5; i++)
 	{
 		if(ready_queue[i] != NULL)
-		{			
+		{					
 			prev_running_process = current_running_process;
 			
 			// select the next process
@@ -165,8 +167,9 @@ VOID trap_call_animal( VOID )
 	}
 	else if(val == CALLER_RECEIVE_MESSAGE)
 	{
-		asm("move.l +96(%%a7), %0" : "=r" (parm1));
-		return_val = receive_message_jessie(parm1);	
+		asm("move.l +96(%%a7), %0" : "=r" (parm2));	
+		asm("move.l +100(%%a7), %0" : "=r" (parm1));
+		return_val = receive_message_jessie(parm1, parm2);	
 		asm("move.l %0, +96(%%a7)" : : "r" (return_val));	
 	}
 	else if(val == CALLER_DELAYED_SEND)
