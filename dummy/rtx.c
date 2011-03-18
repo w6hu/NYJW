@@ -14,33 +14,33 @@
 /* Interprocess Communications*/
 int send_message (int process_ID, void * MessageEnvelope)
 {
-    //rtx_dbug_outs((CHAR *)"rtx: send_message \r\n");
+    rtx_dbug_outs((CHAR *)"rtx: send_message \r\n");
 	return send_message_jessie (process_ID, MessageEnvelope);
 }
 
 void * receive_message(int * sender_ID)
 {
-    //rtx_dbug_outs((CHAR *)"rtx: receive_message \r\n");
+    rtx_dbug_outs((CHAR *)"rtx: receive_message \r\n");
 	return receive_message_jessie(sender_ID);
 }
 
 /*Memory Management*/
 void * request_memory_block() 
 {
-    //rtx_dbug_outs((CHAR *)"rtx: request_memory_block \r\n");
+    rtx_dbug_outs((CHAR *)"rtx: request_memory_block \r\n");
 	return s_request_memory_block_yishi(); 
 }
 
 int release_memory_block(void * MemoryBlock)
 {
-    //rtx_dbug_outs((CHAR *)"rtx: release_memory_block \r\n");
+    rtx_dbug_outs((CHAR *)"rtx: release_memory_block \r\n");
 	return s_release_memory_block_yishi(MemoryBlock);
 }
 
 /*Process Management*/
 int release_processor()
 {
-    //rtx_dbug_outs((CHAR *)"rtx: release_processor \r\n");
+    rtx_dbug_outs((CHAR *)"rtx: release_processor \r\n");
     return release_processor_kuma_san();
 }
 
