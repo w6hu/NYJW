@@ -9,6 +9,7 @@
 extern UINT32 __end;
 extern UINT32 *free_blocks;
 extern UINT32 *used_blocks;
+extern struct PCB* current_running_process;
 
 const BYTE USED = 1;
 const BYTE FREE = 0;
@@ -17,17 +18,23 @@ const BYTE FAILURE = 1;
 
 void* s_request_memory_block_yishi()
 {
-	if(*free_blocks == NULL)	
-		return NULL;
-		
-	UINT32	*allocated_block;
-	allocated_block = free_blocks;
-	*(allocated_block+2) = USED;
-	
-	free_blocks = *free_blocks;
-	*(free_blocks+1) = NULL;
-
-	return (void*)(allocated_block+5);
+	while (TRUE) {
+		// put to blocked queue if the no avaiable memory
+		if(*free_blocks == NULL) {
+			put_to_blocked(1, current_running_process);
+			rtx_dbug_outs((CHAR *)"blocked on requesting memory");
+			release_processor_kuma_san();
+		}
+		else {
+			UINT32	*allocated_block;
+			allocated_block = free_blocks;
+			*(allocated_block+2) = USED;
+			
+			free_blocks = *free_blocks;
+			*(free_blocks+1) = NULL;
+			return (void*)(allocated_block+5);
+		}
+	}
 }
 
 /**
@@ -62,6 +69,8 @@ int s_release_memory_block_yishi( void* memory_block )
 	*((UINT32 *)memory_block + 1) = 0;
 	free_blocks = memory_block;
 	*((int *)memory_block+2) = FREE;
+	// pull blocked process out of the blocked queue if any
+	remove_first_from_blocked(1);
 	return SUCCESS;
 }
 

@@ -5,7 +5,7 @@ struct PCB* current_running_process = 0;
 struct PCB* prev_running_process = 0;
 
 extern struct PCB* ready_queue[5];
-extern struct PCB* blocked_queue[1];
+extern struct PCB* blocked_queue[2];
 
 void null_process()
 {

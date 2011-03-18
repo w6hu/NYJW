@@ -69,6 +69,7 @@ void * receive_message_jessie (int * sender_ID) {
 		if (message == NULL) {
 			// if the message is not there yet, put into blocked queue
 			put_to_blocked(0, get_process_from_ID(receiver_ID));
+			rtx_dbug_outs("No message, blocked\r\n");
 			release_processor_kuma_san();
 		}
 		else {
@@ -94,41 +95,6 @@ void * receive_message_jessie (int * sender_ID) {
 	}
 }
 
-int * delayed_send_umi_san(int process_ID, void * MessageEnvelope, int delay)
-{
-		int last = (int)process_ID%10;
-		int remain = (int)process_ID;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) " -------> parm1\r\n");
-		
-		last = (int)MessageEnvelope%10;
-		remain = (int)MessageEnvelope;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) " -------> parm2\r\n");		
-		
-		last = (int)delay%10;
-		remain = (int)delay;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) " -------> parm3\r\n");			
-
-		return 1337;
+int delayed_send_umi_san (int process_ID, void * MessageEnvelope, int delay) {
+	
 }
-

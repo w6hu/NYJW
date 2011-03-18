@@ -6,7 +6,7 @@ UINT32 *used_blocks = NULL;
 
 extern UINT32* mem_end; 
 extern struct PCB* ready_queue[5];
-extern struct PCB* blocked_queue[1];
+extern struct PCB* blocked_queue[2];
 
 void put_to_ready(struct PCB* p)
 {
@@ -45,6 +45,7 @@ void put_to_ready(struct PCB* p)
 void put_to_blocked(int waiting_on, struct PCB* p)
 {	
 	// 0 is the message blocked queue
+	// 1 is the memory blocked queue
 
 	// theoraticlaly shouldn't get here
 	if (waiting_on < 0) {
@@ -127,6 +128,22 @@ void remove_from_blocked(int waiting_on, struct PCB* p) {
 	}
 	p->next = NULL;
 	put_to_ready(p);
+}
+
+// remove the first blocking message from the blocked queue
+void remove_first_from_blocked(int index) {
+	rtx_dbug_outs((CHAR *)"rtx: remove first from blocked \r\n");
+	if (blocked_queue[index] == 0) {
+		return;
+	}
+	else {
+		struct PCB* first = blocked_queue[index];
+		blocked_queue[index] = first->next;
+		first->next = 0;
+		first->state = STATE_READY;
+		first->waiting_on = -1;
+		put_to_ready(first);
+	}
 }
 
 

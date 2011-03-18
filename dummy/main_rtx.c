@@ -30,7 +30,7 @@ struct PCB null_p;
 extern struct PCB* current_running_process;
 extern struct PCB* prev_running_process;
 struct PCB* ready_queue[5];
-struct PCB* blocked_queue[1];
+struct PCB* blocked_queue[2];
 
 /* gcc expects this function to exist */
 int __main( void )
@@ -68,7 +68,7 @@ int main()
 	}
 	
 	i=0;
-	for (i; i < 1; i++) {
+	for (i; i < 2; i++) {
 		blocked_queue[i] = 0;
 	}
 	
