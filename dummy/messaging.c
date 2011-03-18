@@ -95,6 +95,6 @@ void * receive_message_jessie (int * sender_ID) {
 	}
 }
 
-int delayed_send (int process_ID, void * MessageEnvelope, int delay) {
+int delayed_send_umi_san (int process_ID, void * MessageEnvelope, int delay) {
 	
 }

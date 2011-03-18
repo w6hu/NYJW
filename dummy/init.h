@@ -10,10 +10,7 @@ struct queue {
 };
 
 //Built based on structure from test dummy procs
-struct PCB {
-	UINT16 psw;
-	
-	UINT32 pc;	
+struct PCB {	
 	UINT32 stack;
 
 	struct PCB* next;

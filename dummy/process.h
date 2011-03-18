@@ -18,6 +18,7 @@ struct PCB* get_process_from_ID(int process_id);
 int get_process_number_from_ID(int process_id);
 int get_process_ID();
 int get_process_priority_usagi_san(int process_id);
+int set_process_priority_yama_san(int process_ID, int priority);
 int process_exists(int process_id);
 int is_waiting_for(int process_ID, int sender_ID);
 

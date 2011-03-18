@@ -77,28 +77,27 @@ int main()
 		p[i].next = NULL;
 		p[i].id = g_test_proc[i].pid;
 		p[i].priority = g_test_proc[i].priority;
-		p[i].psw = 9984;   // assuming 9984 is the nomal initial state ... eh ?
-		p[i].pc = *(g_test_proc[i].entry); //point pc to entry point of code
-
 		process_start = process_start + g_test_proc[i].sz_stack/4;
-		p[i].stack = process_start; // where exactly is the process stack ?
-		p[i].returning = FALSE;
+		p[i].stack = process_start;
 		p[i].waiting_on = -1;
-		
+				
 		int val;
 		//back up a7
 		int original_a7;
 		asm("move.l %%a7, %0" : "=r" (original_a7));	
 		val = p[i].stack;
 		asm("move.l %0, %%a7" : : "r" (val));
-		val = p[i].pc;			
+		val = *(g_test_proc[i].entry);			
 		asm("move.l %0, %%d0" : : "r" (val));
 		asm("move.l %d0, -(%a7)");
-		asm("move.l %d0, -(%a7)");
-		asm("move.l %d0, -(%a7)");
-		asm("move.l %d0, -(%a7)");
-		p[i].stack -= 4;
-
+		val = 1796;			
+		asm("move.w %0, %%d0" : : "r" (val));
+		asm("move.w %d0, -(%a7)");
+		val = 16512;			
+		asm("move.w %0, %%d0" : : "r" (val));
+		asm("move.w %d0, -(%a7)");
+		p[i].stack -= 8;	
+		
 		//restore a7
 		asm("move.l %0, %%a7" : : "r" (original_a7));
 						

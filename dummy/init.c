@@ -1,6 +1,5 @@
 #include "init.h"
-//#include "dbug.h"
-#include <stdio.h>
+#include "dbug.h"
 
 UINT32 *free_blocks;
 UINT32 *used_blocks = NULL;

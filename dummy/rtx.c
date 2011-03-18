@@ -14,52 +14,173 @@
 /* Interprocess Communications*/
 int send_message (int process_ID, void * MessageEnvelope)
 {
-    rtx_dbug_outs((CHAR *)"rtx: send_message \r\n");
-	return send_message_jessie (process_ID, MessageEnvelope);
+	asm("move.l %d0, -(%a7)");
+	asm("move.l %0, %d0" : : "r" (process_ID));
+	asm("move.l %d0, -(%a7)");	
+	asm("move.l %0, %d0" : : "r" (MessageEnvelope));
+	asm("move.l %d0, -(%a7)");	
+	
+	int val = CALLER_SEND_MESSAGE;
+	asm("move.l %0, %%d0" : : "r" (val));
+	asm( "TRAP #0" );
+
+	// gets the return value
+	int return_val;
+	asm("move.l (%a7)+ ,%d0");
+	asm("move.l %d0, %0" : "=r" (return_val));	
+	
+	asm("move.l (%a7)+ ,%d0");
+	asm("move.l (%a7)+ ,%d0");	
+	
+    //rtx_dbug_outs((CHAR *)"rtx: send_message \r\n");
+	return return_val;
 }
 
 void * receive_message(int * sender_ID)
 {
-    rtx_dbug_outs((CHAR *)"rtx: receive_message \r\n");
-	return receive_message_jessie(sender_ID);
+	asm("move.l %d0, -(%a7)");
+	asm("move.l %0, %d0" : : "r" (sender_ID));
+	asm("move.l %d0, -(%a7)");	
+	
+	int val = CALLER_RECEIVE_MESSAGE;
+	asm("move.l %0, %%d0" : : "r" (val));
+	asm( "TRAP #0" );	
+	
+	int return_val;
+	asm("move.l (%a7)+ ,%d0");
+	asm("move.l %d0, %0" : "=r" (return_val));		
+	
+	asm("move.l (%a7)+ ,%d0");
+    //rtx_dbug_outs((CHAR *)"rtx: receive_message \r\n");
+	return return_val;
 }
 
 /*Memory Management*/
 void * request_memory_block() 
 {
-    rtx_dbug_outs((CHAR *)"rtx: request_memory_block \r\n");
-	return s_request_memory_block_yishi(); 
+	asm("move.l %d0, -(%a7)");
+	asm("move.l %d0, -(%a7)");	
+
+	int val = CALLER_REQUEST_MEMORY_BLOCK;
+	asm("move.l %0, %%d0" : : "r" (val));
+	asm( "TRAP #0" );
+	
+	// gets the return value
+	int return_val;
+	asm("move.l (%a7)+ ,%d0");
+	asm("move.l %d0, %0" : "=r" (return_val));
+	
+	asm("move.l (%a7)+ ,%d0");
+
+
+    //rtx_dbug_outs((CHAR *)"rtx: request_memory_block \r\n");
+	return (void*)return_val; 
 }
 
 int release_memory_block(void * MemoryBlock)
 {
-    rtx_dbug_outs((CHAR *)"rtx: release_memory_block \r\n");
-	return s_release_memory_block_yishi(MemoryBlock);
+	asm("move.l %d0, -(%a7)");
+	asm("move.l %0, %d0" : : "r" (MemoryBlock));
+	asm("move.l %d0, -(%a7)");	
+
+	int val = CALLER_RELEASE_MEMORY_BLOCK;
+	asm("move.l %0, %%d0" : : "r" (val));
+	asm( "TRAP #0" );
+	
+	// gets the return value
+	int return_val;
+	asm("move.l (%a7)+ ,%d0");
+	asm("move.l %d0, %0" : "=r" (return_val));
+	
+	asm("move.l (%a7)+ ,%d0");
+
+
+    //rtx_dbug_outs((CHAR *)"rtx: release_memory_block \r\n");
+	return return_val;
 }
 
 /*Process Management*/
 int release_processor()
 {
-    rtx_dbug_outs((CHAR *)"rtx: release_processor \r\n");
-    return release_processor_kuma_san();
+    //rtx_dbug_outs((CHAR *)"rtx: release_processor \r\n");
+	int val = CALLER_RELEASE_PROCESSOR;
+	asm("move.l %0, %%d0" : : "r" (val));
+	asm( "TRAP #0" );
+	
+    return;
 }
 
 /*Timing Service*/
 int delayed_send(int process_ID, void * MessageEnvelope, int delay)
 {
-    //rtx_dbug_outs((CHAR *)"rtx: delayed_send \r\n");
-    return 0;
+	asm("move.l %d0, -(%a7)");
+	asm("move.l %0, %d0" : : "r" (process_ID));
+	asm("move.l %d0, -(%a7)");	
+	asm("move.l %0, %d0" : : "r" (MessageEnvelope));
+	asm("move.l %d0, -(%a7)");	
+	asm("move.l %0, %d0" : : "r" (delay));
+	asm("move.l %d0, -(%a7)");	
+	
+	int val = CALLER_DELAYED_SEND;
+	asm("move.l %0, %%d0" : : "r" (val));
+	asm( "TRAP #0" );
+
+	// gets the return value
+	int return_val;
+	asm("move.l (%a7)+ ,%d0");
+	asm("move.l %d0, %0" : "=r" (return_val));	
+	
+	asm("move.l (%a7)+ ,%d0");
+	asm("move.l (%a7)+ ,%d0");	
+	asm("move.l (%a7)+ ,%d0");
+	
+    //rtx_dbug_outs((CHAR *)"rtx: send_message \r\n");
+	return return_val;
 }
 
 /*Process Priority*/
-int set_process_priority (int process_ID, int priority)
+int set_process_priority(int process_ID, int priority)
 {
-    //rtx_dbug_outs((CHAR *)"rtx: set_process_priority \r\n");
-    return 0;
+	asm("move.l %d0, -(%a7)");
+	asm("move.l %0, %d0" : : "r" (process_ID));
+	asm("move.l %d0, -(%a7)");	
+	asm("move.l %0, %d0" : : "r" (priority));
+	asm("move.l %d0, -(%a7)");	
+	
+	int val = CALLER_SET_PRIORITY;
+	asm("move.l %0, %%d0" : : "r" (val));
+	asm( "TRAP #0" );
+
+	// gets the return value
+	int return_val;
+	asm("move.l (%a7)+ ,%d0");
+	asm("move.l %d0, %0" : "=r" (return_val));	
+	
+	asm("move.l (%a7)+ ,%d0");
+	asm("move.l (%a7)+ ,%d0");	
+	
+    //rtx_dbug_outs((CHAR *)"rtx: send_message \r\n");
+	return return_val;
 }
 
-int get_process_priority (int process_ID)
+int get_process_priority(int process_ID)
 {
-    //rtx_dbug_outs((CHAR *)"rtx: get_process_priority \r\n");
-    return get_process_priority_usagi_san(process_ID);
+	asm("move.l %d0, -(%a7)");
+	asm("move.l %0, %d0" : : "r" (process_ID));
+	asm("move.l %d0, -(%a7)");	
+
+	int val = CALLER_GET_PRIORITY;
+	asm("move.l %0, %%d0" : : "r" (val));
+	asm( "TRAP #0" );
+	
+	// gets the return value
+	int return_val;
+	asm("move.l (%a7)+ ,%d0");
+	asm("move.l %d0, %0" : "=r" (return_val));
+	
+	asm("move.l (%a7)+ ,%d0");
+
+
+    //rtx_dbug_outs((CHAR *)"rtx: release_memory_block \r\n");
+	return return_val;
 }

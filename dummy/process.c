@@ -11,23 +11,17 @@ void null_process()
 {
     while (1) 
     {
-	    rtx_dbug_outs((CHAR *)"Hey APLLE! Hey APLLE! Hey APLLE!\r\n");
         /* execute a rtx primitive to test */
         release_processor_kuma_san();
-	    rtx_dbug_outs((CHAR *)"WHAT !?\r\n");
     }
 }
 
 void init_null_process( struct PCB* pcb_null_process, UINT32* process_start)
 {	
-	//rtx_dbug_outs((CHAR *)"rtx: Initializing the null process\r\n");
 	pcb_null_process->next = NULL;
 	pcb_null_process->id = -2;
-	//pcb_null_process->state = STATE_READY;
 	pcb_null_process->priority = 4;
-	pcb_null_process->psw = 9984;   // assuming 9984 is the nomal initial state ... eh ?
-	pcb_null_process->pc = null_process; //point pc to entry point of code
-	pcb_null_process->stack = process_start; // where exactly is the process stack ?
+	pcb_null_process->stack = process_start;
 	pcb_null_process->returning = FALSE;
 	pcb_null_process->waiting_on = -1;
 		
@@ -37,13 +31,16 @@ void init_null_process( struct PCB* pcb_null_process, UINT32* process_start)
 	asm("move.l %%a7, %0" : "=r" (original_a7));	
 	val = pcb_null_process->stack;
 	asm("move.l %0, %%a7" : : "r" (val));
-	val = pcb_null_process->pc;			
+	val = null_process;			
 	asm("move.l %0, %%d0" : : "r" (val));
 	asm("move.l %d0, -(%a7)");
-	asm("move.l %d0, -(%a7)");
-	asm("move.l %d0, -(%a7)");
-	asm("move.l %d0, -(%a7)");
-	pcb_null_process->stack -= 4;
+	val = 1796;			
+	asm("move.w %0, %%d0" : : "r" (val));
+	asm("move.w %d0, -(%a7)");
+	val = 16512;			
+	asm("move.w %0, %%d0" : : "r" (val));
+	asm("move.w %d0, -(%a7)");
+	pcb_null_process->stack -= 8;
 
 	//restore a7
 	asm("move.l %0, %%a7" : : "r" (original_a7));
@@ -54,14 +51,12 @@ void init_null_process( struct PCB* pcb_null_process, UINT32* process_start)
 }
 
 int release_processor_kuma_san()
-{
-	//rtx_dbug_outs((CHAR *)"rtx: Kuma san Ohaiyou !!\r\n");
-	
+{	
 	// set state and put the process to ready
 	if(current_running_process->state == STATE_RUNNING)
 		put_to_ready (current_running_process);
 	
-	schedule_next_process();
+	schedule_next_process_neko_san();
 	
 	//other wise just return to the calling process and continue
 	return RTX_SUCCESS;
@@ -69,19 +64,21 @@ int release_processor_kuma_san()
 
 void schedule_next_process()
 {
-	//rtx_dbug_outs((CHAR *)"rtx: In scheduler\r\n");
+	int val = CALLER_SCHEDULER;
+	asm("move.l %0, %%d0" : : "r" (val));
+	asm( "TRAP #0" );
+}
 
+void schedule_next_process_neko_san()
+{
 	// look for the next process.
 	// if nothing is selected, the null 
 	// process is there at your service.
 	int i=0;
-	//rtx_dbug_outs((CHAR *)"rtx: before the scheduling loop\r\n");
 	for(i; i<5; i++)
 	{
 		if(ready_queue[i] != NULL)
-		{
-			//rtx_dbug_outs((CHAR *)"rtx: Found a ready process, begin to switch .... !\r\n");
-			
+		{			
 			prev_running_process = current_running_process;
 			
 			// select the next process
@@ -89,17 +86,19 @@ void schedule_next_process()
 			ready_queue[i] = current_running_process->next;
 			current_running_process->next = NULL;
 			
-			asm( "TRAP #0" );			
+			stack_pointer_switcher();			
 
 			break;
 		}
 	}
-	//rtx_dbug_outs((CHAR *)"rtx: after the scheduling loop the loop\r\n");
 }
 
 VOID stack_pointer_switcher( VOID )
 {
 	asm("move.l %a6, -(%a7)");
+	
+	// we need a swtich statement to see what the calling function is,
+	// since all other primitives are going to be calling this thing now
 	
 	int val;
 	if(prev_running_process != NULL)
@@ -112,13 +111,87 @@ VOID stack_pointer_switcher( VOID )
 	asm("move.l %0, %%a7" :  : "r" (val));	
 
 	if(current_running_process->state == STATE_NEW)
-	{
+	{	
+		// as this hack simply jump out of the trap, so 
+		// need to reset automic here
+		
 		current_running_process->state = STATE_RUNNING;
-		asm("rts");
+		asm("rte");
 	}
 	
 	current_running_process->state = STATE_RUNNING;
 	asm("move.l (%a7)+, %a6");	
+}
+
+VOID trap_call_animal( VOID )
+{
+	// set automic here
+	
+	// get the caller id
+	int val;
+	int parm1;
+	int parm2;
+	int parm3;
+	int return_val;
+	
+	asm("move.l %%d0, %0" : "=r" (val));
+	// giant swtich to decide where to go
+	if(val == CALLER_SCHEDULER)
+	{
+		schedule_next_process_neko_san();
+	}
+	else if(val == CALLER_RELEASE_PROCESSOR)
+	{
+		release_processor_kuma_san();
+	}
+	else if(val == CALLER_RELEASE_MEMORY_BLOCK)
+	{
+		asm("move.l +96(%%a7), %0" : "=r" (parm1));
+		return_val = s_release_memory_block_yishi((void*)parm1);	
+		asm("move.l %0, +96(%%a7)" : : "r" (return_val));		
+	}
+	else if(val == CALLER_REQUEST_MEMORY_BLOCK)
+	{
+		asm("move.l +96(%%a7), %0" : "=r" (parm1));
+		return_val = (int)s_request_memory_block_yishi();	
+		asm("move.l %0, +96(%%a7)" : : "r" (return_val));	
+	}
+	else if(val == CALLER_SEND_MESSAGE)
+	{
+		asm("move.l +96(%%a7), %0" : "=r" (parm2));
+		asm("move.l +100(%%a7), %0" : "=r" (parm1));
+		return_val = send_message_jessie(parm1, (void*)parm2);	
+		asm("move.l %0, +96(%%a7)" : : "r" (return_val));
+	}
+	else if(val == CALLER_RECEIVE_MESSAGE)
+	{
+		asm("move.l +96(%%a7), %0" : "=r" (parm1));
+		return_val = receive_message_jessie(parm1);	
+		asm("move.l %0, +96(%%a7)" : : "r" (return_val));	
+	}
+	else if(val == CALLER_DELAYED_SEND)
+	{
+		asm("move.l +96(%%a7), %0" : "=r" (parm3));
+		asm("move.l +100(%%a7), %0" : "=r" (parm2));
+		asm("move.l +104(%%a7), %0" : "=r" (parm1));
+		return_val = delayed_send_umi_san(parm1, (void*)parm2, parm3);	
+		asm("move.l %0, +96(%%a7)" : : "r" (return_val));
+	}
+	else if(val == CALLER_GET_PRIORITY)
+	{
+		asm("move.l +96(%%a7), %0" : "=r" (parm1));
+		return_val = get_process_priority_usagi_san(parm1);	
+		asm("move.l %0, +96(%%a7)" : : "r" (return_val));	
+	}
+	else if(val == CALLER_SET_PRIORITY)
+	{
+		asm("move.l +96(%%a7), %0" : "=r" (parm2));
+		asm("move.l +100(%%a7), %0" : "=r" (parm1));
+		return_val = set_process_priority_yama_san(parm1, parm2);	
+		asm("move.l %0, +96(%%a7)" : : "r" (return_val));
+	}
+	
+	// reset sutomic here
 }
 
 struct PCB* get_process_from_ID(int process_id)
@@ -159,6 +232,33 @@ int get_process_priority_usagi_san(int process_id)
 	}
 }
 
+int set_process_priority_yama_san(int process_ID, int priority)
+{
+		int last = (int)process_ID%10;
+		int remain = (int)process_ID;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+		rtx_dbug_outs((CHAR *) " -------> parm1\r\n");
+		
+		last = (int)priority%10;
+		remain = (int)priority;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+		rtx_dbug_outs((CHAR *) " -------> parm2\r\n");		
+
+		return 168;
+}
+
 int process_exists(int process_id)
 {
 	int i = 0;
@@ -191,11 +291,3 @@ void set_process_state(int process_id, int process_state)
 	}
 }
 
-/*void set_process_to_run(int process_id)
-{
-	struct PCB* to_be_run = get_process_from_ID(process_id);
-	if(to_be_run != NULL)
-	{
-		imma_epeen_process = to_be_run;
-	}
-}*/
