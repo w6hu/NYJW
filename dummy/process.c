@@ -179,8 +179,9 @@ VOID trap_call_animal( VOID )
 	}
 	else if(val == CALLER_RECEIVE_MESSAGE)
 	{
-		asm("move.l +96(%%a7), %0" : "=r" (parm1));
-		return_val = receive_message_jessie(parm1);	
+		asm("move.l +96(%%a7), %0" : "=r" (parm2));
+		asm("move.l +100(%%a7), %0" : "=r" (parm1));
+		return_val = receive_message_jessie(parm1, parm2);	
 		asm("move.l %0, +96(%%a7)" : : "r" (return_val));	
 	}
 	else if(val == CALLER_DELAYED_SEND)
