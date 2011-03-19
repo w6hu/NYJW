@@ -36,7 +36,7 @@ void init_null_process( struct PCB* pcb_null_process, UINT32* process_start)
 	val = null_process;			
 	asm("move.l %0, %%d0" : : "r" (val));
 	asm("move.l %d0, -(%a7)");
-	val = 1796;			
+	val = 4;			
 	asm("move.w %0, %%d0" : : "r" (val));
 	asm("move.w %d0, -(%a7)");
 	val = 16512;			

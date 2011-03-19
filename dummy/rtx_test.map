@@ -2,9 +2,9 @@
 Allocating common symbols
 Common symbol       size              file
 
-old_stack           0x4               /tmp/cc3qMaYg.o
+old_stack           0x4               /tmp/ccc3R3D9.o
 free_blocks         0x4               dbug.o
-main_stack          0x1000            /tmp/cc3qMaYg.o
+main_stack          0x1000            /tmp/ccc3R3D9.o
 mem_end             0x4               rtx_test_dummy.o
 
 Memory Configuration
@@ -15,7 +15,7 @@ ram              0x10400000         0x00100000
 
 Linker script and memory map
 
-LOAD /tmp/cc3qMaYg.o
+LOAD /tmp/ccc3R3D9.o
 LOAD dbug.o
 LOAD rtx_test_dummy.o
 START GROUP
@@ -27,75 +27,75 @@ END GROUP
                 0x00000000                PROVIDE (software_init_hook, 0x0)
                 0x00000000                PROVIDE (_software_init_hook, 0x0)
 
-.text           0x10400000      0x4a1
+.text           0x10400000      0x936
  *(.text)
- .text          0x10400000       0x1e /tmp/cc3qMaYg.o
+ .text          0x10400000       0x1e /tmp/ccc3R3D9.o
  *fill*         0x1040001e        0x2 00
  .text          0x10400020       0x5c dbug.o
                 0x10400040                rtx_dbug_outs
                 0x10400020                rtx_dbug_out_char
- .text          0x1040007c      0x2ac rtx_test_dummy.o
+ .text          0x1040007c      0x70c rtx_test_dummy.o
                 0x1040007c                test1
-                0x104002e6                test6
-                0x10400292                test4
-                0x10400310                main
-                0x104001da                test2
-                0x104002bc                test5
-                0x10400252                test3
-                0x10400328                . = ALIGN (0x4)
-                0x10400328                __CTOR_LIST__ = .
-                0x10400328        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
+                0x10400646                test6
+                0x104003f2                test4
+                0x10400770                main
+                0x104001ac                test2
+                0x1040051c                test5
+                0x104002c8                test3
+                0x10400788                . = ALIGN (0x4)
+                0x10400788                __CTOR_LIST__ = .
+                0x10400788        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
  *(.ctors)
-                0x1040032c        0x4 LONG 0x0
-                0x10400330                __CTOR_END__ = .
-                0x10400330                __DTOR_LIST__ = .
-                0x10400330        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
+                0x1040078c        0x4 LONG 0x0
+                0x10400790                __CTOR_END__ = .
+                0x10400790                __DTOR_LIST__ = .
+                0x10400790        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
  *(.dtors)
-                0x10400334        0x4 LONG 0x0
-                0x10400338                __DTOR_END__ = .
+                0x10400794        0x4 LONG 0x0
+                0x10400798                __DTOR_END__ = .
  *(.rodata*)
- .rodata        0x10400338      0x159 rtx_test_dummy.o
+ .rodata        0x10400798      0x18e rtx_test_dummy.o
  *(.gcc_except_table)
-                0x10400491                __INIT_SECTION__ = .
-                0x10400491        0x4 LONG 0x4e560000
+                0x10400926                __INIT_SECTION__ = .
+                0x10400926        0x4 LONG 0x4e560000
  *(.init)
-                0x10400495        0x2 SHORT 0x4e5e
-                0x10400497        0x2 SHORT 0x4e75
-                0x10400499                __FINI_SECTION__ = .
-                0x10400499        0x4 LONG 0x4e560000
+                0x1040092a        0x2 SHORT 0x4e5e
+                0x1040092c        0x2 SHORT 0x4e75
+                0x1040092e                __FINI_SECTION__ = .
+                0x1040092e        0x4 LONG 0x4e560000
  *(.fini)
-                0x1040049d        0x2 SHORT 0x4e5e
-                0x1040049f        0x2 SHORT 0x4e75
-                0x104004a1                _etext = .
+                0x10400932        0x2 SHORT 0x4e5e
+                0x10400934        0x2 SHORT 0x4e75
+                0x10400936                _etext = .
  *(.lit)
 
-.data           0x104004a4        0x0
+.data           0x10400938        0x0
  *(.shdata)
  *(.data)
- .data          0x104004a4        0x0 /tmp/cc3qMaYg.o
- .data          0x104004a4        0x0 dbug.o
- .data          0x104004a4        0x0 rtx_test_dummy.o
-                0x104004a4                _edata = .
+ .data          0x10400938        0x0 /tmp/ccc3R3D9.o
+ .data          0x10400938        0x0 dbug.o
+ .data          0x10400938        0x0 rtx_test_dummy.o
+                0x10400938                _edata = .
 
-.bss            0x104004a4     0x1024
-                0x104004a4                __bss_start = .
+.bss            0x10400938     0x1020
+                0x10400938                __bss_start = .
  *(.shbss)
  *(.bss)
- .bss           0x104004a4        0x0 /tmp/cc3qMaYg.o
- .bss           0x104004a4        0x0 dbug.o
- .bss           0x104004a4        0x4 rtx_test_dummy.o
-                0x104004a4                test
+ .bss           0x10400938        0x0 /tmp/ccc3R3D9.o
+ .bss           0x10400938        0x0 dbug.o
+ .bss           0x10400938        0x4 rtx_test_dummy.o
+                0x10400938                test
  *(COMMON)
- *fill*         0x104004a8        0x8 00
- COMMON         0x104004b0     0x1010 /tmp/cc3qMaYg.o
-                0x104004b0                old_stack
-                0x104004c0                main_stack
- COMMON         0x104014c0        0x4 dbug.o
-                0x104014c0                free_blocks
- COMMON         0x104014c4        0x4 rtx_test_dummy.o
-                0x104014c4                mem_end
-                0x104014c8                _end = ALIGN (0x8)
-                0x104014c8                __end = _end
+ *fill*         0x1040093c        0x4 00
+ COMMON         0x10400940     0x1010 /tmp/ccc3R3D9.o
+                0x10400940                old_stack
+                0x10400950                main_stack
+ COMMON         0x10401950        0x4 dbug.o
+                0x10401950                free_blocks
+ COMMON         0x10401954        0x4 rtx_test_dummy.o
+                0x10401954                mem_end
+                0x10401958                _end = ALIGN (0x8)
+                0x10401958                __end = _end
 
 .stab
  *(.stab)
