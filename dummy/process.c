@@ -56,7 +56,7 @@ int release_processor_kuma_san()
 {	
 	// set state and put the process to ready
 	if(current_running_process->state == STATE_RUNNING)
-		put_to_ready (current_running_process);
+		put_to_ready(current_running_process);
 	
 	schedule_next_process_neko_san();
 	
@@ -80,7 +80,13 @@ void schedule_next_process_neko_san()
 	for(i; i<5; i++)
 	{
 		if(ready_queue[i] != NULL)
-		{					
+		{	
+			if(current_running_process->id == ready_queue[i]->id)
+			{
+				rtx_dbug_outs((CHAR *)"getting the same process\r\n");
+				continue;
+			}
+			
 			prev_running_process = current_running_process;
 			
 			// select the next process
@@ -237,29 +243,19 @@ int get_process_priority_usagi_san(int process_id)
 
 int set_process_priority_yama_san(int process_ID, int priority)
 {
-		int last = (int)process_ID%10;
-		int remain = (int)process_ID;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) " -------> parm1\r\n");
-		
-		last = (int)priority%10;
-		remain = (int)priority;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) " -------> parm2\r\n");		
-
-		return 168;
+	struct PCB* to_be_changed = get_process_from_ID(process_ID);
+	if(to_be_changed == NULL)
+		return RTX_FAILURE;  // false for failing to set it
+	
+	// sainity checks; only 0, 1, 2, 3, levels allowed
+	// process can only change its own priority
+	if(priority >= 4 || priority < 0)
+		return RTX_FAILURE;
+	if(current_running_process->id != process_ID)
+		return RTX_FAILURE;
+	
+	to_be_changed->priority = priority;
+	return RTX_SUCCESS;
 }
 
 int process_exists(int process_id)
