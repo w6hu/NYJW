@@ -4,6 +4,8 @@
 struct PCB* current_running_process = 0;
 struct PCB* prev_running_process = 0;
 
+extern struct PCB p [NUM_PROCESS];
+
 extern struct PCB* ready_queue[5];
 extern struct PCB* blocked_queue[2];
 
@@ -12,8 +14,6 @@ void null_process()
     while (1) 
     {
         /* execute a rtx primitive to test */
-		
-		rtx_dbug_outs((CHAR *)"Running null process\r\n");		
         release_processor_kuma_san();
     }
 }
@@ -55,8 +55,10 @@ void init_null_process( struct PCB* pcb_null_process, UINT32* process_start)
 int release_processor_kuma_san()
 {	
 	// set state and put the process to ready
-	if(current_running_process->state == STATE_RUNNING)
+	if(current_running_process->state == STATE_RUNNING) {
 		put_to_ready (current_running_process);
+	}
+
 	
 	schedule_next_process_neko_san();
 	
@@ -73,14 +75,22 @@ void schedule_next_process()
 
 void schedule_next_process_neko_san()
 {
+	rtx_dbug_outs((CHAR *)"scheduled next process neko-san \r\n");
 	// look for the next process.
 	// if nothing is selected, the null 
 	// process is there at your service.
 	int i=0;
 	for(i; i<5; i++)
 	{
+		rtx_dbug_outs((CHAR *)"looping in ready queue \r\n");
 		if(ready_queue[i] != NULL)
-		{					
+		{	
+			if(current_running_process->id == ready_queue[i]->id)
+			{
+				rtx_dbug_outs((CHAR *)"getting the same process\r\n");
+				continue;
+			}
+			
 			prev_running_process = current_running_process;
 			
 			// select the next process
@@ -93,6 +103,7 @@ void schedule_next_process_neko_san()
 			break;
 		}
 	}
+	rtx_dbug_outs((CHAR *)"exited scheduled next process neko-san \r\n");
 }
 
 VOID stack_pointer_switcher( VOID )
@@ -167,9 +178,8 @@ VOID trap_call_animal( VOID )
 	}
 	else if(val == CALLER_RECEIVE_MESSAGE)
 	{
-		asm("move.l +96(%%a7), %0" : "=r" (parm2));	
-		asm("move.l +100(%%a7), %0" : "=r" (parm1));
-		return_val = receive_message_jessie(parm1, parm2);	
+		asm("move.l +96(%%a7), %0" : "=r" (parm1));
+		return_val = receive_message_jessie(parm1);	
 		asm("move.l %0, +96(%%a7)" : : "r" (return_val));	
 	}
 	else if(val == CALLER_DELAYED_SEND)
@@ -200,20 +210,18 @@ VOID trap_call_animal( VOID )
 struct PCB* get_process_from_ID(int process_id)
 {
 	int i = 0;
-	extern struct PCB p [6];
-	for (i; i < 6; i++) {
+	for (i; i < NUM_PROCESS; i++) {
 		if (p[i].id == process_id) {
 			return &(p[i]);
 		}
-	}
+	}	
 	return NULL;
 }
 
 int get_process_number_from_ID(int process_id)
 {
 	int i = 0;
-	extern struct PCB p [6];
-	for (i; i < 6; i++) {
+	for (i; i < NUM_PROCESS; i++) {
 		if (p[i].id == process_id) {
 			return i;
 		}
@@ -237,36 +245,25 @@ int get_process_priority_usagi_san(int process_id)
 
 int set_process_priority_yama_san(int process_ID, int priority)
 {
-		int last = (int)process_ID%10;
-		int remain = (int)process_ID;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) " -------> parm1\r\n");
-		
-		last = (int)priority%10;
-		remain = (int)priority;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) " -------> parm2\r\n");		
-
-		return 168;
+	struct PCB* to_be_changed = get_process_from_ID(process_ID);
+	if(to_be_changed == NULL)
+		return RTX_FAILURE;  // false for failing to set it
+	
+	// sainity checks; only 0, 1, 2, 3, levels allowed
+	// process can only change its own priority
+	if(priority >= 4 || priority < 0)
+		return RTX_FAILURE;
+	if(current_running_process->id != process_ID)
+		return RTX_FAILURE;
+	
+	to_be_changed->priority = priority;
+	return RTX_SUCCESS;
 }
 
 int process_exists(int process_id)
 {
 	int i = 0;
-	extern struct PCB p [6];
-	for (i; i < 6; i++) {
+	for (i; i < NUM_PROCESS; i++) {
 		if (p[i].id == process_id) {
 			return TRUE;
 		}

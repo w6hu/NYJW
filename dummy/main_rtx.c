@@ -16,6 +16,8 @@
 #include "memory.h"
 #include "init.h"
 #include "process.h"
+#include "kcd.h"
+#include "iprocess.h"
 //#include "messaging.h"
 
 /* test proc initializaiton info. registration function provided by test suite.
@@ -40,19 +42,20 @@ int __main( void )
 
 int main() 
 {
+	
 	// set up the trap
 	asm( "move.l #asm_trap_entry,%d0" );
 	asm( "move.l %d0,0x10000080" );
 
 	asm( "move.l #asm_trap_entry,%d0" );
     asm( "move.l %d0,0x10000080" );
-
+	
     rtx_dbug_outs((CHAR *)"rtx: Entering main()\r\n");
 
     /* get the third party test proc initialization info */
     __REGISTER_TEST_PROCS_ENTRY__();
 	__REGISTER_RTX__();
-
+	
 	free_blocks = initBlock(NUM_MEM_BLKS);
 	init_mailboxes();
 	
@@ -90,7 +93,7 @@ int main()
 		val = *(g_test_proc[i].entry);			
 		asm("move.l %0, %%d0" : : "r" (val));
 		asm("move.l %d0, -(%a7)");
-		val = 1796;			
+		val = 4;			
 		asm("move.w %0, %%d0" : : "r" (val));
 		asm("move.w %d0, -(%a7)");
 		val = 16512;			
@@ -109,9 +112,100 @@ int main()
 	process_start = process_start + 2048/4;
 	init_null_process(&null_p, process_start);
 	
+	process_start = process_start + 2048/4;
+	init_kcd(&p[6], process_start);
+	
+    rtx_dbug_outs((CHAR *) "muahaha.\n\r" );
+	init_interrupts();
+    rtx_dbug_outs((CHAR *) "Teeeheee.\n\r" );
 	//call the scheduler to start a process
 	schedule_next_process();
+	//while (TRUE){}
     return 0;
+}
+
+SINT32 coldfire_vbr_init( VOID )
+{
+    /*
+     * Move the VBR into real memory
+     *
+     * DG: actually, it'll already be here.
+     */
+    asm( "move.l %a0, -(%a7)" );
+    asm( "move.l #0x10000000, %a0 " );
+    asm( "movec.l %a0, %vbr" );
+    asm( "move.l (%a7)+, %a0" );
+    
+    return RTX_SUCCESS;
+}
+
+
+void init_interrupts(){
+	UINT32 mask;
+
+    /* Disable all interupts */
+    asm( "move.w #0x2700,%sr" );
+
+    coldfire_vbr_init();
+    
+    /*
+     * Store the serial ISR at user vector #64
+     */
+    asm( "move.l #asm_serial_entry,%d0" );
+	asm( "move.l %d0,0x10000100" );
+
+    /* Reset the entire UART */
+    SERIAL1_UCR = 0x10;
+
+    /* Reset the receiver */
+    SERIAL1_UCR = 0x20;
+    
+    /* Reset the transmitter */
+    SERIAL1_UCR = 0x30;
+
+    /* Reset the error condition */
+    SERIAL1_UCR = 0x40;
+
+    /* Install the interupt */
+
+    SERIAL1_ICR = 0x17;
+    SERIAL1_IVR = 64;
+
+    /* enable interrupts on rx only */
+    SERIAL1_IMR = 0x02;
+
+    /* Set the baud rate */
+    SERIAL1_UBG1 = 0x00;
+#ifdef _CFSERVER_           /* add -D_CFSERVER_ for cf-server build */
+    SERIAL1_UBG2 = 0x49;    /* cf-server baud rate 19200 */ 
+#else
+    SERIAL1_UBG2 = 0x92;    /* lab board baud rate 9600 */
+#endif /* _CFSERVER_ */
+
+    /* Set clock mode */
+    SERIAL1_UCSR = 0xDD;
+
+    /* Setup the UART (no parity, 8 bits ) */
+    SERIAL1_UMR = 0x13;
+    
+    /* Setup the rest of the UART (noecho, 1 stop bit ) */
+    SERIAL1_UMR = 0x07;
+
+    /* Setup for transmit and receive */
+    SERIAL1_UCR = 0x05;
+
+    /* Enable interupts */
+    mask = SIM_IMR;
+
+    mask &= 0x0003dfff;
+    SIM_IMR = mask;
+
+    /* Enable all interupts */
+    asm( "move.w #0x2000,%sr" );
+	
+    return 0;
+	
+	
 }
 
 /* register rtx primitives with test suite */

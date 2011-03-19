@@ -38,47 +38,34 @@ VOID c_serial_handler( VOID )
 
     temp = SERIAL1_USR;    /* Ack the interrupt */
 
-#ifdef _DEBUG_
-    rtx_dbug_outs((CHAR *) "Enter: c_serial_handler ");
-#endif /* _DEBUG_ */
     
-    /* See if data is waiting.... */    
-    if( temp & 1 )
-    {
-#ifdef _DEBUG_
-        rtx_dbug_outs((CHAR *) "reading data: ");
-#endif /* _DEBUG_ */
-		CharIn = SERIAL1_RD;
-        
-		Caught = FALSE;
-
-#ifdef _DEBUG_
-        rtx_dbug_out_char(CharIn);
-    	rtx_dbug_outs((CHAR *) "\r\n");
-#endif /* _DEBUG_ */
-    }
-
-    /* See if port is ready to accept data */    
-    else if ( temp & 4 )
-    {
-#ifdef _DEBUG_
-        rtx_dbug_outs((CHAR *) "writing data: ");
-        rtx_dbug_out_char(CharOut);
-    	rtx_dbug_outs((CHAR *) "\r\n");
-#endif /* _DEBUG_*/
-        SERIAL1_WD = CharOut;   /* Write data to port */
-        SERIAL1_IMR = 2;        /* Disable tx Interupt */
-		Printed = TRUE;
-		NewLine = FALSE;
-		if (CharOut == CR) {
-			NewLine = TRUE;
+		/* See if data is waiting.... */    
+		if( temp & 1 )
+		{
+			CharIn = SERIAL1_RD;        
+			Caught = FALSE;
+//			Printed = FALSE;
 		}
-		/*if (CharOut == CR) {
-			SERIAL1_IMR = 3;
-			SERIAL1_WD = LF;
-			SERIAL1_IMR = 2; 	
-		}*/		
-    }
+
+		/* See if port is ready to accept data */    
+		else if ( temp & 4 )
+		{
+
+			CharOut = CharIn;
+			SERIAL1_WD = CharOut;   /* Write data to port */
+			Printed = TRUE;
+			SERIAL1_IMR = 2;        /* Disable tx Interupt */
+			NewLine = FALSE;
+			if (CharOut == CR) {
+				NewLine = TRUE;
+			}
+			/*if (CharOut == CR) {
+				SERIAL1_IMR = 3;
+				SERIAL1_WD = LF;
+				SERIAL1_IMR = 2; 	
+			}*/		
+		}
+	
     return;
 }
 
@@ -152,11 +139,6 @@ int main( void )
 
     /* Set the baud rate */
     SERIAL1_UBG1 = 0x00;
-#ifdef _CFSERVER_           /* add -D_CFSERVER_ for cf-server build */
-    SERIAL1_UBG2 = 0x49;    /* cf-server baud rate 19200 */ 
-#else
-    SERIAL1_UBG2 = 0x92;    /* lab board baud rate 9600 */
-#endif /* _CFSERVER_ */
 
     /* Set clock mode */
     SERIAL1_UCSR = 0xDD;
@@ -183,17 +165,6 @@ int main( void )
 
     rtx_dbug_outs((CHAR *) "Type Q or q on RTX terminal to quit.\n\r" );
     
-
-
-
-
-
-
-
-
-
-
-
     /* Busy Loop */
     while( CharIn != 'q' && CharIn != 'Q' )
     {
@@ -221,11 +192,11 @@ int main( void )
              * note that interrupts are now back on. 
              */	 
 			
-			//rtx_dbug_outs( StringHack );
+			rtx_dbug_outs( StringHack );
 			
         }
     }
-
+	rtx_dbug_outs((CHAR *) "Exited Loop.\n\r" );
     /* Disable all interupts */
     asm( "move.w #0x2700,%sr" );
 

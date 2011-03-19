@@ -19,12 +19,12 @@ LDFLAGS_RTX_LOADER = -Trtx_loader.ld -Wl,-Map=rtx_loader.map
 LDFLAGS_RTX_TEST = -Trtx_test.ld -Wl,-Map=rtx_test.map
 
 #RTX_OBJS = dbug.o memory.o init.o rtx.o main_rtx.o
-RTX_OBJS = process.o init.o memory.o dbug.o messaging.o rtx.o main_rtx.o
+RTX_OBJS = process.o init.o memory.o dbug.o kcd.o messaging.o rtx.o main_rtx.o iprocess.o
 RTX_LOADER_OBJS = dbug.o rtx_loader.o
 RTX_TEST_DUMMY_OBJS = dbug.o rtx_test_dummy.o
 
-#all: mdummy.s19 
-all: Gid_rtx.s19
+all: mdummy.s19 
+#all: Gid_rtx.s19
 
 # Note, GCC builds things in order, it's important to put yhe
 #  ASM first, so that it is located at the beginning of our program.
@@ -35,8 +35,8 @@ all: Gid_rtx.s19
 #init.o : ../init/init.c ../init/init.h
 #	$(CC) $(CFLAGS) -c ../init/init.c -o init.o
 
-rtx.s19: trap_entry.s $(RTX_OBJS)
-	$(CC) $(CFLAGS) $(LDFLAGS_RTX) -o rtx.bin $(ASM) trap_entry.s $(RTX_OBJS) 
+rtx.s19: trap_entry.s  keyboard_i_proc_entry.s  $(RTX_OBJS)
+	$(CC) $(CFLAGS) $(LDFLAGS_RTX) -o rtx.bin $(ASM) trap_entry.s keyboard_i_proc_entry.s $(RTX_OBJS) 
 	$(OBJCPY) --output-format=srec rtx.bin rtx.s19
 	$(OBJDUMP) -xdC rtx.bin > rtx.lst
 
@@ -58,9 +58,9 @@ mdummy.s19: m2.s19 rtx_loader.s19
 	python merge.py mdummy.s19 m2.s19 rtx_loader.s19 
 	chmod u+x mdummy.s19
 
-Gid_rtx.s19: mlight.s19 rtx.s19
-	python merge.py Gid_rtx.s19 mlight.s19 rtx.s19
-	chmod u+x Gid_rtx.s19	
+#Gid_rtx.s19: mlight.s19 rtx.s19
+#	python merge.py Gid_rtx.s19 mlight.s19 rtx.s19
+#	chmod u+x Gid_rtx.s19	
 	
 .c.o:
 	$(CC) $(CFLAGS) -c $< 
