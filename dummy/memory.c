@@ -66,8 +66,10 @@ int s_release_memory_block_yishi( void* memory_block )
 		*(free_blocks + 1) = memory_block;
 	}
 	*((UINT32 *)memory_block) = free_blocks;
-	*((UINT32 *)memory_block + 1) = 0;
+	*((UINT32 *)memory_block + 1) = NULL;
 	free_blocks = memory_block;
+	*((UINT32 *)memory_block + 3) = NULL;
+	*((UINT32 *)memory_block + 4) = NULL;
 	*((int *)memory_block+2) = FREE;
 	// pull blocked process out of the blocked queue if any
 	remove_first_from_blocked(1);
