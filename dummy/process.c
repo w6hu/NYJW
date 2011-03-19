@@ -251,11 +251,17 @@ int set_process_priority_yama_san(int process_ID, int priority)
 		return RTX_FAILURE;  // false for failing to set it
 	
 	// sainity checks; only 0, 1, 2, 3, levels allowed
-	// process can only change its own priority
 	if(priority >= 4 || priority < 0)
 		return RTX_FAILURE;
-	if(current_running_process->id != process_ID)
-		return RTX_FAILURE;
+		
+	// if the process is running or blocked, we don't need to 
+	// change any queue, as it is not in the ready queue
+	if(to_be_changed->state == STATE_READY)
+	{
+		remove_from_ready(to_be_changed);
+		to_be_changed->priority = priority;
+		put_to_ready(to_be_changed);
+	}
 	
 	to_be_changed->priority = priority;
 	return RTX_SUCCESS;

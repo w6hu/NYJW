@@ -141,6 +141,10 @@
 #define NUM_MEM_BLKS 32
 UINT32 *free_blocks;
 
+//define the message types
+#define COMMAND_KEYBOARD 0
+#define COMMAND_REGISTER 1
+
 #define NUM_PROCESS 7
 
 #endif
