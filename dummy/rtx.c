@@ -41,6 +41,9 @@ void * receive_message(int * sender_ID)
 	asm("move.l %d0, -(%a7)");
 	asm("move.l %0, %d0" : : "r" (sender_ID));
 	asm("move.l %d0, -(%a7)");	
+	asm("move.l #1, %d0"); // pass in an extra parameter, user who call this function have no option but
+						   // to be blocked; a 1 indicate that it should be blocked if no message.
+	asm("move.l %d0, -(%a7)");
 	
 	int val = CALLER_RECEIVE_MESSAGE;
 	asm("move.l %0, %%d0" : : "r" (val));
@@ -50,6 +53,7 @@ void * receive_message(int * sender_ID)
 	asm("move.l (%a7)+ ,%d0");
 	asm("move.l %d0, %0" : "=r" (return_val));		
 	
+	asm("move.l (%a7)+ ,%d0");	
 	asm("move.l (%a7)+ ,%d0");
     //rtx_dbug_outs((CHAR *)"rtx: receive_message \r\n");
 	return return_val;

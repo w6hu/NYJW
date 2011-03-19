@@ -23,8 +23,8 @@ RTX_OBJS = process.o init.o memory.o dbug.o messaging.o timer.o rtx.o main_rtx.o
 RTX_LOADER_OBJS = dbug.o rtx_loader.o
 RTX_TEST_DUMMY_OBJS = dbug.o rtx_test_dummy.o
 
-all: mdummy.s19 
-#all: Gid_rtx.s19
+#all: mdummy.s19 
+all: Gid_rtx.s19
 
 # Note, GCC builds things in order, it's important to put yhe
 #  ASM first, so that it is located at the beginning of our program.
@@ -58,11 +58,15 @@ mdummy.s19: m2.s19 rtx_loader.s19
 	python merge.py mdummy.s19 m2.s19 rtx_loader.s19 
 	chmod u+x mdummy.s19
 
+Gid_rtx.s19: mlight.s19 rtx.s19
+	python merge.py Gid_rtx.s19 mlight.s19 rtx.s19
+	chmod u+x Gid_rtx.s19	
+	
 .c.o:
 	$(CC) $(CFLAGS) -c $< 
 
 .PHONY: clean
 clean:
+	mv mlight.s19 mlight_back
 	rm -f *.bin *.s19 *.o *.map *.lst
-	rm -f memory.o
-	rm -f init.o
+	mv mlight_back mlight.s19

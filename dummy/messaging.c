@@ -77,6 +77,18 @@ void * receive_message_jessie (int * sender_ID, int block) {
 	int receiver_box = get_process_number_from_ID(receiver_ID);
 	UINT32* message = 0;
 	
+		int last = (int)a_boolean%10;
+		int remain = (int)a_boolean;
+		//int i = 0; 
+		while (remain != 0) {
+			//rtx_dbug_out_char((CHAR)(last+48));
+			last = remain%10;
+			remain = remain/10;
+			rtx_dbug_out_char((CHAR)(last+48));            
+		}
+		rtx_dbug_outs((CHAR *) " -------> parm1\r\n");	
+	
+	
 	// keep looping and receive message until a message comes in
 	while (TRUE) {
 		message = mailboxStart[receiver_box];
