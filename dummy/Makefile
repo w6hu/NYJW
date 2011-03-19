@@ -23,8 +23,8 @@ RTX_OBJS = process.o init.o memory.o dbug.o messaging.o rtx.o main_rtx.o
 RTX_LOADER_OBJS = dbug.o rtx_loader.o
 RTX_TEST_DUMMY_OBJS = dbug.o rtx_test_dummy.o
 
-#all: mdummy.s19 
-all: Gid_rtx.s19
+all: mdummy.s19 
+#all: Gid_rtx.s19
 
 # Note, GCC builds things in order, it's important to put yhe
 #  ASM first, so that it is located at the beginning of our program.

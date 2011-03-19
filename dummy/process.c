@@ -36,7 +36,7 @@ void init_null_process( struct PCB* pcb_null_process, UINT32* process_start)
 	val = null_process;			
 	asm("move.l %0, %%d0" : : "r" (val));
 	asm("move.l %d0, -(%a7)");
-	val = 1796;			
+	val = 4;			
 	asm("move.w %0, %%d0" : : "r" (val));
 	asm("move.w %d0, -(%a7)");
 	val = 16512;			
@@ -133,7 +133,8 @@ VOID stack_pointer_switcher( VOID )
 
 VOID trap_call_animal( VOID )
 {
-	// set automic here
+	// set automic here by disabling the interrupt
+    asm( "move.w #0x2700,%sr" );
 	
 	// get the caller id
 	int val;
@@ -200,7 +201,8 @@ VOID trap_call_animal( VOID )
 		asm("move.l %0, +96(%%a7)" : : "r" (return_val));
 	}
 	
-	// reset sutomic here
+	// reset sutomic here by enabling the interrupt
+	// note that 
 }
 
 struct PCB* get_process_from_ID(int process_id)

@@ -90,7 +90,7 @@ int main()
 		val = *(g_test_proc[i].entry);			
 		asm("move.l %0, %%d0" : : "r" (val));
 		asm("move.l %d0, -(%a7)");
-		val = 1796;			
+		val = 4;		// 1796 is the value that disable all interrupt	
 		asm("move.w %0, %%d0" : : "r" (val));
 		asm("move.w %d0, -(%a7)");
 		val = 16512;			
