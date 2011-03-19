@@ -6,9 +6,9 @@ UINT32 *mailboxEnd[NUM_PROCESS];
 
 
 /* Header format
-|				|			|				|
-|  Message Type	| Sender ID	| Receiver ID	| 
-|				|			|				|
+|				|			|				|				|
+|  Message Type	| Sender ID	| Receiver ID	| Delayed Time	|
+|				|			|				|				|
 */ 
 
 
@@ -21,18 +21,20 @@ void init_mailboxes() {
 	}
 }
 
-// I'm assuming here process_ID is the receiver ID
-int send_message_jessie (int process_ID, void * MessageEnvelope) {
-	// error check
-	if (process_exists(process_ID) == FALSE) {
-		return RTX_FAILURE;
-	}
-	
-	int receiver_box = get_process_number_from_ID(process_ID);
+// executes before sending message and returns the sender ID
+int pre_send_message (void *MessageEnvelope) {
 	int sender_ID = get_process_ID();
 	
 	// fill in the message hearder
 	*(((int*)MessageEnvelope) + 1) = sender_ID;
+	
+	return sender_ID;
+}
+
+int act_send_message (int process_ID, int sender_ID, void * MessageEnvelope) {
+	int receiver_box = get_process_number_from_ID(process_ID);
+	
+	// fill in the message hearder
 	*(((int*)MessageEnvelope) + 2) = process_ID;
 
 	// update mailbox
@@ -53,17 +55,37 @@ int send_message_jessie (int process_ID, void * MessageEnvelope) {
 			release_processor_kuma_san();
 		}
 	}
+}
+
+// I'm assuming here process_ID is the receiver ID
+int send_message_jessie (int process_ID, void * MessageEnvelope) {
+	// error check
+	if (process_exists(process_ID) == FALSE) {
+		return RTX_FAILURE;
+	}
+	
+	int sender = pre_send_message (MessageEnvelope);
+	
+	act_send_message(process_ID, sender, MessageEnvelope);
 	return RTX_SUCCESS;	
 }
 
 // If a message is not in the inbox yet, the process is put into the blocked queue
-void * receive_message_jessie (int * sender_ID, int a_boolean) {
+void * receive_message_jessie (int * sender_ID, int block) {
+
+rtx_dbug_outs((CHAR*)"blocked?????  ");
+rtx_dbug_out_num(block);
+
 	// check if the message has arrived yet
 	int receiver_ID = get_process_ID();
+	rtx_dbug_outs((CHAR*)"receive id=");
+	rtx_dbug_out_num(receiver_ID);
 	int receiver_box = get_process_number_from_ID(receiver_ID);
+	rtx_dbug_outs((CHAR*)"receive box=");
+	rtx_dbug_out_num(receiver_box);
 	UINT32* message = 0;
 	
-		int last = (int)a_boolean%10;
+		/*int last = (int)a_boolean%10;
 		int remain = (int)a_boolean;
 		//int i = 0; 
 		while (remain != 0) {
@@ -72,7 +94,7 @@ void * receive_message_jessie (int * sender_ID, int a_boolean) {
 			remain = remain/10;
 			rtx_dbug_out_char((CHAR)(last+48));            
 		}
-		rtx_dbug_outs((CHAR *) " -------> parm1\r\n");	
+		rtx_dbug_outs((CHAR *) " -------> parm1\r\n");	*/
 	
 	
 	// keep looping and receive message until a message comes in
@@ -81,8 +103,14 @@ void * receive_message_jessie (int * sender_ID, int a_boolean) {
 		if (message == NULL) {
 			// if the message is not there yet, put into blocked queue
 			put_to_blocked(0, get_process_from_ID(receiver_ID));
-			rtx_dbug_outs("No message, blocked\r\n");
-			release_processor_kuma_san();
+			if (block == 1) {
+				rtx_dbug_outs("No message, blocked\r\n");
+				release_processor_kuma_san();
+			}
+			else {
+				rtx_dbug_outs("No message, return null\r\n");
+				return 0;
+			}
 		}
 		else {
 			// take it out of the mailbox
@@ -101,12 +129,36 @@ void * receive_message_jessie (int * sender_ID, int a_boolean) {
 				mailboxStart[receiver_box] = (UINT32 *)next;
 			}
 			// fill in the sender_ID
-			sender_ID = (int *)message+1;
+			int sender = *((int *)message+1);
+			
+			//rtx_dbug_out_char((CHAR)(sender+48));
+			//rtx_dbug_outs(" is the sender in receive\r\n");
+			
+			*sender_ID = sender;
+			
+			// clear the message about the queue info
+			*((UINT32 *)message - 1) = NULL;
+			*((UINT32 *)message - 2) = NULL;
+			
 			return message;   
 		}
 	}
 }
 
 int delayed_send_umi_san (int process_ID, void * MessageEnvelope, int delay) {
+	// error check
+	if (process_exists(process_ID) == FALSE) {
+		return RTX_FAILURE;
+	}
 	
+	int sender_ID = get_process_ID();
+	
+	// fill in the message hearder
+	*(((int*)MessageEnvelope) + 1) = sender_ID;
+	*(((int*)MessageEnvelope) + 2) = process_ID;
+	*(((int*)MessageEnvelope) + 4) = delay;
+	
+	send_message_jessie (-2, MessageEnvelope);
+	
+	return RTX_SUCCESS;
 }

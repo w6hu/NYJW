@@ -143,6 +143,6 @@
 #define NUM_MEM_BLKS 32
 UINT32 *free_blocks;
 
-#define NUM_PROCESS 7
+#define NUM_PROCESS 8
 
 #endif

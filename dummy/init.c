@@ -48,9 +48,10 @@ void put_to_blocked(int waiting_on, struct PCB* p)
 	// 1 is the memory blocked queue
 
 	// theoraticlaly shouldn't get here
+	/*
 	if (waiting_on < 0) {
 		return;
-	}
+	}*/
 	// set the status in PCB
 	p->waiting_on = waiting_on;
 	p->state = STATE_BLOCKED;
@@ -102,9 +103,10 @@ void remove_from_ready(struct PCB* p) {
 
 void remove_from_blocked(int waiting_on, struct PCB* p) {
 	// theoraticlaly shouldn't get here
-	if (waiting_on < 0) {
+	/*if (waiting_on < 0) {
 		return;
 	}
+	*/
 	
 	//Assume if a process is removed from the ready-queue, we are moving the first one
 	int i = 0;

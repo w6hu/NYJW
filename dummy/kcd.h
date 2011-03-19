@@ -1,5 +1,5 @@
-#ifndef _RTX_KCD_H_
-#define _RTX_KCD_H_
+#ifndef _RTX_CRT_H_
+#define _RTX_CRT_H_
 
 #include "rtx_inc.h"
 #include "init.h"

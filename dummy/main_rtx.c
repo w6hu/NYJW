@@ -29,6 +29,7 @@ extern void __REGISTER_TEST_PROCS_ENTRY__();
 extern UINT32* mem_end;
 struct PCB p [NUM_PROCESS];
 struct PCB null_p;
+struct PCB keyboard_i_proc;
 extern struct PCB* current_running_process;
 extern struct PCB* prev_running_process;
 struct PCB* ready_queue[5];
@@ -115,7 +116,11 @@ int main()
 	init_kcd(&p[6], process_start);
 	
 	process_start = process_start + 2048/4;
-	init_kcd(&p[6], process_start);
+	init_crt(&p[7], process_start);
+	
+	
+	process_start = process_start + 2048/4;
+	init_null_process(&keyboard_i_proc, process_start);
 	
     rtx_dbug_outs((CHAR *) "muahaha.\n\r" );
 	init_interrupts();

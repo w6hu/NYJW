@@ -5,9 +5,16 @@ void kcd()
     while (1) 
     {
 		rtx_dbug_outs((CHAR *)"kcd: calling recieve message \r\n");
-        receive_message (NULL);
-		
-		rtx_dbug_outs((CHAR *)"kcd: recieved message \r\n");
+		int sender_id;
+		//*sender_id = 3;
+        void * block =  receive_message (&sender_id);
+		if (block!= NULL){
+			rtx_dbug_outs((CHAR*)"release memory location @ ");
+			rtx_dbug_out_num((int)block);	
+			rtx_dbug_outs((CHAR *)"kcd: recieved message \r\n");
+			release_memory_block(block);//just mock up~
+		}
+		release_processor();
     }
 }
 
