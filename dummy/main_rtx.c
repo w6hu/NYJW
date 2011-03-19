@@ -16,6 +16,7 @@
 #include "memory.h"
 #include "init.h"
 #include "process.h"
+#include "kcd.h"
 //#include "messaging.h"
 
 /* test proc initializaiton info. registration function provided by test suite.
@@ -25,7 +26,7 @@
 
 extern void __REGISTER_TEST_PROCS_ENTRY__();
 extern UINT32* mem_end;
-struct PCB p [6];
+struct PCB p [NUM_PROCESS];
 struct PCB null_p;
 extern struct PCB* current_running_process;
 extern struct PCB* prev_running_process;
@@ -68,7 +69,7 @@ int main()
 	}
 	
 	i=0;
-	for (i; i < 2; i++) {
+	for (i; i < 1; i++) {
 		blocked_queue[i] = 0;
 	}
 	
@@ -108,6 +109,8 @@ int main()
 	}
 	process_start = process_start + 2048/4;
 	init_null_process(&null_p, process_start);
+	process_start = process_start + 2048/4;
+	init_kcd(&p[6], process_start);
 	
 	//call the scheduler to start a process
 	schedule_next_process();
