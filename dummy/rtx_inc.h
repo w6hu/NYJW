@@ -144,5 +144,9 @@
 UINT32 *free_blocks;
 
 #define NUM_PROCESS 8
+//define the message types
+#define COMMAND_KEYBOARD 0
+#define COMMAND_REGISTER 1
+
 
 #endif

@@ -67,7 +67,7 @@ void test2()
 		}
 		rtx_dbug_outs((CHAR *) "\r\n");
 		rtx_dbug_outs((CHAR *)"rtx_test: TEST 2\r\n");	
-
+		
 		int proc_id = 2;
 		int proc_pri = g_test_fixture.get_process_priority(proc_id);
 		
