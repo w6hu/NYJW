@@ -5,7 +5,7 @@ void init_kcd (struct PCB* pcb_kcd, UINT32* stackPtr)
 	rtx_dbug_outs((CHAR *)"init_kcd \r\n");
 	pcb_kcd->next = NULL;
 	pcb_kcd->id = -4;
-	pcb_kcd->priority = 2;
+	pcb_kcd->priority = 3;
 	pcb_kcd->stack = stackPtr;
 	pcb_kcd->returning = FALSE;
 	pcb_kcd->waiting_on = -1;

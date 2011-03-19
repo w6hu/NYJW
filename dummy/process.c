@@ -82,6 +82,7 @@ void schedule_next_process_neko_san()
 	int i=0;
 	for(i; i<5; i++)
 	{
+		rtx_dbug_outs((CHAR *)"looping in ready queue \r\n");
 		if(ready_queue[i] != NULL)
 		{	
 			if(current_running_process->id == ready_queue[i]->id)

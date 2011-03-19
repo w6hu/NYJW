@@ -101,6 +101,7 @@
 #define SERIAL1_UBG1    *( RTX_COLDFIRE_MBAR + 0x218 )
 #define SERIAL1_UBG2    *( RTX_COLDFIRE_MBAR + 0x21C )
 #define SERIAL1_UCSR    *( RTX_COLDFIRE_MBAR + 0x204 )
+#define SERIAL1_USR     *( RTX_COLDFIRE_MBAR + 0x204 )
 #define SERIAL1_UMR     *( RTX_COLDFIRE_MBAR + 0x200 )
 #define SERIAL1_ICR     *( RTX_COLDFIRE_MBAR + 0x51  )
 #define SERIAL1_IVR     *( RTX_COLDFIRE_MBAR + 0x230 )
@@ -108,6 +109,7 @@
 #define SERIAL1_IMR     *( RTX_COLDFIRE_MBAR + 0x214 )
 #define SERIAL1_RD      *( RTX_COLDFIRE_MBAR + 0x20C )
 #define SERIAL1_WD      *( RTX_COLDFIRE_MBAR + 0x20C )
+
 
 /*
  * RTX Error Codes
