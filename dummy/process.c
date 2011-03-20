@@ -304,4 +304,3 @@ void set_process_state(int process_id, int process_state)
 		to_be_modified->state = process_state;
 	}
 }
-
