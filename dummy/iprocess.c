@@ -13,36 +13,120 @@ The UART i-process uses interrupts for both the transmission and receiving of ch
 CHAR charOut;
 CHAR charIn;
 
+extern struct PCB* current_running_process;
+extern struct PCB keyboard_i_proc;
+
 void uart_i_process(){
-	//rtx_dbug_outs((CHAR*)"key interrupt detected!\n\r");
-	BYTE temp;
+	asm( "move.w #0x2700,%sr" );
+	volatile BYTE temp;
 	temp = SERIAL1_USR;
+
+	BOOLEAN caught = FALSE;
+	SERIAL1_IMR = 2;//disable interrupt
 	//if data is waiting
 	if (temp & 1){
 		charIn = SERIAL1_RD;
-		SERIAL1_IMR = 3;//enable interrupt
-		//void * msg = request_memory_block();
-		//*((CHAR *)msg + 100) =  charIn;
-		//send_message(-2, msg);//assume uart_i_process has id = -2.
+		if ((int)charIn ==	18){//ctrl+r
+			print_ready_queue();
+		}else if ((int )charIn == 2){//ctrl+b
+			print_blocked_queues();
+		}else{
+			struct PCB* backup = current_running_process;
+			current_running_process = &keyboard_i_proc; 
+			
+			void * msg = request_memory_block();
+			*((UINT32 *)msg + 16) =  1;
+			*((CHAR *)msg + 68) =  charIn;			
+			send_message_jessie(-5, msg);//send to the CRT first.
+			// set automic here by disabling the interrupt
+				
+			void * msg2 = request_memory_block();
+			*((UINT32 *)msg2) = COMMAND_KEYBOARD;
+			*((UINT32 *)msg2 + 16) =  1;
+			*((CHAR *)msg2 + 68) =  charIn;
+			
+			rtx_dbug_outs((CHAR *)"IPROCESS : sending message to KCD\r\n");
+			send_message_jessie(-4, msg2);//send to the KCD next.
+			current_running_process = backup;
+			}
 	}else if (temp & 4)
-	// if port is ready to accept data
+		// if port is ready to accept data
 	{
-		//rtx_dbug_outs((CHAR*)"putting char to the other scren\n\r");
-		charOut = charIn;
-		SERIAL1_WD = charOut;
-		rtx_dbug_outs((CHAR*)"you typed ");
-		rtx_dbug_out_char(charOut);
-		rtx_dbug_outs((CHAR*)"\n\r");
-		SERIAL1_IMR = 2;//disable interrupt
-		if (charOut == CR){
-			while (! temp & 4){
+		struct PCB* backup = current_running_process;
+		current_running_process = &keyboard_i_proc; 
+		caught = FALSE;
+		int sender_id;
+		void * block;
+		block = receive_message_jessie(&sender_id, 0);
+		if (sender_id == -5){//if message from CRT
+			SERIAL1_IMR = 2;//disable interrupt
+			int j = 0;
+			CHAR charOut;
+			UINT32 length = *((UINT32*)block+16);
+			//rtx_dbug_outs("length = ");
+			//rtx_dbug_out_num(length);
+			for (j; j < length; j++){
 				temp = SERIAL1_USR;
-			}// blocking here?
-			charOut = LF;
-			SERIAL1_WD = charOut;	
+				charOut = *((CHAR*)block +68+j);
+				while (! (temp&4)){
+					temp = SERIAL1_USR;
+					//rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");					
+				}
+				int i = 0;
+				SERIAL1_WD = charOut;
+				if (charOut == CR){
+					temp = SERIAL1_USR;
+					while (! (temp & 4)){
+						//rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");	
+						temp = SERIAL1_USR;
+					}// blocking here?
+					charOut = LF;
+					SERIAL1_WD = charOut;	
+				}
+			}
+			if (block!= NULL) {
+				release_memory_block(block);
+			}
+				
 		}
-		//rtx_dbug_outs((CHAR*)"done putting stuff to the other screen\n\r");
-	}
-	//rtx_dbug_outs((CHAR*)"key interrupt finished!\n\n");
-	
+				//rtx_dbug_outs((CHAR*)"done putting stuff to the other screen\n\r");
+				//done = TRUE;
+			current_running_process = backup;
+		}
+}
+
+void init_keyboard_i_proc (struct PCB* pcb_keyboard_i_proc, UINT32* stackPtr)
+{	
+	rtx_dbug_outs((CHAR *)"init_i_proc \r\n");
+	pcb_keyboard_i_proc->next = NULL;
+	pcb_keyboard_i_proc->id = -3;
+	pcb_keyboard_i_proc->priority = 0;
+	pcb_keyboard_i_proc->stack = stackPtr;
+	pcb_keyboard_i_proc->returning = FALSE;
+	pcb_keyboard_i_proc->waiting_on = -1;
+		
+	int val;
+	//back up a7
+	int original_a7;
+	asm("move.l %%a7, %0" : "=r" (original_a7));	
+	val = pcb_keyboard_i_proc->stack;
+	asm("move.l %0, %%a7" : : "r" (val));
+	val = pcb_keyboard_i_proc;			
+	asm("move.l %0, %%d0" : : "r" (val));
+	asm("move.l %d0, -(%a7)");
+	val = 9988;			
+	asm("move.w %0, %%d0" : : "r" (val));
+	asm("move.w %d0, -(%a7)");
+	val = 16512;			
+	asm("move.w %0, %%d0" : : "r" (val));
+	asm("move.w %d0, -(%a7)");
+	pcb_keyboard_i_proc->stack -= 8;
+
+	//restore a7
+	asm("move.l %0, %%a7" : : "r" (original_a7));
+		
+	// initialize the process to the correct ready queue
+	//put_to_ready(pcb_keyboard_i_proc);
+	pcb_keyboard_i_proc->state = STATE_NEW;	
+	rtx_dbug_outs((CHAR *)"init_i_proc: exited \r\n");
 }

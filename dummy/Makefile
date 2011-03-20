@@ -19,7 +19,7 @@ LDFLAGS_RTX_LOADER = -Trtx_loader.ld -Wl,-Map=rtx_loader.map
 LDFLAGS_RTX_TEST = -Trtx_test.ld -Wl,-Map=rtx_test.map
 
 #RTX_OBJS = dbug.o memory.o init.o rtx.o main_rtx.o
-RTX_OBJS = process.o init.o memory.o dbug.o kcd.o priority.o messaging.o rtx.o main_rtx.o iprocess.o
+RTX_OBJS = process.o init.o memory.o dbug.o kcd.o priority.o hotkeys.o crt.o messaging.o rtx.o main_rtx.o iprocess.o
 RTX_LOADER_OBJS = dbug.o rtx_loader.o
 RTX_TEST_DUMMY_OBJS = dbug.o rtx_test_yishi.o
 
@@ -67,6 +67,4 @@ mdummy.s19: m2.s19 rtx_loader.s19
 
 .PHONY: clean
 clean:
-	mv mlight.s19 mlight_back
 	rm -f *.bin *.s19 *.o *.map *.lst
-	mv mlight_back mlight.s19

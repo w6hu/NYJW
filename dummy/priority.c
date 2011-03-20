@@ -36,6 +36,7 @@ void init_pm (struct PCB* pcb_pm, UINT32* stackPtr)
 
 void priority_modifier()
 {
+	void* error_message;
 	// the first thing it does it register itself
 	register_command(-7, 'C');
 	
@@ -71,7 +72,11 @@ void priority_modifier()
 		goto PRIORITY_END_CHECK;
 	
 	PRIORITY_CHECK_ERROR:
-		rtx_dbug_outs((CHAR *)"PRIORITY_test: Incorrect formatting\r\n");
+	
+		rtx_dbug_outs((CHAR *)"PRIORITY_test: incorrect command format\r\n");
+		error_message = request_memory_block();
+		*((int *)error_message) = COMMAND_ERROR;
+		send_message(-5, error_message);
 	
 	PRIORITY_END_CHECK:	
 		release_memory_block(user_command);

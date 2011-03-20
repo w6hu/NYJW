@@ -75,7 +75,7 @@ void schedule_next_process()
 
 void schedule_next_process_neko_san()
 {
-	rtx_dbug_outs((CHAR *)"scheduled next process neko-san \r\n");
+	//rtx_dbug_outs((CHAR *)"scheduled next process neko-san \r\n");
 	// look for the next process.
 	// if nothing is selected, the null 
 	// process is there at your service.
@@ -201,7 +201,7 @@ VOID trap_call_animal( VOID )
 		asm("move.l %0, +96(%%a7)" : : "r" (return_val));
 	}
 	
-	// reset sutomic here by enabling the interrupt
+	// reset automic here by enabling the interrupt
 }
 
 struct PCB* get_process_from_ID(int process_id)
@@ -218,6 +218,9 @@ struct PCB* get_process_from_ID(int process_id)
 int get_process_number_from_ID(int process_id)
 {
 	int i = 0;
+	if (process_id == -3) {
+		return NUM_PROCESS;
+	}
 	for (i; i < NUM_PROCESS; i++) {
 		if (p[i].id == process_id) {
 			return i;
@@ -266,6 +269,9 @@ int set_process_priority_yama_san(int process_ID, int priority)
 int process_exists(int process_id)
 {
 	int i = 0;
+	if (process_id == -3) {
+		return TRUE;
+	}
 	for (i; i < NUM_PROCESS; i++) {
 		if (p[i].id == process_id) {
 			return TRUE;
@@ -293,4 +299,3 @@ void set_process_state(int process_id, int process_state)
 		to_be_modified->state = process_state;
 	}
 }
-

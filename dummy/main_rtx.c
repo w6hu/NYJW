@@ -30,6 +30,7 @@ extern void __REGISTER_TEST_PROCS_ENTRY__();
 extern UINT32* mem_end;
 struct PCB p [NUM_PROCESS];
 struct PCB null_p;
+struct PCB keyboard_i_proc;
 extern struct PCB* current_running_process;
 extern struct PCB* prev_running_process;
 struct PCB* ready_queue[5];
@@ -112,12 +113,17 @@ int main()
 	}
 	process_start = process_start + 2048/4;
 	init_null_process(&null_p, process_start);
+	
 	process_start = process_start + 2048/4;
 	init_kcd(&p[6], process_start);
 	process_start = process_start + 2048/4;
 	init_pm(&p[7], process_start);
+	process_start = process_start + 2048/4;
+	init_crt(&p[8], process_start);
+	process_start = process_start + 2048/4;
+	init_keyboard_i_proc(&keyboard_i_proc, process_start);
+    init_interrupts();
 	
-	init_interrupts();
 	//call the scheduler to start a process
 	schedule_next_process();
 	//while (TRUE){}

@@ -5,7 +5,7 @@ void register_command(int registering_process, char registering_command)
 	void* register_request = request_memory_block();
 	*((int *)register_request) = COMMAND_REGISTER;
 	*((int *)register_request + 26) = registering_process;
-	*((char *)register_request + 100) = registering_command;
+	*((char *)register_request + 68) = registering_command;
 	send_message(-4, register_request);
 }
 
@@ -27,7 +27,7 @@ void init_kcd (struct PCB* pcb_kcd, UINT32* stackPtr)
 	val = kcd;			
 	asm("move.l %0, %%d0" : : "r" (val));
 	asm("move.l %d0, -(%a7)");
-	val = 2704;			
+	val = 9988;			
 	asm("move.w %0, %%d0" : : "r" (val));
 	asm("move.w %d0, -(%a7)");
 	val = 16512;			
@@ -67,11 +67,12 @@ void kcd()
 	{				
 		user_command = receive_message(NULL);
 		message_type = *((int*)user_command);
-		command = *((char*)user_command + 100);
+		command = *((char*)user_command + 68);
 		registering_process = *((int *)user_command + 26);
 		release_memory_block(user_command);
 	
-		rtx_dbug_outs((CHAR *)"KCD_TEST: Got a message !!\r\n");
+		rtx_dbug_outs((CHAR *)"KCD_TEST: Got a message : ");
+
 		
 		if(message_type == COMMAND_REGISTER)
 		{
@@ -106,7 +107,7 @@ void kcd()
 				{
 					command_buff[num_characters] = command;
 					num_characters += 1;
-					
+			
 					if(command == CR && num_characters >= 3)
 					{
 					
@@ -151,192 +152,3 @@ void kcd()
 		}
 	}
 }
-		
-/*		
-			if(command == '%')
-			{
-				user_command = receive_message_jessie(NULL);
-				message_type = *((int*)user_command);
-				command = *((char*)user_command+100);
-				release_memory_block(user_command);
-				// sanity check
-				if(message_type != COMMAND_KEYBOARD)
-					continue;
-					
-				if(command == 'W')
-				{
-					user_command = receive_message_jessie(NULL);
-					message_type = *((int*)user_command);
-					command = *((char*)user_command+100);
-					release_memory_block(user_command);
-					// sanity check
-					if(message_type != COMMAND_KEYBOARD)
-						continue;
-						
-					if(command == 'S')
-					{	
-						if(handle_time_string() == FALSE)
-							continue;
-						
-						// send a message to call clock
-						continue;
-					}
-					else if(command == 'T')
-					{
-						user_command = receive_message_jessie(NULL);
-						message_type = *((int*)user_command);
-						command = *((char*)user_command+100);
-						release_memory_block(user_command);
-						// this one has to be a white space
-						if(message_type != COMMAND_KEYBOARD || command == CR)
-							continue;	
-						
-						// send a message to wall clock
-						continue;
-					}
-				}
-				else if(command == 'C')
-				{
-					user_command = receive_message_jessie(NULL);
-					message_type = *((int*)user_command);
-					command = *((char*)user_command+100);
-					release_memory_block(user_command);
-					// this one has to be a white space
-					if(message_type != COMMAND_KEYBOARD || command == ' ')
-						continue;
-					
-					user_command = receive_message_jessie(NULL);
-					message_type = *((int*)user_command);
-					int process_id = *((char *)user_command+100) - 48;
-					release_memory_block(user_command);
-					if(message_type != COMMAND_KEYBOARD)
-						continue;
-	
-					user_command = receive_message_jessie(NULL);
-					message_type = *((int*)user_command);
-					command = *((char*)user_command+100);
-					release_memory_block(user_command);
-					// this one has to be a white space
-					if(message_type != COMMAND_KEYBOARD || command == ' ')
-						continue;	
-	
-					user_command = receive_message_jessie(NULL);
-					message_type = *((int*)user_command);
-					int priority = *((char *)user_command+100) - 48;
-					release_memory_block(user_command);
-					if(message_type != COMMAND_KEYBOARD)
-						continue;
-						
-					user_command = receive_message_jessie(NULL);
-					message_type = *((int*)user_command);
-					command = *((char*)user_command+100);
-					release_memory_block(user_command);
-					// this one has to be a white space
-					if(message_type != COMMAND_KEYBOARD || command == CR)
-						continue;							
-					
-					rtx_dbug_outs((CHAR *)"got to the pot of gold !\r\n");
-					// send a message to set process priority PROCESS
-					continue;
-				}
-			}
-			else 
-				continue;
-		}
-	
-	}
-}
-
-int handle_time_string()
-{
-	int hour = 0;
-	int minute = 0;
-	int second = 0;
-	char command;
-	
-	void* user_command = receive_message_jessie(NULL);
-	int message_type = *((int*)user_command);
-	int hour10 = *((char *)user_command + 100) - 48;
-	release_memory_block(user_command);
-	// this one has to be a white space
-	if(message_type != COMMAND_KEYBOARD || (hour10 >2 || hour10 <0))
-		return FALSE;
-		
-	user_command = receive_message_jessie(NULL);
-	message_type = *((int*)user_command);
-	int hour1 = *((char *)user_command + 100) - 48;
-	release_memory_block(user_command);
-	// this one has to be a white space
-	if(message_type != COMMAND_KEYBOARD || (hour1 >4 || hour1 <0))
-		return FALSE;
-	
-	hour = hour10*10 + hour1;
-	
-	user_command = receive_message_jessie(NULL);
-	message_type = *((int*)user_command);
-	command = *((char*)user_command + 100);
-	release_memory_block(user_command);
-	// this one has to be a white space
-	if(message_type != COMMAND_KEYBOARD || command != ':')
-		return FALSE;
-		
-	user_command = receive_message_jessie(NULL);
-	message_type = *((int*)user_command);
-	int minute10 = *((char *)user_command + 100) - 48;
-	release_memory_block(user_command);
-	// this one has to be a white space
-	if(message_type != COMMAND_KEYBOARD || (minute10 >5 || minute10 <0))
-		return FALSE;
-		
-	user_command = receive_message_jessie(NULL);
-	message_type = *((int*)user_command);
-	int minute1 = *((char *)user_command + 100) - 48;
-	release_memory_block(user_command);
-	// this one has to be a white space
-	if(message_type != COMMAND_KEYBOARD || (minute1 >9 || minute1 <0))
-		return FALSE;
-	
-	minute = minute10*10 + minute1;
-	
-	user_command = receive_message_jessie(NULL);
-	message_type = *((int*)user_command);
-	command = *((char*)user_command+100);
-	release_memory_block(user_command);
-	// this one has to be a white space
-	if(message_type != COMMAND_KEYBOARD || command != ':')
-		return FALSE;
-	
-	user_command = receive_message_jessie(NULL);
-	message_type = *((int*)user_command);
-	int second10 = *((char *)user_command + 100) - 48;
-	release_memory_block(user_command);
-	// this one has to be a white space
-	if(message_type != COMMAND_KEYBOARD || (second10 >5 || second10 <0))
-		return FALSE;
-		
-	user_command = receive_message_jessie(NULL);
-	message_type = *((int*)user_command);
-	int second1 = *((char *)user_command + 100) - 48;
-	release_memory_block(user_command);
-	// this one has to be a white space
-	if(message_type != COMMAND_KEYBOARD || (second1 >9 || second1 <0))
-		return FALSE;
-	
-	user_command = receive_message_jessie(NULL);
-	message_type = *((int*)user_command);
-	command = *((char*)user_command + 100);
-	release_memory_block(user_command);
-	// this one has to be a white space
-	if(message_type != COMMAND_KEYBOARD || command == CR)
-		return FALSE;	
-		
-	second = second10*10 + second1;
-	
-	// assuming that the KCD has a relatively high priority, higher than all other process, then it
-	// should continue to execute after the send message and gets blocked on the next receive message
-	// which is happening right afterward.
-	// send a message to the wall clock
-	
-	return;
-}
-*/
