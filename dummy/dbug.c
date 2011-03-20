@@ -13,8 +13,6 @@
  * @param: c the charcter to output to janusROM  
  */
 
-//extern struct PCB* ready_queue[5];
- 
 VOID rtx_dbug_out_char( CHAR c )
 {	
     /* Store registers */
@@ -63,12 +61,15 @@ SINT32 rtx_dbug_outs( CHAR* s )
 }
 
 void rtx_dbug_out_num(int number){
+	//Modify to print numbers in correct order later
 	if (number < 0){
 		number  = number * -1;
 		rtx_dbug_out_char(45);
 	}
 	int digit = number %10;
 	int remain = number;
+	if (remain == 0) 
+		rtx_dbug_outs((CHAR *) "0");
 	while (remain != 0){
 		rtx_dbug_out_char(digit +48);
 		remain = remain /10;
@@ -77,35 +78,3 @@ void rtx_dbug_out_num(int number){
 	rtx_dbug_outs((CHAR*) "\r\n");
 
 }
-/*
-
-void print_ready_queue() {
-	int i = 0;
-	for (i; i < 5; i++) {
-		rtx_dbug_outs((CHAR *) "Ready Queue Priority: ");
-		rtx_dbug_out_char((CHAR) i + 48);
-		rtx_dbug_outs((CHAR *) "\r\n");
-		if (ready_queue[i] == NULL) {
-			rtx_dbug_outs((CHAR *) "Empty\r\n");
-		} else {
-			rtx_dbug_outs((CHAR *) "Processes: ");
-			struct PCB* temp = ready_queue[i];
-			while (temp != NULL) {
-				int last; 
-				int remain = temp->id;
-				if (remain == 0) 
-				rtx_dbug_outs((CHAR *) "0");
-				while (remain != 0) {
-					last = remain%10;
-					remain = remain/10;
-					rtx_dbug_out_char((CHAR)(last+48));            
-				}
-				temp = temp->next;
-				rtx_dbug_outs((CHAR *) ", ");
-			}
-			printf ("\n");		
-		}
-		rtx_dbug_outs((CHAR *) "\r\n");
-	}
-}
-*/
