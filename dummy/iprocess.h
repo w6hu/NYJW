@@ -5,5 +5,6 @@
 #include "rtx.h"
 #include "dbug.h"
 #include "timer.h"
+#include "hotkeys.h"
 
 void uart_i_process();

@@ -19,7 +19,7 @@ LDFLAGS_RTX_LOADER = -Trtx_loader.ld -Wl,-Map=rtx_loader.map
 LDFLAGS_RTX_TEST = -Trtx_test.ld -Wl,-Map=rtx_test.map
 
 #RTX_OBJS = dbug.o memory.o init.o rtx.o main_rtx.o
-RTX_OBJS = process.o init.o memory.o dbug.o kcd.o crt.o messaging.o timer.o rtx.o main_rtx.o iprocess.o
+RTX_OBJS = process.o init.o memory.o dbug.o kcd.o priority.o hotkeys.o crt.o messaging.o rtx.o main_rtx.o iprocess.o timer.o
 RTX_LOADER_OBJS = dbug.o rtx_loader.o
 RTX_TEST_DUMMY_OBJS = dbug.o jessie_test.o
 

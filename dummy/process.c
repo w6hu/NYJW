@@ -85,10 +85,7 @@ void schedule_next_process_neko_san()
 		if(ready_queue[i] != NULL)
 		{	
 			if(current_running_process->id == ready_queue[i]->id)
-			{
-				rtx_dbug_outs((CHAR *)"getting the same process\r\n");
 				continue;
-			}
 			
 			prev_running_process = current_running_process;
 			
@@ -102,7 +99,6 @@ void schedule_next_process_neko_san()
 			break;
 		}
 	}
-	//rtx_dbug_outs((CHAR *)"exited scheduled next process neko-san \r\n");
 }
 
 VOID stack_pointer_switcher( VOID )
@@ -205,8 +201,7 @@ VOID trap_call_animal( VOID )
 		asm("move.l %0, +96(%%a7)" : : "r" (return_val));
 	}
 	
-	// reset sutomic here by enabling the interrupt
-	// note that 
+	// reset automic here by enabling the interrupt
 }
 
 struct PCB* get_process_from_ID(int process_id)
@@ -307,4 +302,3 @@ void set_process_state(int process_id, int process_state)
 		to_be_modified->state = process_state;
 	}
 }
-

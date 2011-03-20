@@ -8,22 +8,19 @@ void crt(){
 		SERIAL1_IMR = 2;
 		int sender_id;
 		struct PCB* backup;
-		backup = current_running_process;
-		current_running_process = &p[7];
+//		backup = current_running_process;
+//		current_running_process = &p[8];
 		
 		//rtx_dbug_outs((CHAR *)"crt: before message:");
 		
-		void* block = receive_message(&sender_id);//receive from -4
-		char c = *((CHAR*)block +100);
-		//rtx_dbug_out_char (c);
-		//rtx_dbug_outs ((CHAR*) "\r\n");
-				
-		//rtx_dbug_outs((CHAR *)"crt: after message:");
-		
-		send_message(-3,block);
-		current_running_process = backup;
-		SERIAL1_IMR = 3;//enable interrupt
-		//release_processor();
+		void* block = receive_message(&sender_id);//receive from -3
+		//rtx_dbug_outs("sender = ");
+		//rtx_dbug_out_num(sender_id);
+		if (sender_id == -3 || sender_id == -6){//if sender is i-process or timer
+			send_message(-3,block);
+//			current_running_process = backup;
+			SERIAL1_IMR = 3;
+		}
 	}
 }
 
@@ -47,7 +44,7 @@ void init_crt (struct PCB* pcb_crt, UINT32* stackPtr){
 	val = crt;			
 	asm("move.l %0, %%d0" : : "r" (val));
 	asm("move.l %d0, -(%a7)");
-	val = 4;			
+	val = 4;		// TODO change this to a kernel level, but at the same time, leave interrupt enabled	
 	asm("move.w %0, %%d0" : : "r" (val));
 	asm("move.w %d0, -(%a7)");
 	val = 16512;			

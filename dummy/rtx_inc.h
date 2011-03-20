@@ -156,6 +156,9 @@ UINT32 *free_blocks;
 //define the message types
 #define COMMAND_KEYBOARD 0
 #define COMMAND_REGISTER 1
+#define COMMAND_WALL_CLOCK 2
+#define COMMAND_PRIORITY_MODIFIER 3
+#define COMMAND_ERROR 4
 
 
 #endif

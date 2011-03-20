@@ -18,6 +18,7 @@
 #include "process.h"
 #include "timer.h"
 #include "kcd.h"
+#include "priority.h"
 #include "iprocess.h"
 #include "messaging.h"
 #include "timer.h";
@@ -119,12 +120,16 @@ int main()
 	
 	process_start = process_start + 2048/4;
 	init_kcd(&p[6], process_start);
+	process_start = process_start + 2048/4;
+
+	init_pm(&p[7], process_start);
+	process_start = process_start + 2048/4;
+	
+	init_crt(&p[8], process_start);
+	process_start = process_start + 2048/4;
 	
 	process_start = process_start + 2048/4;
-	init_crt(&p[7], process_start);
-	
-	process_start = process_start + 2048/4;
-	init_wall_clock(&p[8], process_start);
+	init_wall_clock(&p[9], process_start);
 	
 	process_start = process_start + 2048/4;
 	init_keyboard_i_proc(&keyboard_i_proc, process_start);
@@ -133,6 +138,7 @@ int main()
 	init_timer_i_proc(&timer_i_proc, process_start);
 	
     init_interrupts();
+	
 	//call the scheduler to start a process
 	schedule_next_process();
 	//while (TRUE){}

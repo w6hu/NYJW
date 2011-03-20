@@ -35,7 +35,6 @@ void test2()
 	//rtx_dbug_outs((CHAR *)"rtx_test: TEST 2 start\r\n");
     while (1) 
     {
-
 	    g_test_fixture.release_processor();
 		//rtx_dbug_outs((CHAR *)"rtx_test: TEST 2 END\r\n");
     }
