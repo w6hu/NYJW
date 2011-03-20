@@ -77,7 +77,7 @@ void * receive_message_jessie (int * sender_ID, int block) {
 	int receiver_box = get_process_number_from_ID(receiver_ID);
 	UINT32* message = 0;
 	
-		int last = (int)a_boolean%10;
+		/*int last = (int)a_boolean%10;
 		int remain = (int)a_boolean;
 		//int i = 0; 
 		while (remain != 0) {
@@ -86,7 +86,7 @@ void * receive_message_jessie (int * sender_ID, int block) {
 			remain = remain/10;
 			rtx_dbug_out_char((CHAR)(last+48));            
 		}
-		rtx_dbug_outs((CHAR *) " -------> parm1\r\n");	
+		rtx_dbug_outs((CHAR *) " -------> parm1\r\n");	*/
 	
 	
 	// keep looping and receive message until a message comes in
@@ -121,7 +121,12 @@ void * receive_message_jessie (int * sender_ID, int block) {
 				mailboxStart[receiver_box] = (UINT32 *)next;
 			}
 			// fill in the sender_ID
-			sender_ID = (int *)message+1;
+			int sender = *((int *)message+1);
+			
+			//rtx_dbug_out_char((CHAR)(sender+48));
+			//rtx_dbug_outs(" is the sender in receive\r\n");
+			
+			*sender_ID = sender;
 			
 			// clear the message about the queue info
 			*((UINT32 *)message - 1) = NULL;
@@ -148,4 +153,19 @@ int delayed_send_umi_san (int process_ID, void * MessageEnvelope, int delay) {
 	send_message_jessie (-2, MessageEnvelope);
 	
 	return RTX_SUCCESS;
+}
+
+void clear_mailbox (int process_ID) {
+	int boxNumber = get_process_number_from_ID(process_ID);
+	UINT32* next = mailboxStart[boxNumber];
+	UINT32* temp = NULL;
+	while (next != NULL) {
+		 temp = next;
+		 next = *((UINT32 *)temp - 1);
+		*((UINT32 *)temp - 1) = NULL;
+		*((UINT32 *)temp - 2) = NULL;
+		release_memory_block(temp);
+	}
+	mailboxStart[boxNumber] = NULL;
+	mailboxEnd[boxNumber] = NULL;
 }

@@ -16,6 +16,7 @@
 #include "memory.h"
 #include "init.h"
 #include "process.h"
+#include "timer.h"
 //#include "messaging.h"
 
 /* test proc initializaiton info. registration function provided by test suite.
@@ -27,6 +28,7 @@ extern void __REGISTER_TEST_PROCS_ENTRY__();
 extern UINT32* mem_end;
 struct PCB p [6];
 struct PCB null_p;
+struct PCB wall_clock;
 extern struct PCB* current_running_process;
 extern struct PCB* prev_running_process;
 struct PCB* ready_queue[5];
@@ -108,6 +110,8 @@ int main()
 	}
 	process_start = process_start + 2048/4;
 	init_null_process(&null_p, process_start);
+	process_start = process_start + 2048/4;
+	init_wall_clock(&wall_clock, process_start);
 	
 	//call the scheduler to start a process
 	schedule_next_process();
