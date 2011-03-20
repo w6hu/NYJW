@@ -58,37 +58,29 @@ void uart_i_process(){
 		int sender_id;
 		void * block;
 		block = receive_message_jessie(&sender_id, 0);
-		if (sender_id == -5){//if message from CRT
-			SERIAL1_IMR = 2;//disable interrupt
-			int j = 0;
-			CHAR charOut;
-			UINT32 length = *((UINT32*)block+16);
-			//rtx_dbug_outs("length = ");
-			//rtx_dbug_out_num(length);
-			for (j; j < length; j++){
+		if (sender_id == -5){
+			SERIAL1_IMR = 2;
+			CHAR charOut = *((CHAR*)block +68);
+			while (! (temp&4)){
 				temp = SERIAL1_USR;
-				charOut = *((CHAR*)block +68+j);
-				while (! (temp&4)){
-					temp = SERIAL1_USR;
-					//rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");					
-				}
-				int i = 0;
-				SERIAL1_WD = charOut;
-				if (charOut == CR){
-					temp = SERIAL1_USR;
-					while (! (temp & 4)){
-						//rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");	
-						temp = SERIAL1_USR;
-					}// blocking here?
-					charOut = LF;
-					SERIAL1_WD = charOut;	
-				}
+				//rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");					
 			}
-			if (block!= NULL) {
-				release_memory_block(block);
+			SERIAL1_WD = charOut;
+			if (charOut == CR){
+				temp = SERIAL1_USR;
+				while (! (temp & 4)){
+					//rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");	
+					temp = SERIAL1_USR;
+				}// blocking here?
+				charOut = LF;
+				SERIAL1_WD = charOut;	
 			}
-				
 		}
+		if (block!= NULL) {
+			release_memory_block(block);
+		}
+				
+	}
 				//rtx_dbug_outs((CHAR*)"done putting stuff to the other screen\n\r");
 				//done = TRUE;
 			current_running_process = backup;
