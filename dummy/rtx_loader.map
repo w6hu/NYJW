@@ -2,9 +2,9 @@
 Allocating common symbols
 Common symbol       size              file
 
-old_stack           0x4               /tmp/cc7LIZah.o
+old_stack           0x4               /tmp/cc8fnZz8.o
 free_blocks         0x4               dbug.o
-main_stack          0x1000            /tmp/cc7LIZah.o
+main_stack          0x1000            /tmp/cc8fnZz8.o
 
 Memory Configuration
 
@@ -14,7 +14,7 @@ ram              0x10200000         0x00100000
 
 Linker script and memory map
 
-LOAD /tmp/cc7LIZah.o
+LOAD /tmp/cc8fnZz8.o
 LOAD dbug.o
 LOAD rtx_loader.o
 START GROUP
@@ -28,7 +28,7 @@ END GROUP
 
 .text           0x10200000      0x24b
  *(.text)
- .text          0x10200000       0x1e /tmp/cc7LIZah.o
+ .text          0x10200000       0x1e /tmp/cc8fnZz8.o
  *fill*         0x1020001e        0x2 00
  .text          0x10200020       0xfa dbug.o
                 0x10200040                rtx_dbug_outs
@@ -68,7 +68,7 @@ END GROUP
 .data           0x1020024c        0x0
  *(.shdata)
  *(.data)
- .data          0x1020024c        0x0 /tmp/cc7LIZah.o
+ .data          0x1020024c        0x0 /tmp/cc8fnZz8.o
  .data          0x1020024c        0x0 dbug.o
  .data          0x1020024c        0x0 rtx_loader.o
                 0x1020024c                _edata = .
@@ -77,12 +77,12 @@ END GROUP
                 0x1020024c                __bss_start = .
  *(.shbss)
  *(.bss)
- .bss           0x1020024c        0x0 /tmp/cc7LIZah.o
+ .bss           0x1020024c        0x0 /tmp/cc8fnZz8.o
  .bss           0x1020024c        0x0 dbug.o
  .bss           0x1020024c        0x0 rtx_loader.o
  *(COMMON)
  *fill*         0x1020024c        0x4 00
- COMMON         0x10200250     0x1010 /tmp/cc7LIZah.o
+ COMMON         0x10200250     0x1010 /tmp/cc8fnZz8.o
                 0x10200250                old_stack
                 0x10200260                main_stack
  COMMON         0x10201260        0x4 dbug.o

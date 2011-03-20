@@ -18,61 +18,89 @@ extern struct PCB keyboard_i_proc;
 
 void uart_i_process(){
 	asm( "move.w #0x2700,%sr" );
-	BYTE temp;
+	volatile BYTE temp;
 	temp = SERIAL1_USR;
+
 	BOOLEAN caught = FALSE;
+	SERIAL1_IMR = 2;//disable interrupt
 	//if data is waiting
-	if (temp & 1 && caught == FALSE){
+	if (temp & 1){
 		charIn = SERIAL1_RD;
-				
+					
 		struct PCB* backup = current_running_process;
 		current_running_process = &keyboard_i_proc; 
 		
 		void * msg = request_memory_block();
-		*((CHAR *)msg + 100) =  charIn;
-		*((UINT32*)msg) = 42;//filler value
-		//change to the proper state later.
-		
+		*((UINT32 *)msg + 16) =  1;
+		*((CHAR *)msg + 69) =  charIn;			
+		/*
+		*((CHAR *)msg + 69+1) =  charIn+1;
+		*((CHAR *)msg + 69+2) =  charIn+2;
+		*((CHAR *)msg + 69+3) =  charIn+3;
+		*((CHAR *)msg + 69+4) =  charIn+4;
+		*((CHAR *)msg + 69+5) =  charIn+5;
+		*/
 		send_message_jessie(-5, msg);//send to the CRT first.
 		// set automic here by disabling the interrupt
-		
+			
 		void * msg2 = request_memory_block();
-		*((CHAR *)msg2 + 100) =  charIn;
-		//*((UINT32*)msg2) = COMMAND_KEYBOARD;
-		*((UINT32*)msg2) = 42;//filler value
+		*((UINT32 *)msg2 + 16) =  1;
+		*((CHAR *)msg2 + 69) =  charIn;
+		/*
+		*((CHAR *)msg2 + 69+1) =  charIn+1;
+		*((CHAR *)msg2 + 69+2) =  charIn+2;
+		*((CHAR *)msg2 + 69+2) =  charIn+3;
+		*((CHAR *)msg2 + 69+2) =  charIn+4;
+		*((CHAR *)msg2 + 69+2) =  charIn+5;
+		*/
 		send_message_jessie(-4, msg2);//send to the KCD next.
 		current_running_process = backup;
 		caught = TRUE;
+		//done = TRUE;
 	}else if (temp & 4)
-	// if port is ready to accept data
+		// if port is ready to accept data
 	{
 		struct PCB* backup = current_running_process;
 		current_running_process = &keyboard_i_proc; 
 		caught = FALSE;
 		int sender_id;
-		void * block = receive_message_jessie(&sender_id, 0);
-		charOut = *((CHAR*)block +100);
-		//rtx_dbug_out_char (charOut);
-		//rtx_dbug_outs ((CHAR*) "\r\n");
-		//charOut = charIn;
-		SERIAL1_WD = charOut;
-		if (block!= NULL) {
-			release_memory_block(block);
-		}
-		//rtx_dbug_outs((CHAR*)"you typed ");
-		//rtx_dbug_out_char(charOut);
-		//rtx_dbug_outs((CHAR*)"\n\r");
-		SERIAL1_IMR = 2;//disable interrupt
-		if (charOut == CR){
-			while (! temp & 4){
+		void * block;
+		block = receive_message_jessie(&sender_id, 0);
+		if (sender_id == -5){//if message from CRT
+			SERIAL1_IMR = 2;//disable interrupt
+			int j = 0;
+			CHAR charOut;
+			UINT32 length = *((UINT32*)block+16);
+			rtx_dbug_outs("length = ");
+			rtx_dbug_out_num(length);
+			for (j; j < length; j++){
 				temp = SERIAL1_USR;
-			}// blocking here?
-			charOut = LF;
-			SERIAL1_WD = charOut;	
+				charOut = *((CHAR*)block +69+j);
+				while (! (temp&4)){
+					temp = SERIAL1_USR;
+					rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");					
+				}
+				int i = 0;
+				SERIAL1_WD = charOut;
+				if (charOut == CR){
+					temp = SERIAL1_USR;
+					while (! (temp & 4)){
+						rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");	
+						temp = SERIAL1_USR;
+					}// blocking here?
+					charOut = LF;
+					SERIAL1_WD = charOut;	
+				}
+			}
+			if (block!= NULL) {
+				release_memory_block(block);
+			}
+				
 		}
-		current_running_process = backup;
-		//rtx_dbug_outs((CHAR*)"done putting stuff to the other screen\n\r");
-	}
+				//rtx_dbug_outs((CHAR*)"done putting stuff to the other screen\n\r");
+				//done = TRUE;
+			current_running_process = backup;
+		}
 }
 
 void init_keyboard_i_proc (struct PCB* pcb_keyboard_i_proc, UINT32* stackPtr)

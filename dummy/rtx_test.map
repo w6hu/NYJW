@@ -2,9 +2,9 @@
 Allocating common symbols
 Common symbol       size              file
 
-old_stack           0x4               /tmp/cc2I39t0.o
+old_stack           0x4               /tmp/ccQ6mD9K.o
 free_blocks         0x4               dbug.o
-main_stack          0x1000            /tmp/cc2I39t0.o
+main_stack          0x1000            /tmp/ccQ6mD9K.o
 mem_end             0x4               rtx_test_dummy.o
 
 Memory Configuration
@@ -15,7 +15,7 @@ ram              0x10400000         0x00100000
 
 Linker script and memory map
 
-LOAD /tmp/cc2I39t0.o
+LOAD /tmp/ccQ6mD9K.o
 LOAD dbug.o
 LOAD rtx_test_dummy.o
 START GROUP
@@ -29,7 +29,7 @@ END GROUP
 
 .text           0x10400000      0x1e8
  *(.text)
- .text          0x10400000       0x1e /tmp/cc2I39t0.o
+ .text          0x10400000       0x1e /tmp/ccQ6mD9K.o
  *fill*         0x1040001e        0x2 00
  .text          0x10400020       0xfa dbug.o
                 0x10400040                rtx_dbug_outs
@@ -76,7 +76,7 @@ END GROUP
 .data           0x104001e8        0x0
  *(.shdata)
  *(.data)
- .data          0x104001e8        0x0 /tmp/cc2I39t0.o
+ .data          0x104001e8        0x0 /tmp/ccQ6mD9K.o
  .data          0x104001e8        0x0 dbug.o
  .data          0x104001e8        0x0 rtx_test_dummy.o
                 0x104001e8                _edata = .
@@ -85,13 +85,13 @@ END GROUP
                 0x104001e8                __bss_start = .
  *(.shbss)
  *(.bss)
- .bss           0x104001e8        0x0 /tmp/cc2I39t0.o
+ .bss           0x104001e8        0x0 /tmp/ccQ6mD9K.o
  .bss           0x104001e8        0x0 dbug.o
  .bss           0x104001e8        0x4 rtx_test_dummy.o
                 0x104001e8                test
  *(COMMON)
  *fill*         0x104001ec        0x4 00
- COMMON         0x104001f0     0x1010 /tmp/cc2I39t0.o
+ COMMON         0x104001f0     0x1010 /tmp/ccQ6mD9K.o
                 0x104001f0                old_stack
                 0x10400200                main_stack
  COMMON         0x10401200        0x4 dbug.o
