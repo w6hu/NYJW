@@ -1,11 +1,19 @@
 #include "kcd.h"
 
+void register_command(int registering_process, char registering_command)
+{
+	void* register_request = request_memory_block();
+	*((int *)register_request) = COMMAND_REGISTER;
+	*((int *)register_request + 26) = registering_process;
+	*((char *)register_request + 100) = registering_command;
+	send_message(-4, register_request);
+}
+
 void init_kcd (struct PCB* pcb_kcd, UINT32* stackPtr)
 {	
-	rtx_dbug_outs((CHAR *)"init_kcd \r\n");
 	pcb_kcd->next = NULL;
 	pcb_kcd->id = -4;
-	pcb_kcd->priority = 3;
+	pcb_kcd->priority = 0;
 	pcb_kcd->stack = stackPtr;
 	pcb_kcd->returning = FALSE;
 	pcb_kcd->waiting_on = -1;
@@ -19,7 +27,7 @@ void init_kcd (struct PCB* pcb_kcd, UINT32* stackPtr)
 	val = kcd;			
 	asm("move.l %0, %%d0" : : "r" (val));
 	asm("move.l %d0, -(%a7)");
-	val = 4;			
+	val = 2704;			
 	asm("move.w %0, %%d0" : : "r" (val));
 	asm("move.w %d0, -(%a7)");
 	val = 16512;			
@@ -33,42 +41,138 @@ void init_kcd (struct PCB* pcb_kcd, UINT32* stackPtr)
 	// initialize the process to the correct ready queue
 	put_to_ready(pcb_kcd);
 	pcb_kcd->state = STATE_NEW;	
-	rtx_dbug_outs((CHAR *)"init_kcd: exited \r\n");
 }
 
 void kcd()
-{
-	char availabe_command[10] = {' '};
+{	
+	// make a buff of 30 ... for now, we might be able to use the stack as well
+	char command_buff[30];
+	char commands[28];
+	int  handlers[28];
+	int  num_handlers = 0;
+	int  num_characters = 0;
+
+	// declare all the local variable that will be used
+	void* user_command;
+	int	message_type;
+	char command;
+	int  registering_process;
+	
+	
+	KCD_START:
+		rtx_dbug_outs((CHAR *)"rtx_test: TEST KCD START\r\n");
+		num_characters = 0;
+	
 	while(1)
-	{
-		void* user_command = receive_message(NULL);
-		int	message_type = *((int*)user_command);
-		char command = *((char*)user_command+400);
+	{				
+		user_command = receive_message(NULL);
+		message_type = *((int*)user_command);
+		command = *((char*)user_command + 100);
+		registering_process = *((int *)user_command + 26);
+		release_memory_block(user_command);
+	
+		rtx_dbug_outs((CHAR *)"KCD_TEST: Got a message !!\r\n");
 		
 		if(message_type == COMMAND_REGISTER)
 		{
-			// do the registyeration
+			if(num_handlers < 28)
+			{
+			/*			
+				rtx_dbug_outs((CHAR *)"KCD_TEST: got a registerring command : ");
+				rtx_dbug_out_num(registering_process);
+				rtx_dbug_outs((CHAR *)"      ");
+				rtx_dbug_out_char(command);
+				rtx_dbug_outs((CHAR *)"\r\n");			
+			*/
+			
+				commands[num_handlers] = command;
+				handlers[num_handlers] = registering_process;
+			
+				num_handlers += 1;
+			}
 		}
 		else if(message_type == COMMAND_KEYBOARD)
 		{
+			if(FALSE)
+			{
+				// here to process the list of hot keys
+				// and then restart, wipe out the buff
+				goto KCD_START;
+			} 
+			else 
+			{
+				// put whatever thing onto the buffer if it has any space
+				if(num_characters < 30)
+				{
+					command_buff[num_characters] = command;
+					num_characters += 1;
+					
+					if(command == CR && num_characters >= 3)
+					{
+					
+						// if the user pressed ENTER, then parse the string
+						if(command_buff[0] != '%')
+						{
+							// not a command
+							goto KCD_START;
+						}
+						
+						int i=0;
+						int destination_process = -1;
+						char command_identifier = command_buff[1];
+						
+						for(i; i<num_handlers; i++)
+						{
+							if(commands[i] == command_identifier)
+							{
+								destination_process = handlers[i];
+								break;
+							}
+						}
+						
+						// send the message to the handler
+						void* initiate_action_request = request_memory_block();
+						*((int *)initiate_action_request) = COMMAND_PRIORITY_MODIFIER;
+						*((int *)initiate_action_request + 16) = num_characters - 2;
+						
+						// put the command string in the message 
+						int j=0;
+						for(j; j<num_characters-2; j++)
+						{
+							*((char *)initiate_action_request + 68 + j) = command_buff[j+2];
+						}
+						
+						send_message(destination_process, initiate_action_request);
+						
+						goto KCD_START;
+					}
+				}
+			}
+		}
+	}
+}
+		
+/*		
 			if(command == '%')
 			{
-				user_command = receive_message(NULL);
+				user_command = receive_message_jessie(NULL);
 				message_type = *((int*)user_command);
-				command = *((char*)user_command+400);		
+				command = *((char*)user_command+100);
+				release_memory_block(user_command);
 				// sanity check
 				if(message_type != COMMAND_KEYBOARD)
 					continue;
 					
 				if(command == 'W')
 				{
-					user_command = receive_message(NULL);
+					user_command = receive_message_jessie(NULL);
 					message_type = *((int*)user_command);
-					command = *((char*)user_command+400);	
+					command = *((char*)user_command+100);
+					release_memory_block(user_command);
 					// sanity check
-					
 					if(message_type != COMMAND_KEYBOARD)
 						continue;
+						
 					if(command == 'S')
 					{	
 						if(handle_time_string() == FALSE)
@@ -79,9 +183,10 @@ void kcd()
 					}
 					else if(command == 'T')
 					{
-						user_command = receive_message(NULL);
+						user_command = receive_message_jessie(NULL);
 						message_type = *((int*)user_command);
-						command = *((char*)user_command+400);
+						command = *((char*)user_command+100);
+						release_memory_block(user_command);
 						// this one has to be a white space
 						if(message_type != COMMAND_KEYBOARD || command == CR)
 							continue;	
@@ -92,39 +197,45 @@ void kcd()
 				}
 				else if(command == 'C')
 				{
-					user_command = receive_message(NULL);
+					user_command = receive_message_jessie(NULL);
 					message_type = *((int*)user_command);
-					command = *((char*)user_command+400);
+					command = *((char*)user_command+100);
+					release_memory_block(user_command);
 					// this one has to be a white space
 					if(message_type != COMMAND_KEYBOARD || command == ' ')
 						continue;
 					
-					user_command = receive_message(NULL);
+					user_command = receive_message_jessie(NULL);
 					message_type = *((int*)user_command);
-					int process_id = *((int*)user_command+100) - 48;
+					int process_id = *((char *)user_command+100) - 48;
+					release_memory_block(user_command);
 					if(message_type != COMMAND_KEYBOARD)
 						continue;
 	
-					user_command = receive_message(NULL);
+					user_command = receive_message_jessie(NULL);
 					message_type = *((int*)user_command);
-					command = *((char*)user_command+400);
+					command = *((char*)user_command+100);
+					release_memory_block(user_command);
 					// this one has to be a white space
 					if(message_type != COMMAND_KEYBOARD || command == ' ')
 						continue;	
 	
-					user_command = receive_message(NULL);
+					user_command = receive_message_jessie(NULL);
 					message_type = *((int*)user_command);
-					int priority = *((int*)user_command+100) - 48;
+					int priority = *((char *)user_command+100) - 48;
+					release_memory_block(user_command);
 					if(message_type != COMMAND_KEYBOARD)
 						continue;
 						
-					user_command = receive_message(NULL);
+					user_command = receive_message_jessie(NULL);
 					message_type = *((int*)user_command);
-					command = *((char*)user_command+400);
+					command = *((char*)user_command+100);
+					release_memory_block(user_command);
 					// this one has to be a white space
 					if(message_type != COMMAND_KEYBOARD || command == CR)
 						continue;							
-						
+					
+					rtx_dbug_outs((CHAR *)"got to the pot of gold !\r\n");
 					// send a message to set process priority PROCESS
 					continue;
 				}
@@ -143,69 +254,78 @@ int handle_time_string()
 	int second = 0;
 	char command;
 	
-	void* user_command = receive_message(NULL);
+	void* user_command = receive_message_jessie(NULL);
 	int message_type = *((int*)user_command);
-	int hour10 = *((int*)user_command+100) - 48;
+	int hour10 = *((char *)user_command + 100) - 48;
+	release_memory_block(user_command);
 	// this one has to be a white space
 	if(message_type != COMMAND_KEYBOARD || (hour10 >2 || hour10 <0))
 		return FALSE;
 		
-	user_command = receive_message(NULL);
+	user_command = receive_message_jessie(NULL);
 	message_type = *((int*)user_command);
-	int hour1 = *((int*)user_command+100) - 48;
+	int hour1 = *((char *)user_command + 100) - 48;
+	release_memory_block(user_command);
 	// this one has to be a white space
 	if(message_type != COMMAND_KEYBOARD || (hour1 >4 || hour1 <0))
 		return FALSE;
 	
 	hour = hour10*10 + hour1;
 	
-	user_command = receive_message(NULL);
+	user_command = receive_message_jessie(NULL);
 	message_type = *((int*)user_command);
-	command = *((char*)user_command+400);
+	command = *((char*)user_command + 100);
+	release_memory_block(user_command);
 	// this one has to be a white space
 	if(message_type != COMMAND_KEYBOARD || command != ':')
 		return FALSE;
 		
-	user_command = receive_message(NULL);
+	user_command = receive_message_jessie(NULL);
 	message_type = *((int*)user_command);
-	int minute10 = *((int*)user_command+100) - 48;
+	int minute10 = *((char *)user_command + 100) - 48;
+	release_memory_block(user_command);
 	// this one has to be a white space
 	if(message_type != COMMAND_KEYBOARD || (minute10 >5 || minute10 <0))
 		return FALSE;
 		
-	user_command = receive_message(NULL);
+	user_command = receive_message_jessie(NULL);
 	message_type = *((int*)user_command);
-	int minute1 = *((int*)user_command+100) - 48;
+	int minute1 = *((char *)user_command + 100) - 48;
+	release_memory_block(user_command);
 	// this one has to be a white space
 	if(message_type != COMMAND_KEYBOARD || (minute1 >9 || minute1 <0))
 		return FALSE;
 	
 	minute = minute10*10 + minute1;
 	
-	user_command = receive_message(NULL);
+	user_command = receive_message_jessie(NULL);
 	message_type = *((int*)user_command);
-	command = *((char*)user_command+400);
+	command = *((char*)user_command+100);
+	release_memory_block(user_command);
 	// this one has to be a white space
 	if(message_type != COMMAND_KEYBOARD || command != ':')
 		return FALSE;
 	
-	user_command = receive_message(NULL);
+	user_command = receive_message_jessie(NULL);
 	message_type = *((int*)user_command);
-	int second10 = *((int*)user_command+100) - 48;
+	int second10 = *((char *)user_command + 100) - 48;
+	release_memory_block(user_command);
 	// this one has to be a white space
 	if(message_type != COMMAND_KEYBOARD || (second10 >5 || second10 <0))
 		return FALSE;
 		
-	user_command = receive_message(NULL);
+	user_command = receive_message_jessie(NULL);
 	message_type = *((int*)user_command);
-	int second1 = *((int*)user_command+100) - 48;
+	int second1 = *((char *)user_command + 100) - 48;
+	release_memory_block(user_command);
 	// this one has to be a white space
 	if(message_type != COMMAND_KEYBOARD || (second1 >9 || second1 <0))
 		return FALSE;
 	
-	user_command = receive_message(NULL);
+	user_command = receive_message_jessie(NULL);
 	message_type = *((int*)user_command);
-	command = *((char*)user_command+400);
+	command = *((char*)user_command + 100);
+	release_memory_block(user_command);
 	// this one has to be a white space
 	if(message_type != COMMAND_KEYBOARD || command == CR)
 		return FALSE;	
@@ -219,3 +339,4 @@ int handle_time_string()
 	
 	return;
 }
+*/

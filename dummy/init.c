@@ -98,6 +98,7 @@ void remove_from_ready(struct PCB* p) {
 			}
 		}
 	}
+	p->next = NULL;
 }
 
 void remove_from_blocked(int waiting_on, struct PCB* p) {

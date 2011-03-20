@@ -61,6 +61,22 @@ SINT32 rtx_dbug_outs( CHAR* s )
     }
     return RTX_SUCCESS;
 }
+
+void rtx_dbug_out_num(int number){
+	if (number < 0){
+		number  = number * -1;
+		rtx_dbug_out_char(45);
+	}
+	int digit = number %10;
+	int remain = number;
+	while (remain != 0){
+		rtx_dbug_out_char(digit +48);
+		remain = remain /10;
+		digit = remain %10;
+	}
+	rtx_dbug_outs((CHAR*) "\r\n");
+
+}
 /*
 
 void print_ready_queue() {

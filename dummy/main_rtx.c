@@ -17,6 +17,7 @@
 #include "init.h"
 #include "process.h"
 #include "kcd.h"
+#include "priority.h"
 #include "iprocess.h"
 //#include "messaging.h"
 
@@ -113,13 +114,10 @@ int main()
 	init_null_process(&null_p, process_start);
 	process_start = process_start + 2048/4;
 	init_kcd(&p[6], process_start);
-	
 	process_start = process_start + 2048/4;
-	init_kcd(&p[6], process_start);
+	init_pm(&p[7], process_start);
 	
-    rtx_dbug_outs((CHAR *) "muahaha.\n\r" );
 	init_interrupts();
-    rtx_dbug_outs((CHAR *) "Teeeheee.\n\r" );
 	//call the scheduler to start a process
 	schedule_next_process();
 	//while (TRUE){}

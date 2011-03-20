@@ -54,7 +54,6 @@ void test2()
 {
     while (1) 
     {
-
 		test++;
 		int last = (int)test%10;
 		int remain = (int)test;

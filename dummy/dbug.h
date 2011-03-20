@@ -13,6 +13,7 @@
 
 VOID rtx_dbug_out_char( CHAR c );   // output a char to janusROM terminal
 SINT32 rtx_dbug_outs( CHAR* s );    // output a string to janusROM terminal
+VOID rtx_dbug_out_num(int );
 //void print_ready_queue() 			 
 
 #endif /* _DBUG_H_ */
