@@ -50,16 +50,15 @@ void uart_i_process(){
 			current_running_process = backup;
 			}
 	}else if (temp & 4)
-		// if port is ready to accept data
+	// if port is ready to accept data
 	{
+		SERIAL1_IMR = 2;
 		struct PCB* backup = current_running_process;
 		current_running_process = &keyboard_i_proc; 
-		caught = FALSE;
 		int sender_id;
 		void * block;
 		block = receive_message_jessie(&sender_id, 0);
 		if (sender_id == -5){
-			SERIAL1_IMR = 2;
 			CHAR charOut = *((CHAR*)block +68);
 			while (! (temp&4)){
 				temp = SERIAL1_USR;
@@ -79,12 +78,10 @@ void uart_i_process(){
 		if (block!= NULL) {
 			release_memory_block(block);
 		}
-				
+		//rtx_dbug_outs((CHAR*)"done putting stuff to the other screen\n\r");
+		//done = TRUE;
+		current_running_process = backup;
 	}
-				//rtx_dbug_outs((CHAR*)"done putting stuff to the other screen\n\r");
-				//done = TRUE;
-			current_running_process = backup;
-		}
 }
 
 void init_keyboard_i_proc (struct PCB* pcb_keyboard_i_proc, UINT32* stackPtr)

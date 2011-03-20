@@ -18,6 +18,9 @@ void crt(){
 		//rtx_dbug_out_num(sender_id);
 		if (sender_id == -3 || sender_id == -6){//if sender is i-process or timer
 			UINT32 length = *((UINT32*)block+16);
+			rtx_dbug_outs((CHAR*) "length =");
+			rtx_dbug_out_num(length);
+			rtx_dbug_outs((CHAR*) "\n");
 			int j = 0;
 			CHAR charOut;
 			for (j; j < length; j++){
@@ -26,14 +29,10 @@ void crt(){
 				*((int* )newBlock+16) = 1;
 				*((CHAR* )newBlock+68) = charOut;
 				send_message(-3,newBlock);
-				
+				SERIAL1_IMR = 3;
 			}
 			
-			
-			
-			send_message(-3,block);
-//			current_running_process = backup;
-			SERIAL1_IMR = 3;
+			release_memory_block(block);
 		}
 	}
 }

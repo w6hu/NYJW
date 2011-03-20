@@ -93,7 +93,7 @@ void handle_timer() {
 	void *message = receive_message_jessie (&sender_ID, 0); 
 	while (message != NULL) {
 		int delay = *((int *)message+4);
-		delay = delay / 10 + timeCounter;
+		delay = delay + timeCounter;
 		*((int *)message+4) = delay;
 /*rtx_dbug_outs("delay is ");
 rtx_dbug_out_num(delay);
@@ -122,6 +122,7 @@ void wall_clock() {
 	int clock_on = FALSE;
 	int sender;
 	int hour, minute, second;
+	void * new_msg = NULL;
 	register_command(WALL_CLOCK_ID, 'W');
 	
 	while (TRUE) {
@@ -131,9 +132,6 @@ void wall_clock() {
 		
 		// if the msg is from KCD
 		if (sender_ID == KCD_ID) {
-		
-		rtx_dbug_outs("clock is going to start\r\n");
-			
 			int size = *((int *)incoming_msg + 16);
 			if (size != 11 && size != 2) {
 				goto ERROR_INPUT;
@@ -146,7 +144,7 @@ void wall_clock() {
 				//hour = 0;
 				//minute = 0;
 				//second = 0;
-				void * new_msg = request_memory_block();
+				new_msg = request_memory_block();
 				*((int *)new_msg + 16) = 8;
 				if (*next == '0' || *next == '1' || *next == '2') {
 					hour = (int)(*next - 48)*10;
@@ -213,7 +211,13 @@ void wall_clock() {
 				
 				ERROR_INPUT:
 					rtx_dbug_outs("invalid command in clock");
-					release_memory_block(new_msg);
+					/*void* errorMsg = request_memory_block();
+					if (errorMsg != NULL) {
+						(int *)errorMsg = 4;
+					}*/
+					if (new_msg != NULL) {
+						release_memory_block(new_msg);
+					}
 					goto FINALLY;
 					
 				CORRECT_INPUT:
