@@ -2,8 +2,8 @@
 Allocating common symbols
 Common symbol       size              file
 
-old_stack           0x4               /tmp/ccFbaMHr.o
-main_stack          0x1000            /tmp/ccFbaMHr.o
+old_stack           0x4               /tmp/ccxeBw9B.o
+main_stack          0x1000            /tmp/ccxeBw9B.o
 
 Memory Configuration
 
@@ -13,8 +13,8 @@ ram              0x10100000         0x00100000
 
 Linker script and memory map
 
-LOAD /tmp/ccFbaMHr.o
-LOAD /tmp/ccGj190I.o
+LOAD /tmp/ccxeBw9B.o
+LOAD /tmp/cci12qa2.o
 LOAD ../dbug/dbug.o
 LOAD serial.o
 START GROUP
@@ -26,77 +26,78 @@ END GROUP
                 0x00000000                PROVIDE (software_init_hook, 0x0)
                 0x00000000                PROVIDE (_software_init_hook, 0x0)
 
-.text           0x10100000      0x31f
+.text           0x10100000      0x34e
  *(.text)
- .text          0x10100000       0x1e /tmp/ccFbaMHr.o
+ .text          0x10100000       0x1e /tmp/ccxeBw9B.o
  *fill*         0x1010001e        0x2 00
- .text          0x10100020       0x44 /tmp/ccGj190I.o
+ .text          0x10100020       0x44 /tmp/cci12qa2.o
                 0x10100020                asm_serial_entry
  .text          0x10100064       0x5c ../dbug/dbug.o
                 0x10100084                rtx_dbug_outs
                 0x10100064                rtx_dbug_out_char
- .text          0x101000c0      0x218 serial.o
+ .text          0x101000c0      0x236 serial.o
                 0x101000c0                __main
-                0x10100152                coldfire_vbr_init
+                0x1010015e                coldfire_vbr_init
                 0x101000ca                c_serial_handler
-                0x1010016a                main
-                0x101002d8                . = ALIGN (0x4)
-                0x101002d8                __CTOR_LIST__ = .
-                0x101002d8        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
+                0x10100176                main
+                0x101002f8                . = ALIGN (0x4)
+ *fill*         0x101002f6        0x2 00
+                0x101002f8                __CTOR_LIST__ = .
+                0x101002f8        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
  *(.ctors)
-                0x101002dc        0x4 LONG 0x0
-                0x101002e0                __CTOR_END__ = .
-                0x101002e0                __DTOR_LIST__ = .
-                0x101002e0        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
+                0x101002fc        0x4 LONG 0x0
+                0x10100300                __CTOR_END__ = .
+                0x10100300                __DTOR_LIST__ = .
+                0x10100300        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
  *(.dtors)
-                0x101002e4        0x4 LONG 0x0
-                0x101002e8                __DTOR_END__ = .
+                0x10100304        0x4 LONG 0x0
+                0x10100308                __DTOR_END__ = .
  *(.rodata*)
- .rodata        0x101002e8       0x27 serial.o
+ .rodata        0x10100308       0x36 serial.o
  *(.gcc_except_table)
-                0x1010030f                __INIT_SECTION__ = .
-                0x1010030f        0x4 LONG 0x4e560000
+                0x1010033e                __INIT_SECTION__ = .
+                0x1010033e        0x4 LONG 0x4e560000
  *(.init)
-                0x10100313        0x2 SHORT 0x4e5e
-                0x10100315        0x2 SHORT 0x4e75
-                0x10100317                __FINI_SECTION__ = .
-                0x10100317        0x4 LONG 0x4e560000
+                0x10100342        0x2 SHORT 0x4e5e
+                0x10100344        0x2 SHORT 0x4e75
+                0x10100346                __FINI_SECTION__ = .
+                0x10100346        0x4 LONG 0x4e560000
  *(.fini)
-                0x1010031b        0x2 SHORT 0x4e5e
-                0x1010031d        0x2 SHORT 0x4e75
-                0x1010031f                _etext = .
+                0x1010034a        0x2 SHORT 0x4e5e
+                0x1010034c        0x2 SHORT 0x4e75
+                0x1010034e                _etext = .
  *(.lit)
 
-.data           0x10100320       0x1a
+.data           0x10100350       0x1a
  *(.shdata)
  *(.data)
- .data          0x10100320        0x0 /tmp/ccFbaMHr.o
- .data          0x10100320        0x0 /tmp/ccGj190I.o
- .data          0x10100320        0x0 ../dbug/dbug.o
- .data          0x10100320       0x1a serial.o
-                0x10100320                CharIn
-                0x1010032a                StringHack
-                0x10100326                Printed
-                0x10100322                Caught
-                0x1010033a                _edata = .
+ .data          0x10100350        0x0 /tmp/ccxeBw9B.o
+ .data          0x10100350        0x0 /tmp/cci12qa2.o
+ .data          0x10100350        0x0 ../dbug/dbug.o
+ .data          0x10100350       0x1a serial.o
+                0x10100350                CharIn
+                0x1010035a                StringHack
+                0x10100356                Printed
+                0x10100352                Caught
+                0x1010036a                _edata = .
 
-.bss            0x1010033c     0x1024
-                0x1010033c                __bss_start = .
+.bss            0x1010036c     0x1024
+                0x1010036c                __bss_start = .
  *(.shbss)
  *(.bss)
- .bss           0x1010033c        0x0 /tmp/ccFbaMHr.o
- .bss           0x1010033c        0x0 /tmp/ccGj190I.o
- .bss           0x1010033c        0x0 ../dbug/dbug.o
- .bss           0x1010033c        0x5 serial.o
-                0x1010033c                NewLine
-                0x10100340                CharOut
+ .bss           0x1010036c        0x0 /tmp/ccxeBw9B.o
+ .bss           0x1010036c        0x0 /tmp/cci12qa2.o
+ .bss           0x1010036c        0x0 ../dbug/dbug.o
+ .bss           0x1010036c        0x5 serial.o
+                0x1010036c                NewLine
+                0x10100370                CharOut
  *(COMMON)
- *fill*         0x10100341        0xf 00
- COMMON         0x10100350     0x1010 /tmp/ccFbaMHr.o
-                0x10100350                old_stack
-                0x10100360                main_stack
-                0x10101360                _end = ALIGN (0x8)
-                0x10101360                __end = _end
+ *fill*         0x10100371        0xf 00
+ COMMON         0x10100380     0x1010 /tmp/ccxeBw9B.o
+                0x10100380                old_stack
+                0x10100390                main_stack
+                0x10101390                _end = ALIGN (0x8)
+                0x10101390                __end = _end
 
 .stab
  *(.stab)

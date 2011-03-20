@@ -36,3 +36,5 @@ asm_trap_entry:
 	move.l (%a7)+, %d0
 	
 	rte
+
+	

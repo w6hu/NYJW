@@ -14,6 +14,8 @@
 /* Interprocess Communications*/
 int send_message (int process_ID, void * MessageEnvelope)
 {
+	//rtx_dbug_outs((CHAR *)"rtx: start send_message \r\n");
+	
 	asm("move.l %d0, -(%a7)");
 	asm("move.l %0, %d0" : : "r" (process_ID));
 	asm("move.l %d0, -(%a7)");	
@@ -32,12 +34,13 @@ int send_message (int process_ID, void * MessageEnvelope)
 	asm("move.l (%a7)+ ,%d0");
 	asm("move.l (%a7)+ ,%d0");	
 	
-    //rtx_dbug_outs((CHAR *)"rtx: send_message \r\n");
+    //rtx_dbug_outs((CHAR *)"rtx: end send_message \r\n");
 	return return_val;
 }
 
 void * receive_message(int * sender_ID)
 {
+	//rtx_dbug_outs((CHAR *)"rtx: start receive_message \r\n");
 	asm("move.l %d0, -(%a7)");
 	asm("move.l %0, %d0" : : "r" (sender_ID));
 	asm("move.l %d0, -(%a7)");	
@@ -55,7 +58,7 @@ void * receive_message(int * sender_ID)
 	
 	asm("move.l (%a7)+ ,%d0");	
 	asm("move.l (%a7)+ ,%d0");
-    //rtx_dbug_outs((CHAR *)"rtx: receive_message \r\n");
+    //rtx_dbug_outs((CHAR *)"rtx: end receive_message \r\n");
 	return return_val;
 }
 
@@ -117,6 +120,7 @@ int release_processor()
 /*Timing Service*/
 int delayed_send(int process_ID, void * MessageEnvelope, int delay)
 {
+	//rtx_dbug_outs((CHAR *)"rtx: start delayed_send \r\n");
 	asm("move.l %d0, -(%a7)");
 	asm("move.l %0, %d0" : : "r" (process_ID));
 	asm("move.l %d0, -(%a7)");	
@@ -138,7 +142,7 @@ int delayed_send(int process_ID, void * MessageEnvelope, int delay)
 	asm("move.l (%a7)+ ,%d0");	
 	asm("move.l (%a7)+ ,%d0");
 	
-    //rtx_dbug_outs((CHAR *)"rtx: send_message \r\n");
+    //rtx_dbug_outs((CHAR *)"rtx: end delayed_send \r\n");
 	return return_val;
 }
 

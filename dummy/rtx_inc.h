@@ -101,6 +101,7 @@
 #define SERIAL1_UBG1    *( RTX_COLDFIRE_MBAR + 0x218 )
 #define SERIAL1_UBG2    *( RTX_COLDFIRE_MBAR + 0x21C )
 #define SERIAL1_UCSR    *( RTX_COLDFIRE_MBAR + 0x204 )
+#define SERIAL1_USR     *( RTX_COLDFIRE_MBAR + 0x204 )
 #define SERIAL1_UMR     *( RTX_COLDFIRE_MBAR + 0x200 )
 #define SERIAL1_ICR     *( RTX_COLDFIRE_MBAR + 0x51  )
 #define SERIAL1_IVR     *( RTX_COLDFIRE_MBAR + 0x230 )
@@ -108,6 +109,7 @@
 #define SERIAL1_IMR     *( RTX_COLDFIRE_MBAR + 0x214 )
 #define SERIAL1_RD      *( RTX_COLDFIRE_MBAR + 0x20C )
 #define SERIAL1_WD      *( RTX_COLDFIRE_MBAR + 0x20C )
+
 
 /*
  * RTX Error Codes
@@ -141,6 +143,19 @@
 #define NUM_MEM_BLKS 32
 UINT32 *free_blocks;
 
-#define NUM_PROCESS 6
+#define NUM_PROCESS 10
+
+#define NULL_ID -2
+#define KEYBOARD_INTERRUPT -3
+#define KCD_ID -4
+#define CRT_ID -5
+#define WALL_CLOCK_ID -6
+#define SET_PRIORITY_ID -7
+#define TIMER_INTERRUPT -8
+
+//define the message types
+#define COMMAND_KEYBOARD 0
+#define COMMAND_REGISTER 1
+
 
 #endif

@@ -19,190 +19,71 @@ int test = 0;
 void test1()
 {
 	test = 0;
+	//rtx_dbug_outs((CHAR *)"rtx_test: TEST 1 start\r\n");
     //rtx_dbug_outs((CHAR *)"rtx_test: test1\r\n");
     
     while (1) 
     {
-		rtx_dbug_outs((CHAR *)"rtx_test: test1\r\n");
-		test++;
-		int last = (int)test%10;
-		int remain = (int)test;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) "\r\n");
-		rtx_dbug_outs((CHAR *)"rtx_test: TEST 1\r\n");
-		
-		int proc_id = 1;
-		int proc_pri = g_test_fixture.get_process_priority(proc_id);
-		
-		proc_pri = (proc_pri+1)%4;
-		g_test_fixture.set_process_priority(proc_id, proc_pri);
-		g_test_fixture.receive_message(NULL);			
-		
-        g_test_fixture.release_processor();
-		rtx_dbug_outs((CHAR *)"rtx_test: TEST 1 END\r\n");
+	    g_test_fixture.release_processor();
+		//rtx_dbug_outs((CHAR *)"rtx_test: TEST 1 END\r\n");
     }
 }
 
 /* third party dummy test process 2 */ 
 void test2()
 {
+	//rtx_dbug_outs((CHAR *)"rtx_test: TEST 2 start\r\n");
     while (1) 
     {
 
-		test++;
-		int last = (int)test%10;
-		int remain = (int)test;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) "\r\n");
-		rtx_dbug_outs((CHAR *)"rtx_test: TEST 2\r\n");	
-
-		int proc_id = 2;
-		int proc_pri = g_test_fixture.get_process_priority(proc_id);
-		
-		proc_pri = (proc_pri+1)%4;
-		g_test_fixture.set_process_priority(proc_id, proc_pri);
-		g_test_fixture.receive_message(NULL);	
-		
-        /* execute a rtx primitive to test */
-        g_test_fixture.release_processor();
-		rtx_dbug_outs((CHAR *)"rtx_test: TEST 2 END\r\n");
+	    g_test_fixture.release_processor();
+		//rtx_dbug_outs((CHAR *)"rtx_test: TEST 2 END\r\n");
     }
 }
 /* third party dummy test process 3 */ 
 void test3()
 {
-    rtx_dbug_outs((CHAR *)"rtx_test: test3\r\n");
+	//rtx_dbug_outs((CHAR *)"rtx_test: TEST 3 start\r\n");
+   // rtx_dbug_outs((CHAR *)"rtx_test: test3\r\n");
     while (1) 
     {
-		test++;
-		int last = (int)test%10;
-		int remain = (int)test;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) "\r\n");
-		rtx_dbug_outs((CHAR *)"rtx_test: TEST 3\r\n");
-        /* execute a rtx primitive to test */
-		
-		int proc_id = 3;
-		int proc_pri = g_test_fixture.get_process_priority(proc_id);
-		
-		proc_pri = (proc_pri+1)%4;
-		g_test_fixture.set_process_priority(proc_id, proc_pri);
-		g_test_fixture.receive_message(NULL);			
-		
-        g_test_fixture.release_processor();
-		rtx_dbug_outs((CHAR *)"rtx_test: TEST 3 END\r\n");
+	    g_test_fixture.release_processor();
+		//rtx_dbug_outs((CHAR *)"rtx_test: TEST 3 END\r\n");
     }
 }
 
 /* third party dummy test process 4 */ 
 void test4()
 {
-    rtx_dbug_outs((CHAR *)"rtx_test: test4\r\n");
+	//rtx_dbug_outs((CHAR *)"rtx_test: TEST 4 start\r\n");
+   // rtx_dbug_outs((CHAR *)"rtx_test: test4\r\n");
     while (1) 
     {
-		test++;
-		int last = (int)test%10;
-		int remain = (int)test;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) "\r\n");
-		rtx_dbug_outs((CHAR *)"rtx_test: TEST 4\r\n");
-        /* execute a rtx primitive to test */
-	
-		int proc_id = 4;
-		int proc_pri = g_test_fixture.get_process_priority(proc_id);
-		
-		proc_pri = (proc_pri+1)%4;
-		g_test_fixture.set_process_priority(proc_id, proc_pri);	
-		g_test_fixture.receive_message(NULL);		
-	
-        g_test_fixture.release_processor();
-		rtx_dbug_outs((CHAR *)"rtx_test: TEST 4 END\r\n");
+	    g_test_fixture.release_processor();
+		//rtx_dbug_outs((CHAR *)"rtx_test: TEST 4 END\r\n");
     }
 }
 /* third party dummy test process 5 */ 
 void test5()
-{
-    rtx_dbug_outs((CHAR *)"rtx_test: test5\r\n");
+{	
+	//rtx_dbug_outs((CHAR *)"rtx_test: TEST 5 start\r\n");
+   // rtx_dbug_outs((CHAR *)"rtx_test: test5\r\n");
     while (1) 
     {
-		test++;
-		int last = (int)test%10;
-		int remain = (int)test;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) "\r\n");
-		rtx_dbug_outs((CHAR *)"rtx_test: TEST 5\r\n");
-		
-		int proc_id = 5;
-		int proc_pri = g_test_fixture.get_process_priority(proc_id);
-		
-		proc_pri = (proc_pri+1)%4;
-		g_test_fixture.set_process_priority(proc_id, proc_pri);
-		g_test_fixture.receive_message(NULL);			
-		
-        /* execute a rtx primitive to test */
+	    /* execute a rtx primitive to test */
         g_test_fixture.release_processor();
-		rtx_dbug_outs((CHAR *)"rtx_test: TEST 5 END\r\n");
+		//rtx_dbug_outs((CHAR *)"rtx_test: TEST 5 END\r\n");
     }
 }
 /* third party dummy test process 6 */ 
 void test6()
 {
-    rtx_dbug_outs((CHAR *)"rtx_test: test6\r\n");
+//rtx_dbug_outs((CHAR *)"rtx_test: TEST 6 start\r\n");
+  //  rtx_dbug_outs((CHAR *)"rtx_test: test6\r\n");
     while (1) 
     {
-		test++;
-		int last = (int)test%10;
-		int remain = (int)test;
-		//int i = 0; 
-		while (remain != 0) {
-			//rtx_dbug_out_char((CHAR)(last+48));
-			last = remain%10;
-			remain = remain/10;
-			rtx_dbug_out_char((CHAR)(last+48));            
-		}
-		rtx_dbug_outs((CHAR *) "\r\n");
-		rtx_dbug_outs((CHAR *)"rtx_test: TEST 6\r\n");
-		
-		int proc_id = 6;
-		int proc_pri = g_test_fixture.get_process_priority(proc_id);
-		
-		proc_pri = (proc_pri+1)%4;
-		g_test_fixture.set_process_priority(proc_id, proc_pri);	
-		g_test_fixture.receive_message(NULL);		
-		
-		
-        g_test_fixture.release_processor();
-		rtx_dbug_outs((CHAR *)"rtx_test: TEST 6 END\r\n");
+	    g_test_fixture.release_processor();
+		//rtx_dbug_outs((CHAR *)"rtx_test: TEST 6 END\r\n");
     }
 }
 

@@ -7,65 +7,65 @@ start address 0x10100000
 
 Program Header:
     LOAD off    0x00002000 vaddr 0x10100000 paddr 0x10100000 align 2**13
-         filesz 0x0000033a memsz 0x00001360 flags rwx
+         filesz 0x0000036a memsz 0x00001390 flags rwx
 private flags = 12: [isa A] [mac]
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         0000031f  10100000  10100000  00002000  2**2
+  0 .text         0000034e  10100000  10100000  00002000  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         0000001a  10100320  10100320  00002320  2**2
+  1 .data         0000001a  10100350  10100350  00002350  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00001024  1010033c  1010033c  0000233a  2**4
+  2 .bss          00001024  1010036c  1010036c  0000236a  2**4
                   ALLOC
-  3 .comment      0000004e  00000000  00000000  0000233a  2**0
+  3 .comment      0000004e  00000000  00000000  0000236a  2**0
                   CONTENTS, READONLY
 SYMBOL TABLE:
 10100000 l    d  .text	00000000 .text
-10100320 l    d  .data	00000000 .data
-1010033c l    d  .bss	00000000 .bss
+10100350 l    d  .data	00000000 .data
+1010036c l    d  .bss	00000000 .bss
 00000000 l    d  .comment	00000000 .comment
 00000000 l    df *ABS*	00000000 dbug.c
 00000000 l    df *ABS*	00000000 serial.c
 101000c0 g     F .text	0000000a __main
-10100152 g     F .text	00000018 coldfire_vbr_init
+1010015e g     F .text	00000018 coldfire_vbr_init
 10400000 g       *ABS*	00000000 __RTX_TEST_CODE_ENTRY__
-1010031f g       .text	00000000 _etext
-101002e8 g       .text	00000000 __DTOR_END__
-10100317 g       .text	00000000 __FINI_SECTION__
+1010034e g       .text	00000000 _etext
+10100308 g       .text	00000000 __DTOR_END__
+10100346 g       .text	00000000 __FINI_SECTION__
 00000000 g       *ABS*	00000000 __DYNAMIC
 10300000 g       *ABS*	00000000 __REGISTER_RTX_ENTRY__
 10100084 g     F .text	0000003c rtx_dbug_outs
-10100320 g     O .data	00000001 CharIn
-10100350 g     O .bss	00000004 old_stack
+10100350 g     O .data	00000001 CharIn
+10100380 g     O .bss	00000004 old_stack
 10380000 g       *ABS*	00000000 __REGISTER_TEST_PROCS_ENTRY__
-1010030f g       .text	00000000 __INIT_SECTION__
-1010032a g     O .data	00000010 StringHack
+1010033e g       .text	00000000 __INIT_SECTION__
+1010035a g     O .data	00000010 StringHack
 10100064 g     F .text	00000020 rtx_dbug_out_char
-101002d8 g       .text	00000000 __CTOR_LIST__
-10101360 g       .bss	00000000 __end
-10100360 g     O .bss	00001000 main_stack
-101000ca g     F .text	00000088 c_serial_handler
-1010033c g       .bss	00000000 __bss_start
-1010016a g     F .text	0000016e main
+101002f8 g       .text	00000000 __CTOR_LIST__
+10101390 g       .bss	00000000 __end
+10100390 g     O .bss	00001000 main_stack
+101000ca g     F .text	00000094 c_serial_handler
+1010036c g       .bss	00000000 __bss_start
+10100176 g     F .text	00000180 main
 10100020 g       .text	00000000 asm_serial_entry
-1010033c g     O .bss	00000004 NewLine
-101002e0 g       .text	00000000 __CTOR_END__
-101002e0 g       .text	00000000 __DTOR_LIST__
-10100326 g     O .data	00000004 Printed
-1010033a g       .data	00000000 _edata
-10101360 g       .bss	00000000 _end
-10100322 g     O .data	00000004 Caught
-10100340 g     O .bss	00000001 CharOut
+1010036c g     O .bss	00000004 NewLine
+10100300 g       .text	00000000 __CTOR_END__
+10100300 g       .text	00000000 __DTOR_LIST__
+10100356 g     O .data	00000004 Printed
+1010036a g       .data	00000000 _edata
+10101390 g       .bss	00000000 _end
+10100352 g     O .data	00000004 Caught
+10100370 g     O .bss	00000001 CharOut
 
 
 Disassembly of section .text:
 
 10100000 <asm_serial_entry-0x20>:
-10100000:	23cf 1010 0350 	movel %sp,10100350 <old_stack>
-10100006:	2e7c 1010 1360 	moveal #269488992,%sp
-1010000c:	4eb9 1010 016a 	jsr 1010016a <main>
-10100012:	2e79 1010 0350 	moveal 10100350 <old_stack>,%sp
+10100000:	23cf 1010 0380 	movel %sp,10100380 <old_stack>
+10100006:	2e7c 1010 1390 	moveal #269489040,%sp
+1010000c:	4eb9 1010 0176 	jsr 10100176 <main>
+10100012:	2e79 1010 0380 	moveal 10100380 <old_stack>,%sp
 10100018:	2e00           	movel %d0,%d7
 1010001a:	7000           	moveq #0,%d0
 1010001c:	4e4f           	trap #15
@@ -161,159 +161,173 @@ Disassembly of section .text:
 101000e6:	6716           	beqs 101000fe <c_serial_handler+0x34>
 101000e8:	207c f000 020c 	moveal #-268434932,%a0
 101000ee:	1010           	moveb %a0@,%d0
-101000f0:	13c0 1010 0320 	moveb %d0,10100320 <CharIn>
-101000f6:	42b9 1010 0322 	clrl 10100322 <Caught>
-101000fc:	6050           	bras 1010014e <c_serial_handler+0x84>
+101000f0:	13c0 1010 0350 	moveb %d0,10100350 <CharIn>
+101000f6:	42b9 1010 0352 	clrl 10100352 <Caught>
+101000fc:	605c           	bras 1010015a <c_serial_handler+0x90>
 101000fe:	4280           	clrl %d0
 10100100:	102e ffff      	moveb %fp@(-1),%d0
 10100104:	7204           	moveq #4,%d1
 10100106:	c081           	andl %d1,%d0
 10100108:	4a80           	tstl %d0
-1010010a:	6742           	beqs 1010014e <c_serial_handler+0x84>
-1010010c:	207c f000 020c 	moveal #-268434932,%a0
-10100112:	1039 1010 0340 	moveb 10100340 <CharOut>,%d0
-10100118:	1080           	moveb %d0,%a0@
-1010011a:	207c f000 0214 	moveal #-268434924,%a0
-10100120:	10bc 0002      	moveb #2,%a0@
-10100124:	7001           	moveq #1,%d0
-10100126:	23c0 1010 0326 	movel %d0,10100326 <Printed>
-1010012c:	42b9 1010 033c 	clrl 1010033c <NewLine>
-10100132:	1039 1010 0340 	moveb 10100340 <CharOut>,%d0
-10100138:	1000           	moveb %d0,%d0
-1010013a:	0280 0000 00ff 	andil #255,%d0
-10100140:	720d           	moveq #13,%d1
-10100142:	b280           	cmpl %d0,%d1
-10100144:	6608           	bnes 1010014e <c_serial_handler+0x84>
-10100146:	7001           	moveq #1,%d0
-10100148:	23c0 1010 033c 	movel %d0,1010033c <NewLine>
-1010014e:	4e5e           	unlk %fp
-10100150:	4e75           	rts
+1010010a:	674e           	beqs 1010015a <c_serial_handler+0x90>
+1010010c:	1039 1010 0350 	moveb 10100350 <CharIn>,%d0
+10100112:	13c0 1010 0370 	moveb %d0,10100370 <CharOut>
+10100118:	207c f000 020c 	moveal #-268434932,%a0
+1010011e:	1039 1010 0370 	moveb 10100370 <CharOut>,%d0
+10100124:	1080           	moveb %d0,%a0@
+10100126:	7001           	moveq #1,%d0
+10100128:	23c0 1010 0356 	movel %d0,10100356 <Printed>
+1010012e:	207c f000 0214 	moveal #-268434924,%a0
+10100134:	10bc 0002      	moveb #2,%a0@
+10100138:	42b9 1010 036c 	clrl 1010036c <NewLine>
+1010013e:	1039 1010 0370 	moveb 10100370 <CharOut>,%d0
+10100144:	1000           	moveb %d0,%d0
+10100146:	0280 0000 00ff 	andil #255,%d0
+1010014c:	720d           	moveq #13,%d1
+1010014e:	b280           	cmpl %d0,%d1
+10100150:	6608           	bnes 1010015a <c_serial_handler+0x90>
+10100152:	7001           	moveq #1,%d0
+10100154:	23c0 1010 036c 	movel %d0,1010036c <NewLine>
+1010015a:	4e5e           	unlk %fp
+1010015c:	4e75           	rts
 
-10100152 <coldfire_vbr_init>:
-10100152:	4e56 0000      	linkw %fp,#0
-10100156:	2f08           	movel %a0,%sp@-
-10100158:	207c 1000 0000 	moveal #268435456,%a0
-1010015e:	4e7b 8801      	movec %a0,%vbr
-10100162:	205f           	moveal %sp@+,%a0
-10100164:	4280           	clrl %d0
-10100166:	4e5e           	unlk %fp
-10100168:	4e75           	rts
+1010015e <coldfire_vbr_init>:
+1010015e:	4e56 0000      	linkw %fp,#0
+10100162:	2f08           	movel %a0,%sp@-
+10100164:	207c 1000 0000 	moveal #268435456,%a0
+1010016a:	4e7b 8801      	movec %a0,%vbr
+1010016e:	205f           	moveal %sp@+,%a0
+10100170:	4280           	clrl %d0
+10100172:	4e5e           	unlk %fp
+10100174:	4e75           	rts
 
-1010016a <main>:
-1010016a:	4e56 fffc      	linkw %fp,#-4
-1010016e:	46fc 2700      	movew #9984,%sr
-10100172:	4eba ffde      	jsr %pc@(10100152 <coldfire_vbr_init>)
-10100176:	203c 1010 0020 	movel #269484064,%d0
-1010017c:	23c0 1000 0100 	movel %d0,10000100 <__DYNAMIC+0x10000100>
-10100182:	207c f000 0208 	moveal #-268434936,%a0
-10100188:	10bc 0010      	moveb #16,%a0@
-1010018c:	207c f000 0208 	moveal #-268434936,%a0
-10100192:	10bc 0020      	moveb #32,%a0@
-10100196:	207c f000 0208 	moveal #-268434936,%a0
-1010019c:	10bc 0030      	moveb #48,%a0@
-101001a0:	207c f000 0208 	moveal #-268434936,%a0
-101001a6:	10bc 0040      	moveb #64,%a0@
-101001aa:	207c f000 0051 	moveal #-268435375,%a0
-101001b0:	10bc 0017      	moveb #23,%a0@
-101001b4:	207c f000 0230 	moveal #-268434896,%a0
-101001ba:	10bc 0040      	moveb #64,%a0@
-101001be:	207c f000 0214 	moveal #-268434924,%a0
-101001c4:	10bc 0002      	moveb #2,%a0@
-101001c8:	207c f000 0218 	moveal #-268434920,%a0
-101001ce:	4210           	clrb %a0@
-101001d0:	207c f000 021c 	moveal #-268434916,%a0
-101001d6:	10bc ff92      	moveb #-110,%a0@
-101001da:	207c f000 0204 	moveal #-268434940,%a0
-101001e0:	10bc ffdd      	moveb #-35,%a0@
-101001e4:	207c f000 0200 	moveal #-268434944,%a0
-101001ea:	10bc 0013      	moveb #19,%a0@
-101001ee:	207c f000 0200 	moveal #-268434944,%a0
-101001f4:	10bc 0007      	moveb #7,%a0@
-101001f8:	207c f000 0208 	moveal #-268434936,%a0
-101001fe:	10bc 0005      	moveb #5,%a0@
-10100202:	207c f000 0044 	moveal #-268435388,%a0
-10100208:	2d50 fffc      	movel %a0@,%fp@(-4)
-1010020c:	203c 0003 dfff 	movel #253951,%d0
-10100212:	c1ae fffc      	andl %d0,%fp@(-4)
-10100216:	207c f000 0044 	moveal #-268435388,%a0
-1010021c:	20ae fffc      	movel %fp@(-4),%a0@
-10100220:	46fc 2000      	movew #8192,%sr
-10100224:	4879 1010 02e8 	pea 101002e8 <__DTOR_END__>
-1010022a:	4eb9 1010 0084 	jsr 10100084 <rtx_dbug_outs>
-10100230:	588f           	addql #4,%sp
-10100232:	6060           	bras 10100294 <main+0x12a>
-10100234:	2039 1010 0322 	movel 10100322 <Caught>,%d0
-1010023a:	4a80           	tstl %d0
-1010023c:	660a           	bnes 10100248 <main+0xde>
-1010023e:	2039 1010 0326 	movel 10100326 <Printed>,%d0
-10100244:	4a80           	tstl %d0
-10100246:	660a           	bnes 10100252 <main+0xe8>
-10100248:	2039 1010 033c 	movel 1010033c <NewLine>,%d0
-1010024e:	4a80           	tstl %d0
-10100250:	6742           	beqs 10100294 <main+0x12a>
-10100252:	7201           	moveq #1,%d1
-10100254:	23c1 1010 0322 	movel %d1,10100322 <Caught>
-1010025a:	42b9 1010 0326 	clrl 10100326 <Printed>
-10100260:	2039 1010 033c 	movel 1010033c <NewLine>,%d0
-10100266:	4a80           	tstl %d0
-10100268:	6708           	beqs 10100272 <main+0x108>
-1010026a:	700a           	moveq #10,%d0
-1010026c:	13c0 1010 0320 	moveb %d0,10100320 <CharIn>
-10100272:	1039 1010 0320 	moveb 10100320 <CharIn>,%d0
-10100278:	13c0 1010 0340 	moveb %d0,10100340 <CharOut>
-1010027e:	1039 1010 0320 	moveb 10100320 <CharIn>,%d0
-10100284:	13c0 1010 0336 	moveb %d0,10100336 <StringHack+0xc>
-1010028a:	207c f000 0214 	moveal #-268434924,%a0
-10100290:	10bc 0003      	moveb #3,%a0@
-10100294:	1039 1010 0320 	moveb 10100320 <CharIn>,%d0
-1010029a:	1000           	moveb %d0,%d0
-1010029c:	0280 0000 00ff 	andil #255,%d0
-101002a2:	7271           	moveq #113,%d1
-101002a4:	b280           	cmpl %d0,%d1
-101002a6:	6716           	beqs 101002be <main+0x154>
-101002a8:	1039 1010 0320 	moveb 10100320 <CharIn>,%d0
-101002ae:	1000           	moveb %d0,%d0
-101002b0:	0280 0000 00ff 	andil #255,%d0
-101002b6:	7251           	moveq #81,%d1
-101002b8:	b280           	cmpl %d0,%d1
-101002ba:	6600 ff78      	bnew 10100234 <main+0xca>
-101002be:	46fc 2700      	movew #9984,%sr
-101002c2:	4200           	clrb %d0
-101002c4:	13c0 1010 0320 	moveb %d0,10100320 <CharIn>
-101002ca:	7201           	moveq #1,%d1
-101002cc:	23c1 1010 0322 	movel %d1,10100322 <Caught>
-101002d2:	4280           	clrl %d0
-101002d4:	4e5e           	unlk %fp
-101002d6:	4e75           	rts
-
-101002d8 <__CTOR_LIST__>:
+10100176 <main>:
+10100176:	4e56 fffc      	linkw %fp,#-4
+1010017a:	46fc 2700      	movew #9984,%sr
+1010017e:	4eba ffde      	jsr %pc@(1010015e <coldfire_vbr_init>)
+10100182:	203c 1010 0020 	movel #269484064,%d0
+10100188:	23c0 1000 0100 	movel %d0,10000100 <__DYNAMIC+0x10000100>
+1010018e:	207c f000 0208 	moveal #-268434936,%a0
+10100194:	10bc 0010      	moveb #16,%a0@
+10100198:	207c f000 0208 	moveal #-268434936,%a0
+1010019e:	10bc 0020      	moveb #32,%a0@
+101001a2:	207c f000 0208 	moveal #-268434936,%a0
+101001a8:	10bc 0030      	moveb #48,%a0@
+101001ac:	207c f000 0208 	moveal #-268434936,%a0
+101001b2:	10bc 0040      	moveb #64,%a0@
+101001b6:	207c f000 0051 	moveal #-268435375,%a0
+101001bc:	10bc 0017      	moveb #23,%a0@
+101001c0:	207c f000 0230 	moveal #-268434896,%a0
+101001c6:	10bc 0040      	moveb #64,%a0@
+101001ca:	207c f000 0214 	moveal #-268434924,%a0
+101001d0:	10bc 0002      	moveb #2,%a0@
+101001d4:	207c f000 0218 	moveal #-268434920,%a0
+101001da:	4210           	clrb %a0@
+101001dc:	207c f000 0204 	moveal #-268434940,%a0
+101001e2:	10bc ffdd      	moveb #-35,%a0@
+101001e6:	207c f000 0200 	moveal #-268434944,%a0
+101001ec:	10bc 0013      	moveb #19,%a0@
+101001f0:	207c f000 0200 	moveal #-268434944,%a0
+101001f6:	10bc 0007      	moveb #7,%a0@
+101001fa:	207c f000 0208 	moveal #-268434936,%a0
+10100200:	10bc 0005      	moveb #5,%a0@
+10100204:	207c f000 0044 	moveal #-268435388,%a0
+1010020a:	2d50 fffc      	movel %a0@,%fp@(-4)
+1010020e:	203c 0003 dfff 	movel #253951,%d0
+10100214:	c1ae fffc      	andl %d0,%fp@(-4)
+10100218:	207c f000 0044 	moveal #-268435388,%a0
+1010021e:	20ae fffc      	movel %fp@(-4),%a0@
+10100222:	46fc 2000      	movew #8192,%sr
+10100226:	4879 1010 0308 	pea 10100308 <__DTOR_END__>
+1010022c:	4eb9 1010 0084 	jsr 10100084 <rtx_dbug_outs>
+10100232:	588f           	addql #4,%sp
+10100234:	606e           	bras 101002a4 <main+0x12e>
+10100236:	2039 1010 0352 	movel 10100352 <Caught>,%d0
+1010023c:	4a80           	tstl %d0
+1010023e:	660a           	bnes 1010024a <main+0xd4>
+10100240:	2039 1010 0356 	movel 10100356 <Printed>,%d0
+10100246:	4a80           	tstl %d0
+10100248:	660a           	bnes 10100254 <main+0xde>
+1010024a:	2039 1010 036c 	movel 1010036c <NewLine>,%d0
+10100250:	4a80           	tstl %d0
+10100252:	6750           	beqs 101002a4 <main+0x12e>
+10100254:	7201           	moveq #1,%d1
+10100256:	23c1 1010 0352 	movel %d1,10100352 <Caught>
+1010025c:	42b9 1010 0356 	clrl 10100356 <Printed>
+10100262:	2039 1010 036c 	movel 1010036c <NewLine>,%d0
+10100268:	4a80           	tstl %d0
+1010026a:	6708           	beqs 10100274 <main+0xfe>
+1010026c:	700a           	moveq #10,%d0
+1010026e:	13c0 1010 0350 	moveb %d0,10100350 <CharIn>
+10100274:	1039 1010 0350 	moveb 10100350 <CharIn>,%d0
+1010027a:	13c0 1010 0370 	moveb %d0,10100370 <CharOut>
+10100280:	1039 1010 0350 	moveb 10100350 <CharIn>,%d0
+10100286:	13c0 1010 0366 	moveb %d0,10100366 <StringHack+0xc>
+1010028c:	207c f000 0214 	moveal #-268434924,%a0
+10100292:	10bc 0003      	moveb #3,%a0@
+10100296:	4879 1010 035a 	pea 1010035a <StringHack>
+1010029c:	4eb9 1010 0084 	jsr 10100084 <rtx_dbug_outs>
+101002a2:	588f           	addql #4,%sp
+101002a4:	1039 1010 0350 	moveb 10100350 <CharIn>,%d0
+101002aa:	1000           	moveb %d0,%d0
+101002ac:	0280 0000 00ff 	andil #255,%d0
+101002b2:	7271           	moveq #113,%d1
+101002b4:	b280           	cmpl %d0,%d1
+101002b6:	6716           	beqs 101002ce <main+0x158>
+101002b8:	1039 1010 0350 	moveb 10100350 <CharIn>,%d0
+101002be:	1000           	moveb %d0,%d0
+101002c0:	0280 0000 00ff 	andil #255,%d0
+101002c6:	7251           	moveq #81,%d1
+101002c8:	b280           	cmpl %d0,%d1
+101002ca:	6600 ff6a      	bnew 10100236 <main+0xc0>
+101002ce:	4879 1010 032f 	pea 1010032f <__DTOR_END__+0x27>
+101002d4:	4eb9 1010 0084 	jsr 10100084 <rtx_dbug_outs>
+101002da:	588f           	addql #4,%sp
+101002dc:	46fc 2700      	movew #9984,%sr
+101002e0:	4200           	clrb %d0
+101002e2:	13c0 1010 0350 	moveb %d0,10100350 <CharIn>
+101002e8:	7201           	moveq #1,%d1
+101002ea:	23c1 1010 0352 	movel %d1,10100352 <Caught>
+101002f0:	4280           	clrl %d0
+101002f2:	4e5e           	unlk %fp
+101002f4:	4e75           	rts
 	...
 
-101002e0 <__CTOR_END__>:
+101002f8 <__CTOR_LIST__>:
 	...
 
-101002e8 <__DTOR_END__>:
-101002e8:	5479           	052171
-101002ea:	7065           	moveq #101,%d0
-101002ec:	2051           	moveal %a1@,%a0
-101002ee:	206f 7220      	moveal %sp@(29216),%a0
-101002f2:	7120           	070440
-101002f4:	6f6e           	bles 10100364 <main_stack+0x4>
-101002f6:	2052           	moveal %a2@,%a0
-101002f8:	5458           	052130
-101002fa:	2074 6572 6d69 	moveal %a4@(6d696e61)@(00006c20),%a0
-10100300:	6e61 6c20 
-10100304:	746f           	moveq #111,%d2
-10100306:	2071 7569 742e 	moveal %a1@(0000742e)@(00000000),%a0
-1010030c:	0a0d           	05015
+10100300 <__CTOR_END__>:
 	...
 
-1010030f <__INIT_SECTION__>:
-1010030f:	4e56 0000      	linkw %fp,#0
-10100313:	4e5e           	unlk %fp
-10100315:	4e75           	rts
+10100308 <__DTOR_END__>:
+10100308:	5479           	052171
+1010030a:	7065           	moveq #101,%d0
+1010030c:	2051           	moveal %a1@,%a0
+1010030e:	206f 7220      	moveal %sp@(29216),%a0
+10100312:	7120           	070440
+10100314:	6f6e           	bles 10100384 <old_stack+0x4>
+10100316:	2052           	moveal %a2@,%a0
+10100318:	5458           	052130
+1010031a:	2074 6572 6d69 	moveal %a4@(6d696e61)@(00006c20),%a0
+10100320:	6e61 6c20 
+10100324:	746f           	moveq #111,%d2
+10100326:	2071 7569 742e 	moveal %a1@(0000742e)@(00000000),%a0
+1010032c:	0a0d           	05015
+1010032e:	0045           	0105
+10100330:	7869           	moveq #105,%d4
+10100332:	7465           	moveq #101,%d2
+10100334:	6420           	bccs 10100356 <Printed>
+10100336:	4c6f           	046157
+10100338:	6f70           	bles 101003aa <main_stack+0x1a>
+1010033a:	2e0a           	movel %a2,%d7
+1010033c:	0d00           	btst %d6,%d0
 
-10100317 <__FINI_SECTION__>:
-10100317:	4e56 0000      	linkw %fp,#0
-1010031b:	4e5e           	unlk %fp
-1010031d:	4e75           	rts
+1010033e <__INIT_SECTION__>:
+1010033e:	4e56 0000      	linkw %fp,#0
+10100342:	4e5e           	unlk %fp
+10100344:	4e75           	rts
+
+10100346 <__FINI_SECTION__>:
+10100346:	4e56 0000      	linkw %fp,#0
+1010034a:	4e5e           	unlk %fp
+1010034c:	4e75           	rts
