@@ -112,6 +112,7 @@ int main()
 	}
 	process_start = process_start + 2048/4;
 	init_null_process(&null_p, process_start);
+	
 	process_start = process_start + 2048/4;
 	init_kcd(&p[6], process_start);
 	
@@ -119,12 +120,11 @@ int main()
 	init_crt(&p[7], process_start);
 	
 	
-	process_start = process_start + 2048/4;
-	init_null_process(&keyboard_i_proc, process_start);
 	
-    rtx_dbug_outs((CHAR *) "muahaha.\n\r" );
-	init_interrupts();
-    rtx_dbug_outs((CHAR *) "Teeeheee.\n\r" );
+	process_start = process_start + 2048/4;
+	init_keyboard_i_proc(&keyboard_i_proc, process_start);
+	
+    init_interrupts();
 	//call the scheduler to start a process
 	schedule_next_process();
 	//while (TRUE){}

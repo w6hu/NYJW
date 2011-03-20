@@ -75,14 +75,13 @@ void schedule_next_process()
 
 void schedule_next_process_neko_san()
 {
-	rtx_dbug_outs((CHAR *)"scheduled next process neko-san \r\n");
+	//rtx_dbug_outs((CHAR *)"scheduled next process neko-san \r\n");
 	// look for the next process.
 	// if nothing is selected, the null 
 	// process is there at your service.
 	int i=0;
 	for(i; i<5; i++)
 	{
-		rtx_dbug_outs((CHAR *)"looping in ready queue \r\n");
 		if(ready_queue[i] != NULL)
 		{	
 			if(current_running_process->id == ready_queue[i]->id)
@@ -103,7 +102,7 @@ void schedule_next_process_neko_san()
 			break;
 		}
 	}
-	rtx_dbug_outs((CHAR *)"exited scheduled next process neko-san \r\n");
+	//rtx_dbug_outs((CHAR *)"exited scheduled next process neko-san \r\n");
 }
 
 VOID stack_pointer_switcher( VOID )
@@ -224,6 +223,9 @@ struct PCB* get_process_from_ID(int process_id)
 int get_process_number_from_ID(int process_id)
 {
 	int i = 0;
+	if (process_id == -3) {
+		return NUM_PROCESS;
+	}
 	for (i; i < NUM_PROCESS; i++) {
 		if (p[i].id == process_id) {
 			return i;
@@ -272,6 +274,9 @@ int set_process_priority_yama_san(int process_ID, int priority)
 int process_exists(int process_id)
 {
 	int i = 0;
+	if (process_id == -3) {
+		return TRUE;
+	}
 	for (i; i < NUM_PROCESS; i++) {
 		if (p[i].id == process_id) {
 			return TRUE;

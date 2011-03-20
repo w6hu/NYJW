@@ -1,20 +1,35 @@
 #include "kcd.h"
 
+
+
+extern struct PCB p [NUM_PROCESS];
 void kcd()
 {
     while (1) 
     {
-		rtx_dbug_outs((CHAR *)"kcd: calling recieve message \r\n");
+		//rtx_dbug_outs((CHAR *)"kcd: calling recieve message \r\n");
 		int sender_id;
 		//*sender_id = 3;
+		
+		//rtx_dbug_outs((CHAR *)"kcd: before message:");
+		
         void * block =  receive_message (&sender_id);
-		if (block!= NULL){
-			rtx_dbug_outs((CHAR*)"release memory location @ ");
-			rtx_dbug_out_num((int)block);	
-			rtx_dbug_outs((CHAR *)"kcd: recieved message \r\n");
+		
+		//rtx_dbug_outs((CHAR *)"kcd: after message:");
+		
+		//rtx_dbug_outs((CHAR*)"sender id:");
+		//rtx_dbug_out_num(sender_id);
+		if (block!= NULL && sender_id == -3){
+			//rtx_dbug_outs((CHAR*)"release memory location @ ");
+			//rtx_dbug_out_num((int)block);	
+			//rtx_dbug_outs((CHAR *)"kcd: recieved message:");
+			//rtx_dbug_out_char(*(((CHAR*)block)+100));
+			//rtx_dbug_outs((CHAR *)"\r\n");
 			release_memory_block(block);//just mock up~
+			
 		}
 		release_processor();
+		//put_to_blocked(1,&p[6]);
     }
 }
 

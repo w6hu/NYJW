@@ -66,11 +66,13 @@ void put_to_blocked(int waiting_on, struct PCB* p)
 	// get the corresponding blocked queue	
 	temp = blocked_queue[waiting_on];
 	
+		
 	if(temp == NULL)
 	{
 		blocked_queue[waiting_on] = p;		
 		return;
 	}
+	
 	
 	while(temp->next != NULL)
 	{
@@ -83,6 +85,8 @@ void put_to_blocked(int waiting_on, struct PCB* p)
 		
 	// add the process into the corresponding queue and update the PCB
 	temp->next = p;
+	
+	
 }
 
 void remove_from_ready(struct PCB* p) {
@@ -99,6 +103,7 @@ void remove_from_ready(struct PCB* p) {
 			}
 		}
 	}
+	p->next = NULL;
 }
 
 void remove_from_blocked(int waiting_on, struct PCB* p) {
@@ -134,7 +139,7 @@ void remove_from_blocked(int waiting_on, struct PCB* p) {
 
 // remove the first blocking message from the blocked queue
 void remove_first_from_blocked(int index) {
-	rtx_dbug_outs((CHAR *)"rtx: remove first from blocked \r\n");
+	//rtx_dbug_outs((CHAR *)"rtx: remove first from blocked \r\n");
 	if (blocked_queue[index] == 0) {
 		return;
 	}

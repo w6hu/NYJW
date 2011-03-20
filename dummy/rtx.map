@@ -1,0 +1,254 @@
+
+Allocating common symbols
+Common symbol       size              file
+
+p                   0xe0              main_rtx.o
+mailboxStart        0x24              messaging.o
+blocked_queue       0x8               main_rtx.o
+old_stack           0x4               /tmp/cckXTfgh.o
+ready_queue         0x14              main_rtx.o
+mailboxEnd          0x24              messaging.o
+free_blocks         0x4               process.o
+main_stack          0x1000            /tmp/cckXTfgh.o
+mem_end             0x4               memory.o
+charOut             0x1               iprocess.o
+null_p              0x1c              main_rtx.o
+charIn              0x1               iprocess.o
+keyboard_i_proc     0x1c              main_rtx.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+ram              0x10100000         0x00100000
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD /tmp/cckXTfgh.o
+LOAD /tmp/ccA18Veo.o
+LOAD /tmp/cci8zFSx.o
+LOAD process.o
+LOAD init.o
+LOAD memory.o
+LOAD dbug.o
+LOAD kcd.o
+LOAD crt.o
+LOAD messaging.o
+LOAD rtx.o
+LOAD main_rtx.o
+LOAD iprocess.o
+START GROUP
+LOAD /opt/gcc-coldfire/bin/../lib/gcc/m68k-elf/4.3.2/m5307/libgcc.a
+END GROUP
+                0x00000000                __DYNAMIC = 0x0
+                0x00000000                PROVIDE (hardware_init_hook, 0x0)
+                0x00000000                PROVIDE (_hardware_init_hook, 0x0)
+                0x00000000                PROVIDE (software_init_hook, 0x0)
+                0x00000000                PROVIDE (_software_init_hook, 0x0)
+
+.text           0x10100000     0x1a8d
+ *(.text)
+ .text          0x10100000       0x1e /tmp/cckXTfgh.o
+ *fill*         0x1010001e        0x2 00
+ .text          0x10100020       0x44 /tmp/ccA18Veo.o
+                0x10100020                asm_trap_entry
+ .text          0x10100064       0x44 /tmp/cci8zFSx.o
+                0x10100064                asm_serial_entry
+ .text          0x101000a8      0x5e0 process.o
+                0x1010061a                is_waiting_for
+                0x10100164                release_processor_kuma_san
+                0x10100662                set_process_state
+                0x101000b2                init_null_process
+                0x101002ba                trap_call_animal
+                0x10100256                stack_pointer_switcher
+                0x101004ae                get_process_number_from_ID
+                0x101000a8                null_process
+                0x101005c4                process_exists
+                0x1010054a                set_process_priority_yama_san
+                0x1010051a                get_process_priority_usagi_san
+                0x10100452                get_process_from_ID
+                0x10100192                schedule_next_process
+                0x10100508                get_process_ID
+                0x101001a6                schedule_next_process_neko_san
+ .text          0x10100688      0x2d6 init.o
+                0x1010071c                put_to_blocked
+                0x101008f2                remove_first_from_blocked
+                0x10100688                put_to_ready
+                0x10100846                remove_from_blocked
+                0x101007ae                remove_from_ready
+ *fill*         0x1010095e        0x2 00
+ .text          0x10100960      0x252 memory.o
+                0x10100ae0                initBlock
+                0x10100960                s_request_memory_block_yishi
+                0x101009e2                s_release_memory_block_yishi
+ *fill*         0x10100bb2        0x2 00
+ .text          0x10100bb4       0xfa dbug.o
+                0x10100bd4                rtx_dbug_outs
+                0x10100bb4                rtx_dbug_out_char
+                0x10100c10                rtx_dbug_out_num
+ *fill*         0x10100cae        0x2 00
+ .text          0x10100cb0      0x108 kcd.o
+                0x10100cea                init_kcd
+                0x10100cb0                kcd
+ .text          0x10100db8      0x13c crt.o
+                0x10100e28                init_crt
+                0x10100db8                crt
+ .text          0x10100ef4      0x2d8 messaging.o
+                0x10100f2e                pre_send_message
+                0x10100ef4                init_mailboxes
+                0x10101014                send_message_jessie
+                0x10101060                receive_message_jessie
+                0x10100f50                act_send_message
+                0x10101164                delayed_send_umi_san
+ .text          0x101011cc      0x180 rtx.o
+                0x1010131e                get_process_priority
+                0x10101238                request_memory_block
+                0x101012e6                set_process_priority
+                0x101011cc                send_message
+                0x10101260                release_memory_block
+                0x10101204                receive_message
+                0x101012a4                delayed_send
+                0x1010128e                release_processor
+ .text          0x1010134c      0x3d8 main_rtx.o
+                0x1010134c                __main
+                0x1010164e                coldfire_vbr_init
+                0x10101356                main
+                0x10101666                init_interrupts
+ .text          0x10101724      0x250 iprocess.o
+                0x101018b4                init_keyboard_i_proc
+                0x10101724                uart_i_process
+                0x10101974                . = ALIGN (0x4)
+                0x10101974                __CTOR_LIST__ = .
+                0x10101974        0x4 LONG 0x0 (((__CTOR_END__ - __CTOR_LIST__) / 0x4) - 0x2)
+ *(.ctors)
+                0x10101978        0x4 LONG 0x0
+                0x1010197c                __CTOR_END__ = .
+                0x1010197c                __DTOR_LIST__ = .
+                0x1010197c        0x4 LONG 0x0 (((__DTOR_END__ - __DTOR_LIST__) / 0x4) - 0x2)
+ *(.dtors)
+                0x10101980        0x4 LONG 0x0
+                0x10101984                __DTOR_END__ = .
+ *(.rodata*)
+ .rodata        0x10101984       0x1b process.o
+ .rodata        0x1010199f       0x21 memory.o
+                0x101019a0                FREE
+                0x101019a2                FAILURE
+                0x101019a1                SUCCESS
+                0x1010199f                USED
+ .rodata        0x101019c0        0x3 dbug.o
+ .rodata        0x101019c3       0x20 kcd.o
+ .rodata        0x101019e3       0x20 crt.o
+ .rodata        0x10101a03       0x54 main_rtx.o
+ .rodata        0x10101a57       0x26 iprocess.o
+ *(.gcc_except_table)
+                0x10101a7d                __INIT_SECTION__ = .
+                0x10101a7d        0x4 LONG 0x4e560000
+ *(.init)
+                0x10101a81        0x2 SHORT 0x4e5e
+                0x10101a83        0x2 SHORT 0x4e75
+                0x10101a85                __FINI_SECTION__ = .
+                0x10101a85        0x4 LONG 0x4e560000
+ *(.fini)
+                0x10101a89        0x2 SHORT 0x4e5e
+                0x10101a8b        0x2 SHORT 0x4e75
+                0x10101a8d                _etext = .
+ *(.lit)
+
+.data           0x10101a90        0x0
+ *(.shdata)
+ *(.data)
+ .data          0x10101a90        0x0 /tmp/cckXTfgh.o
+ .data          0x10101a90        0x0 /tmp/ccA18Veo.o
+ .data          0x10101a90        0x0 /tmp/cci8zFSx.o
+ .data          0x10101a90        0x0 process.o
+ .data          0x10101a90        0x0 init.o
+ .data          0x10101a90        0x0 memory.o
+ .data          0x10101a90        0x0 dbug.o
+ .data          0x10101a90        0x0 kcd.o
+ .data          0x10101a90        0x0 crt.o
+ .data          0x10101a90        0x0 messaging.o
+ .data          0x10101a90        0x0 rtx.o
+ .data          0x10101a90        0x0 main_rtx.o
+ .data          0x10101a90        0x0 iprocess.o
+                0x10101a90                _edata = .
+
+.bss            0x10101a90     0x11a6
+                0x10101a90                __bss_start = .
+ *(.shbss)
+ *(.bss)
+ .bss           0x10101a90        0x0 /tmp/cckXTfgh.o
+ .bss           0x10101a90        0x0 /tmp/ccA18Veo.o
+ .bss           0x10101a90        0x0 /tmp/cci8zFSx.o
+ .bss           0x10101a90        0x8 process.o
+                0x10101a90                current_running_process
+                0x10101a94                prev_running_process
+ .bss           0x10101a98        0x4 init.o
+                0x10101a98                used_blocks
+ .bss           0x10101a9c        0x0 memory.o
+ .bss           0x10101a9c        0x0 dbug.o
+ .bss           0x10101a9c        0x0 kcd.o
+ .bss           0x10101a9c        0x0 crt.o
+ .bss           0x10101a9c        0x0 messaging.o
+ .bss           0x10101a9c        0x0 rtx.o
+ .bss           0x10101a9c        0x0 main_rtx.o
+ .bss           0x10101a9c        0x0 iprocess.o
+ *(COMMON)
+ *fill*         0x10101a9c        0x4 00
+ COMMON         0x10101aa0     0x1010 /tmp/cckXTfgh.o
+                0x10101aa0                old_stack
+                0x10101ab0                main_stack
+ COMMON         0x10102ab0        0x4 process.o
+                0x10102ab0                free_blocks
+ COMMON         0x10102ab4        0x4 memory.o
+                0x10102ab4                mem_end
+ COMMON         0x10102ab8       0x48 messaging.o
+                0x10102ab8                mailboxStart
+                0x10102adc                mailboxEnd
+ COMMON         0x10102b00      0x134 main_rtx.o
+                0x10102b00                p
+                0x10102be0                blocked_queue
+                0x10102be8                ready_queue
+                0x10102bfc                null_p
+                0x10102c18                keyboard_i_proc
+ COMMON         0x10102c34        0x2 iprocess.o
+                0x10102c34                charOut
+                0x10102c35                charIn
+                0x10102c38                _end = ALIGN (0x8)
+                0x10102c38                __end = _end
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+__REGISTER_RTX__
+                0x10300000       0x84
+                0x10300000                __REGISTER_RTX_ENTRY__ = <code 345> (.)
+ *(__REGISTER_RTX__)
+ __REGISTER_RTX__
+                0x10300000       0x84 main_rtx.o
+                0x10300000                register_rtx
+                0x10380000                __REGISTER_TEST_PROCS_ENTRY__ = 0x10380000
+                0x10400000                __RTX_TEST_CODE_ENTRY__ = 0x10400000
+
+__RTX_TEST_DATA__
+                0x10500000       0x5c
+ *(__RTX_TEST_DATA__)
+ __RTX_TEST_DATA__
+                0x10500000       0x5c main_rtx.o
+                0x10500020                g_test_proc
+                0x10500000                g_test_fixture
+OUTPUT(rtx.bin elf32-m68k)
+
+.comment        0x00000000      0x186
+ .comment       0x00000000       0x27 process.o
+ .comment       0x00000027       0x27 init.o
+ .comment       0x0000004e       0x27 memory.o
+ .comment       0x00000075       0x27 dbug.o
+ .comment       0x0000009c       0x27 kcd.o
+ .comment       0x000000c3       0x27 crt.o
+ .comment       0x000000ea       0x27 messaging.o
+ .comment       0x00000111       0x27 rtx.o
+ .comment       0x00000138       0x27 main_rtx.o
+ .comment       0x0000015f       0x27 iprocess.o
