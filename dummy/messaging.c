@@ -90,11 +90,11 @@ void * receive_message_jessie (int * sender_ID, int block) {
 			//rtx_dbug_out_num(receiver_ID);
 			put_to_blocked(0, get_process_from_ID(receiver_ID));
 			if (block == 1) {
-				rtx_dbug_outs("No message, blocked\r\n");
+				//rtx_dbug_outs("No message, blocked\r\n");
 				release_processor_kuma_san();
 			}
 			else {
-				rtx_dbug_outs("No message, return null\r\n");
+				//rtx_dbug_outs("No message, return null\r\n");
 				return 0;
 			}
 		}

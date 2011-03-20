@@ -122,6 +122,8 @@ void wall_clock() {
 	int clock_on = FALSE;
 	int sender;
 	int hour, minute, second;
+	register_command(WALL_CLOCK_ID, 'W');
+	
 	while (TRUE) {
 		void* incoming_msg = receive_message(&sender);
 		
@@ -129,9 +131,11 @@ void wall_clock() {
 		
 		// if the msg is from KCD
 		if (sender_ID == KCD_ID) {
+		
+		rtx_dbug_outs("clock is going to start\r\n");
 			
 			int size = *((int *)incoming_msg + 16);
-			if (size != 11 && size != 1) {
+			if (size != 11 && size != 2) {
 				goto ERROR_INPUT;
 			}
 			
@@ -143,7 +147,7 @@ void wall_clock() {
 				//minute = 0;
 				//second = 0;
 				void * new_msg = request_memory_block();
-				*((int *)new_msg + 64) = 8;
+				*((int *)new_msg + 16) = 8;
 				if (*next == '0' || *next == '1' || *next == '2') {
 					hour = (int)(*next - 48)*10;
 					*((char *)new_msg + 68) = *next;
@@ -164,15 +168,15 @@ void wall_clock() {
 									*((char *)new_msg + 72) = *next;
 									next++;
 									if (*next == ':') {
-										*((char *)new_msg + 70) = *next;
+										*((char *)new_msg + 73) = *next;
 										next++;
 										if (*next >=48 && *next <= 54) {
 											second = (int)(*next - 48) * 10;
-											*((char *)new_msg + 71) = *next;
+											*((char *)new_msg + 74) = *next;
 											next++;
 											if (*next <= 57 && *next >= 48) {
 												second += (int)(*next - 48);
-												*((char *)new_msg + 72) = *next;
+												*((char *)new_msg + 75) = *next;
 												goto CORRECT_INPUT;
 											}
 											else {
@@ -213,6 +217,7 @@ void wall_clock() {
 					goto FINALLY;
 					
 				CORRECT_INPUT:
+					rtx_dbug_outs("Correct input!");
 					clock_on = TRUE;
 					// send a message to myself
 					void* my_message = request_memory_block();
@@ -264,8 +269,8 @@ void wall_clock() {
 				delayed_send(-6, incoming_msg, 1000);
 				
 				// send message to CRT
-				/*void* new_msg = request_memory_block();
-				*((int *)new_msg + 64) = 8;
+				void* new_msg = request_memory_block();
+				*((int *)new_msg + 16) = 8;
 				*((char *)new_msg + 68) = (char)(hour/10 + 48);
 				*((char *)new_msg + 69) = (char)(hour%10 + 48);
 				*((char *)new_msg + 70) = (char)58;
@@ -274,15 +279,15 @@ void wall_clock() {
 				*((char *)new_msg + 73) = (char)58;
 				*((char *)new_msg + 74) = (char)(second/10 + 48);
 				*((char *)new_msg + 75) = (char)(second%10 + 48);
-				send_message(-5, new_msg);*/
+				send_message(-5, new_msg);
 				
-				rtx_dbug_out_num(hour);
+				/*rtx_dbug_out_num(hour);
 					rtx_dbug_out_char(':');
 					rtx_dbug_out_num(minute);
 					rtx_dbug_out_char(':');
 					rtx_dbug_out_num(second);
 					rtx_dbug_out_char('\r');
-					rtx_dbug_out_char('\n');
+					rtx_dbug_out_char('\n');*/
 				
 			}
 			else {
