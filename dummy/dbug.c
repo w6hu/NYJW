@@ -62,19 +62,28 @@ SINT32 rtx_dbug_outs( CHAR* s )
 
 void rtx_dbug_out_num(int number){
 	//Modify to print numbers in correct order later
+	int digits[20];
 	if (number < 0){
 		number  = number * -1;
 		rtx_dbug_out_char(45);
 	}
 	int digit = number %10;
 	int remain = number;
-	if (remain == 0) 
+	int length = 0;
+	if (remain == 0){ 
 		rtx_dbug_outs((CHAR *) "0");
-	while (remain != 0){
-		rtx_dbug_out_char(digit +48);
-		remain = remain /10;
-		digit = remain %10;
+		return;
 	}
-	rtx_dbug_outs((CHAR*) "\r\n");
+	while (remain != 0){
+		digit = remain %10;
+		remain = remain /10;
+		digits[length] = digit;
+		length++;
+	}
+	int j = length -1;
+	for (j; j >=0;  j--){
+		rtx_dbug_out_char(digits[j]+48);
+	}
+	//rtx_dbug_outs((CHAR*) "\r\n");
 
 }

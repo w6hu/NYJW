@@ -14,27 +14,12 @@ void crt(){
 		//rtx_dbug_outs((CHAR *)"crt: before message:");
 		
 		void* block = receive_message(&sender_id);//receive from -3
-		rtx_dbug_outs("sender = ");
-		rtx_dbug_out_num(sender_id);
+		//rtx_dbug_outs("sender = ");
+		//rtx_dbug_out_num(sender_id);
 		if (sender_id == -3 || sender_id == -6){//if sender is KCD or timer
 			send_message(-3,block);
 			current_running_process = backup;
 			SERIAL1_IMR = 3;
-			//enable interrupt	
-			/*
-			UINT32 length = *((UINT32*)block+16);
-			rtx_dbug_outs("length = ");
-			rtx_dbug_out_num(length);
-			int i = 0;
-			for (i = 0; i < length; i++){
-				SERIAL1_IMR = 2;
-				void * newBlock = request_memory_block();
-				*((CHAR *)newBlock+100) = *((CHAR*)block+69+i);
-				send_message(-3,newBlock);
-				current_running_process = backup;
-				SERIAL1_IMR = 3;//enable interrupt	
-			}
-			*/
 		}
 	}
 }

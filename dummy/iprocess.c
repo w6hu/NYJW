@@ -26,37 +26,27 @@ void uart_i_process(){
 	//if data is waiting
 	if (temp & 1){
 		charIn = SERIAL1_RD;
-					
-		struct PCB* backup = current_running_process;
-		current_running_process = &keyboard_i_proc; 
-		
-		void * msg = request_memory_block();
-		*((UINT32 *)msg + 16) =  1;
-		*((CHAR *)msg + 69) =  charIn;			
-		/*
-		*((CHAR *)msg + 69+1) =  charIn+1;
-		*((CHAR *)msg + 69+2) =  charIn+2;
-		*((CHAR *)msg + 69+3) =  charIn+3;
-		*((CHAR *)msg + 69+4) =  charIn+4;
-		*((CHAR *)msg + 69+5) =  charIn+5;
-		*/
-		send_message_jessie(-5, msg);//send to the CRT first.
-		// set automic here by disabling the interrupt
+		if ((int)charIn ==	18){//ctrl+r
+			print_ready_queue();
+		}else if ((int )charIn == 2){//ctrl+b
+			print_blocked_queues();
+		}else{
+			struct PCB* backup = current_running_process;
+			current_running_process = &keyboard_i_proc; 
 			
-		void * msg2 = request_memory_block();
-		*((UINT32 *)msg2 + 16) =  1;
-		*((CHAR *)msg2 + 69) =  charIn;
-		/*
-		*((CHAR *)msg2 + 69+1) =  charIn+1;
-		*((CHAR *)msg2 + 69+2) =  charIn+2;
-		*((CHAR *)msg2 + 69+2) =  charIn+3;
-		*((CHAR *)msg2 + 69+2) =  charIn+4;
-		*((CHAR *)msg2 + 69+2) =  charIn+5;
-		*/
-		send_message_jessie(-4, msg2);//send to the KCD next.
-		current_running_process = backup;
-		caught = TRUE;
-		//done = TRUE;
+			void * msg = request_memory_block();
+			*((UINT32 *)msg + 16) =  1;
+			*((CHAR *)msg + 69) =  charIn;			
+			send_message_jessie(-5, msg);//send to the CRT first.
+			// set automic here by disabling the interrupt
+				
+			void * msg2 = request_memory_block();
+			*((UINT32 *)msg2 + 16) =  1;
+			*((CHAR *)msg2 + 69) =  charIn;
+
+			send_message_jessie(-4, msg2);//send to the KCD next.
+			current_running_process = backup;
+			}
 	}else if (temp & 4)
 		// if port is ready to accept data
 	{
@@ -71,21 +61,21 @@ void uart_i_process(){
 			int j = 0;
 			CHAR charOut;
 			UINT32 length = *((UINT32*)block+16);
-			rtx_dbug_outs("length = ");
-			rtx_dbug_out_num(length);
+			//rtx_dbug_outs("length = ");
+			//rtx_dbug_out_num(length);
 			for (j; j < length; j++){
 				temp = SERIAL1_USR;
 				charOut = *((CHAR*)block +69+j);
 				while (! (temp&4)){
 					temp = SERIAL1_USR;
-					rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");					
+					//rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");					
 				}
 				int i = 0;
 				SERIAL1_WD = charOut;
 				if (charOut == CR){
 					temp = SERIAL1_USR;
 					while (! (temp & 4)){
-						rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");	
+						//rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");	
 						temp = SERIAL1_USR;
 					}// blocking here?
 					charOut = LF;
