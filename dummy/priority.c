@@ -62,12 +62,13 @@ void priority_modifier()
 			goto PRIORITY_CHECK_ERROR;	
 
 		new_priority = *((char *)user_command + 71)-48;
-		if( process_id > 3 || process_id < 0)
+		if( new_priority > 3 || new_priority < 0)
 			goto PRIORITY_CHECK_ERROR;			
 		
 		if( *((char *)user_command + 72) != CR)
 			goto PRIORITY_CHECK_ERROR;	
 		
+		rtx_dbug_outs((CHAR *)"valid statement\r\n");
 		set_process_priority(process_id, new_priority);
 		
 		goto PRIORITY_END_CHECK;

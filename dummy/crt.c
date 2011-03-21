@@ -2,7 +2,12 @@
 
 extern struct PCB* current_running_process;
 extern struct PCB p [NUM_PROCESS];
-//pid =-5!!
+
+CHAR  escapeHack[] = "\x1b[01;68H";
+CHAR restoreHack[] = "\x1b[10;10H";
+int line = 1;
+int column = 1;
+
 void crt(){
 	while (TRUE){
 		SERIAL1_IMR = 2;
@@ -39,22 +44,75 @@ void crt(){
 				
 			}
 			UINT32 length = *((UINT32*)block+16);
+			rtx_dbug_outs((CHAR*) "length =");
+			rtx_dbug_out_num(length);
+			rtx_dbug_outs((CHAR*) "\n");
 			int j = 0;
 			CHAR charOut;
-			for (j; j < length; j++){
-				CHAR temp = SERIAL1_USR;
-				
+			CHAR temp = SERIAL1_USR;
+			if (sender_id == -6){
+				int j = 0;
+				for (j; j < 8 ; j++){
+					void * newBlock  = request_memory_block();
+					*((int* )newBlock+16) = 1;
+					*((CHAR* )newBlock+68) = escapeHack[j];
+					send_message(-3,newBlock);
+					temp = SERIAL1_USR;
+					while (! (temp&4)){
+						temp = SERIAL1_USR;
+						//rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");					
+					}
+					SERIAL1_IMR = 3;
+				}
+			}
+			
+			for (j = 0; j < length; j++){
+
 				charOut = *((CHAR*)block +68+j);
 				void * newBlock  = request_memory_block();
 				*((int* )newBlock+16) = 1;
 				*((CHAR* )newBlock+68) = charOut;
 				send_message(-3,newBlock);
+				temp = SERIAL1_USR;
 				while (! (temp&4)){
 					temp = SERIAL1_USR;
-					rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");					
+					//rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");					
 				}
-				SERIAL1_IMR = 3;				
+				SERIAL1_IMR = 3;
+				if (sender_id != -6){
+					column++;
+					column = column % 80;
+					if (charOut == CR){
+						line ++;
+						column = 1;
+					}
+				}
+								
 			}
+			
+
+			if (sender_id == -6){
+				restoreHack[2] = line /10 +48;
+				restoreHack[3] = line %10 +48;
+				restoreHack[5] = column/10+ 48;
+				restoreHack[6] = column%10 +48;
+				
+				int j = 0;
+				for (j;j< 8;j++){
+					void * newBlock  = request_memory_block();
+					*((int* )newBlock+16) = 1;
+					*((CHAR* )newBlock+68) = restoreHack[j];
+					send_message(-3,newBlock);
+					temp = SERIAL1_USR;
+					while (! (temp&4)){
+						temp = SERIAL1_USR;
+						//rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");					
+					}
+					SERIAL1_IMR = 3;
+				}
+			}
+			
+			
 		}
 		if (block!= NULL){
 			release_memory_block(block);

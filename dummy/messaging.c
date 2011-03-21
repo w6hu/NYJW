@@ -51,8 +51,6 @@ int act_send_message (int process_ID, int sender_ID, void * MessageEnvelope) {
 
 	// update process states
 	if (is_waiting_for(process_ID, 0)) {
-rtx_dbug_outs("take out of block for ");
-rtx_dbug_out_num(process_ID);
 		remove_from_blocked(0, get_process_from_ID(process_ID));
 		if (get_process_priority_usagi_san(process_ID) < get_process_priority_usagi_san(sender_ID)) {
 			release_processor_kuma_san();
@@ -92,7 +90,6 @@ void * receive_message_jessie (int * sender_ID, int block) {
 			//rtx_dbug_out_num(receiver_ID);
 			//put_to_blocked(0, get_process_from_ID(receiver_ID));
 			if (block == 1) {
-				rtx_dbug_outs("put into blocked\r\n");
 				put_to_blocked(0, get_process_from_ID(receiver_ID));
 				release_processor_kuma_san();
 			}

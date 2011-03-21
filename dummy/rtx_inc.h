@@ -159,6 +159,6 @@ UINT32 *free_blocks;
 #define COMMAND_WALL_CLOCK 2
 #define COMMAND_PRIORITY_MODIFIER 3
 #define COMMAND_ERROR 4
-
+#define COMMAND_ERASED 5
 
 #endif

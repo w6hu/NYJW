@@ -16,14 +16,20 @@ const BYTE FREE = 0;
 const BYTE SUCCESS = 0;
 const BYTE FAILURE = 1;
 
-void* s_request_memory_block_yishi()
+void* s_request_memory_block_yishi(int block)
 {
 	while (TRUE) {
 		// put to blocked queue if the no avaiable memory
 		if(*free_blocks == NULL) {
-			put_to_blocked(1, current_running_process);
-			rtx_dbug_outs((CHAR *)"blocked on requesting memory");
-			release_processor_kuma_san();
+			if (block == TRUE) {
+				put_to_blocked(1, current_running_process);
+				rtx_dbug_outs((CHAR *)"blocked on requesting memory\r\n");
+				release_processor_kuma_san();
+			}
+			else {
+				rtx_dbug_outs((CHAR *)"no memory available, return null\r\n");
+				return NULL;
+			}
 		}
 		else {
 			UINT32	*allocated_block;
@@ -44,7 +50,7 @@ void* s_request_memory_block_yishi()
 int s_release_memory_block_yishi( void* memory_block )
 {
 	// check if the address is valid
-	
+	*((UINT32*)memory_block) = COMMAND_ERASED;
 	UINT32 *memory_address;
 	memory_address = (UINT32 *)memory_block - 5;
 	memory_block = memory_address;

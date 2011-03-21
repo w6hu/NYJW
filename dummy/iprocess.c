@@ -51,8 +51,10 @@ void uart_i_process(){
 			current_running_process = backup;
 			}
 	}else if (temp & 4)
-		// if port is ready to accept data
+	// if port is ready to accept data
 	{
+
+		
 		SERIAL1_IMR = 2;
 		struct PCB* backup = current_running_process;
 		current_running_process = &keyboard_i_proc; 
@@ -61,10 +63,11 @@ void uart_i_process(){
 		block = receive_message_jessie(&sender_id, 0);
 		if (sender_id == -5){
 			temp = SERIAL1_USR;
+			charOut = *((CHAR*)block +68);
 			while (! (temp&4)){
 				temp = SERIAL1_USR;								
 			}
-			CHAR charOut = *((CHAR*)block +68);
+			charOut = *((CHAR*)block +68);
 			SERIAL1_WD = charOut;
 			if (charOut == CR){
 				temp = SERIAL1_USR;

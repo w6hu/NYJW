@@ -134,9 +134,6 @@ void wall_clock() {
 		
 		// if the msg is from KCD
 		if (sender_ID == KCD_ID) {
-		
-		rtx_dbug_outs("clock is going to start\r\n");
-			
 			int size = *((int *)incoming_msg + 16);
 			if (size != 11 && size != 2) {
 				goto ERROR_INPUT;
@@ -152,34 +149,46 @@ void wall_clock() {
 				new_msg = request_memory_block();
 				*((int *)new_msg + 16) = 8;
 				if (*next == '0' || *next == '1' || *next == '2') {
-					hour = (int)(*next - 48)*10;
+					int tempHr = (int)(*next - 48)*10;
 					*((char *)new_msg + 68) = *next;
 					next++;
 					if (*next <= 57 && *next >= 48) {
-						hour += (int)(*next - 48);
+						tempHr += (int)(*next - 48);
 						*((char *)new_msg + 69) = *next;
+						if (tempHr >= 24) {
+							goto ERROR_INPUT;
+						}
 						next++;
 						if (*next == ':') {
 							*((char *)new_msg + 70) = *next;
 							next++;
 							if (*next >=48 && *next <= 54) {
-								minute = (int)(*next - 48) * 10;
+								int tempMin = (int)(*next - 48) * 10;
 								*((char *)new_msg + 71) = *next;
 								next++;
 								if (*next <= 57 && *next >= 48) {
-									minute += (int)(*next - 48);
+									tempMin += (int)(*next - 48);
 									*((char *)new_msg + 72) = *next;
+									if (tempMin >= 60) {
+										goto ERROR_INPUT;
+									}
 									next++;
 									if (*next == ':') {
 										*((char *)new_msg + 73) = *next;
 										next++;
 										if (*next >=48 && *next <= 54) {
-											second = (int)(*next - 48) * 10;
+											int tempSec = (int)(*next - 48) * 10;
 											*((char *)new_msg + 74) = *next;
 											next++;
 											if (*next <= 57 && *next >= 48) {
-												second += (int)(*next - 48);
+												tempSec += (int)(*next - 48);
 												*((char *)new_msg + 75) = *next;
+												if (tempSec >= 60) {
+													goto ERROR_INPUT;
+												}
+												hour = tempHr;
+												minute = tempMin;
+												second = tempSec;
 												goto CORRECT_INPUT;
 											}
 											else {
@@ -223,10 +232,12 @@ void wall_clock() {
 					
 				CORRECT_INPUT:
 					rtx_dbug_outs("Correct input!");
-					clock_on = TRUE;
-					// send a message to myself
-					void* my_message = request_memory_block();
-					delayed_send(-6, my_message, 1000);
+					if (clock_on == FALSE) {
+						// send a message to myself
+						void* my_message = request_memory_block();
+						delayed_send(-6, my_message, 1000);
+						clock_on = TRUE;
+					}
 					
 					// send message to crt
 					send_message(-5, new_msg);
