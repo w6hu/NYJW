@@ -18,6 +18,11 @@ const BYTE FAILURE = 1;
 
 void* s_request_memory_block_yishi(int block)
 {
+	rtx_dbug_outs((CHAR *)"parameter passed in :");
+	rtx_dbug_out_num(block);
+	rtx_dbug_outs((CHAR *)"\r\n");
+
+
 	while (TRUE) {
 		// put to blocked queue if the no avaiable memory
 		if(*free_blocks == NULL) {

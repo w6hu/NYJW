@@ -66,7 +66,9 @@ void * receive_message(int * sender_ID)
 void * request_memory_block() 
 {
 	asm("move.l %d0, -(%a7)");
-	asm("move.l %d0, -(%a7)");	
+	asm("move.l #1, %d0"); // pass in an extra parameter, user who call this function have no option but
+						   // to be blocked; a 1 indicate that it should be blocked if no message.
+	asm("move.l %d0, -(%a7)");		
 
 	int val = CALLER_REQUEST_MEMORY_BLOCK;
 	asm("move.l %0, %%d0" : : "r" (val));
