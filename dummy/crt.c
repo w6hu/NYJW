@@ -8,32 +8,56 @@ void crt(){
 		SERIAL1_IMR = 2;
 		int sender_id;
 		struct PCB* backup;
-//		backup = current_running_process;
-//		current_running_process = &p[8];
-		
-		//rtx_dbug_outs((CHAR *)"crt: before message:");
 		
 		void* block = receive_message(&sender_id);//receive from -3
-		//rtx_dbug_outs("sender = ");
-		//rtx_dbug_out_num(sender_id);
-		if (sender_id == -3 || sender_id == -6){//if sender is i-process or timer
+		if ((sender_id == -3 || sender_id == -6 || sender_id == -7) && block != NULL){//if sender is i-process or timer
+			UINT32 type = *((UINT32 *)block);
+			rtx_dbug_outs((CHAR*)"ERROR type");
+			rtx_dbug_out_num(type);
+			rtx_dbug_outs((CHAR*)"\r\n");
+			if (type == COMMAND_ERROR){//remove the false to enable error printing.
+				//release_memory_block(block);
+				//block = request_memory_block();
+				*((UINT32 *)block +16) = 17;
+				*((CHAR *)block + 68) = 'I';
+				*((CHAR *)block + 69) = 'n';
+				*((CHAR *)block + 70) = 'v';
+				*((CHAR *)block + 71) = 'a';
+				*((CHAR *)block + 72) = 'l';
+				*((CHAR *)block + 73) = 'i';
+				*((CHAR *)block + 74) = 'd';
+				*((CHAR *)block + 75) = ' ';
+				*((CHAR *)block + 76) = 'C';
+				*((CHAR *)block + 77) = 'o';
+				*((CHAR *)block + 78) = 'm';
+				*((CHAR *)block + 79) = 'm';
+				*((CHAR *)block + 80) = 'a';
+				*((CHAR *)block + 81) = 'n';
+				*((CHAR *)block + 82) = 'd';
+				*((CHAR *)block + 83) = '\r';
+				*((CHAR *)block + 84) = '\n';
+				
+			}
 			UINT32 length = *((UINT32*)block+16);
 			int j = 0;
 			CHAR charOut;
 			for (j; j < length; j++){
+				CHAR temp = SERIAL1_USR;
+				
 				charOut = *((CHAR*)block +68+j);
 				void * newBlock  = request_memory_block();
 				*((int* )newBlock+16) = 1;
 				*((CHAR* )newBlock+68) = charOut;
 				send_message(-3,newBlock);
-				
+				while (! (temp&4)){
+					temp = SERIAL1_USR;
+					rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");					
+				}
+				SERIAL1_IMR = 3;				
 			}
-			
-			
-			
-			send_message(-3,block);
-//			current_running_process = backup;
-			SERIAL1_IMR = 3;
+		}
+		if (block!= NULL){
+			release_memory_block(block);
 		}
 	}
 }

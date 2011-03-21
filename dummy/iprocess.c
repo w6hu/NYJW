@@ -20,8 +20,6 @@ void uart_i_process(){
 	asm( "move.w #0x2700,%sr" );
 	volatile BYTE temp;
 	temp = SERIAL1_USR;
-
-	BOOLEAN caught = FALSE;
 	SERIAL1_IMR = 2;//disable interrupt
 	//if data is waiting
 	if (temp & 1){
@@ -35,8 +33,11 @@ void uart_i_process(){
 			current_running_process = &keyboard_i_proc; 
 			
 			void * msg = request_memory_block();
+			*((UINT32 *)msg) = COMMAND_KEYBOARD;
 			*((UINT32 *)msg + 16) =  1;
-			*((CHAR *)msg + 68) =  charIn;			
+			
+			*((CHAR *)msg + 68) =  charIn;
+
 			send_message_jessie(-5, msg);//send to the CRT first.
 			// set automic here by disabling the interrupt
 				
@@ -52,24 +53,22 @@ void uart_i_process(){
 	}else if (temp & 4)
 		// if port is ready to accept data
 	{
+		SERIAL1_IMR = 2;
 		struct PCB* backup = current_running_process;
 		current_running_process = &keyboard_i_proc; 
-		caught = FALSE;
 		int sender_id;
 		void * block;
 		block = receive_message_jessie(&sender_id, 0);
 		if (sender_id == -5){
-			SERIAL1_IMR = 2;
-			CHAR charOut = *((CHAR*)block +68);
+			temp = SERIAL1_USR;
 			while (! (temp&4)){
-				temp = SERIAL1_USR;
-				//rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");					
+				temp = SERIAL1_USR;								
 			}
+			CHAR charOut = *((CHAR*)block +68);
 			SERIAL1_WD = charOut;
 			if (charOut == CR){
 				temp = SERIAL1_USR;
 				while (! (temp & 4)){
-					//rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");	
 					temp = SERIAL1_USR;
 				}// blocking here?
 				charOut = LF;
@@ -79,12 +78,8 @@ void uart_i_process(){
 		if (block!= NULL) {
 			release_memory_block(block);
 		}
-				
+		current_running_process = backup;
 	}
-				//rtx_dbug_outs((CHAR*)"done putting stuff to the other screen\n\r");
-				//done = TRUE;
-			current_running_process = backup;
-		}
 }
 
 void init_keyboard_i_proc (struct PCB* pcb_keyboard_i_proc, UINT32* stackPtr)

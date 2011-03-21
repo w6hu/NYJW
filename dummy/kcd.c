@@ -71,7 +71,7 @@ void kcd()
 		registering_process = *((int *)user_command + 26);
 		release_memory_block(user_command);
 	
-		rtx_dbug_outs((CHAR *)"KCD_TEST: Got a message : ");
+		rtx_dbug_outs((CHAR *)"KCD_TEST: Got a message\r\n");
 
 		
 		if(message_type == COMMAND_REGISTER)
@@ -107,7 +107,10 @@ void kcd()
 				{
 					command_buff[num_characters] = command;
 					num_characters += 1;
-			
+					
+					if(command == CR && num_characters < 3)
+						goto KCD_START;
+					
 					if(command == CR && num_characters >= 3)
 					{
 					
@@ -144,7 +147,7 @@ void kcd()
 						}
 						
 						send_message(destination_process, initiate_action_request);
-						
+						rtx_dbug_outs((CHAR *)"KCD_TEST: Message sent \r\n");
 						goto KCD_START;
 					}
 				}

@@ -43,7 +43,8 @@ void priority_modifier()
 	while(1)
 	{
 		rtx_dbug_outs((CHAR *)"PRIORITY_test: PRIORITY_MODIFIER START\r\n");
-		void* user_command = receive_message(NULL);
+		int sender;
+		void* user_command = receive_message(&sender);
 					
 		int process_id;
 		int new_priority;

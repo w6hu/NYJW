@@ -226,7 +226,7 @@ void init_interrupts(){
     /*
      * Set the reference counts, ~10ms
      */
-    TIMER0_TRR = 1758;
+    TIMER0_TRR = 176;
 
     /*
      * Setup the timer prescaler and stuff
