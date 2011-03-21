@@ -2,36 +2,124 @@
 
 extern struct PCB* current_running_process;
 extern struct PCB p [NUM_PROCESS];
-//pid =-5!!
+
+CHAR  escapeHack[] = "\x1b[01;68H";
+CHAR restoreHack[] = "\x1b[10;10H";
+int line = 1;
+int column = 1;
+
 void crt(){
 	while (TRUE){
 		SERIAL1_IMR = 2;
 		int sender_id;
 		struct PCB* backup;
-//		backup = current_running_process;
-//		current_running_process = &p[8];
-		
-		//rtx_dbug_outs((CHAR *)"crt: before message:");
 		
 		void* block = receive_message(&sender_id);//receive from -3
-		//rtx_dbug_outs("sender = ");
-		//rtx_dbug_out_num(sender_id);
-		if (sender_id == -3 || sender_id == -6){//if sender is i-process or timer
+		if ((sender_id == -3 || sender_id == -6 || sender_id == -7) && block != NULL){//if sender is i-process or timer
+			UINT32 type = *((UINT32 *)block);
+			//rtx_dbug_outs((CHAR*)"ERROR type");
+			//rtx_dbug_out_num(type);
+			//rtx_dbug_outs((CHAR*)"\r\n");
+			if (type == COMMAND_ERROR){//remove the false to enable error printing.
+				//release_memory_block(block);
+				//block = request_memory_block();
+				*((UINT32 *)block +16) = 17;
+				*((CHAR *)block + 68) = 'I';
+				*((CHAR *)block + 69) = 'n';
+				*((CHAR *)block + 70) = 'v';
+				*((CHAR *)block + 71) = 'a';
+				*((CHAR *)block + 72) = 'l';
+				*((CHAR *)block + 73) = 'i';
+				*((CHAR *)block + 74) = 'd';
+				*((CHAR *)block + 75) = ' ';
+				*((CHAR *)block + 76) = 'C';
+				*((CHAR *)block + 77) = 'o';
+				*((CHAR *)block + 78) = 'm';
+				*((CHAR *)block + 79) = 'm';
+				*((CHAR *)block + 80) = 'a';
+				*((CHAR *)block + 81) = 'n';
+				*((CHAR *)block + 82) = 'd';
+				*((CHAR *)block + 83) = '\r';
+				*((CHAR *)block + 84) = '\n';
+				
+			}
 			UINT32 length = *((UINT32*)block+16);
-			rtx_dbug_outs((CHAR*) "length =");
-			rtx_dbug_out_num(length);
-			rtx_dbug_outs((CHAR*) "\n");
+			//rtx_dbug_outs((CHAR*) "length =");
+			//rtx_dbug_out_num(length);
+			//rtx_dbug_outs((CHAR*) "\n");
 			int j = 0;
 			CHAR charOut;
-			for (j; j < length; j++){
+			CHAR temp = SERIAL1_USR;
+			if (sender_id == -6){
+				int j = 0;
+				for (j; j < 8 ; j++){
+					void * newBlock  = s_request_memory_block_yishi(0);
+					*((int* )newBlock+16) = 1;
+					*((CHAR* )newBlock+68) = escapeHack[j];
+					send_message(-3,newBlock);
+					temp = SERIAL1_USR;
+					while (! (temp&4)){
+						temp = SERIAL1_USR;
+						//rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");					
+					}
+					SERIAL1_IMR = 3;
+				}
+			}
+			
+			for (j = 0; j < length; j++){
+
 				charOut = *((CHAR*)block +68+j);
-				void * newBlock  = request_memory_block();
+				void * newBlock  = s_request_memory_block_yishi(0);
 				*((int* )newBlock+16) = 1;
 				*((CHAR* )newBlock+68) = charOut;
 				send_message(-3,newBlock);
+				temp = SERIAL1_USR;
+				while (! (temp&4)){
+					temp = SERIAL1_USR;
+					//rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");					
+				}
 				SERIAL1_IMR = 3;
+				if (sender_id != -6){
+					column++;
+					if (column >=80)
+						line++;
+					column = column % 76;
+					if (charOut == CR){
+						line ++;
+						column = 1;
+					}
+					if (charOut == BKSP)
+						column = column -2;
+						column = column %76;
+				}
+								
 			}
 			
+
+			if (sender_id == -6){
+				restoreHack[2] = line /10 +48;
+				restoreHack[3] = line %10 +48;
+				restoreHack[5] = column/10+ 48;
+				restoreHack[6] = column%10 +48;
+				
+				int j = 0;
+				for (j;j< 8;j++){
+					void * newBlock  = s_request_memory_block_yishi(0);
+					*((int* )newBlock+16) = 1;
+					*((CHAR* )newBlock+68) = restoreHack[j];
+					send_message(-3,newBlock);
+					temp = SERIAL1_USR;
+					while (! (temp&4)){
+						temp = SERIAL1_USR;
+						//rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");					
+					}
+					SERIAL1_IMR = 3;
+				}
+			}
+			
+			
+		}
+		if (block!= NULL){
 			release_memory_block(block);
 		}
 	}
@@ -40,7 +128,7 @@ void crt(){
 
 void init_crt (struct PCB* pcb_crt, UINT32* stackPtr){
 
-	rtx_dbug_outs((CHAR *)"init_crt \r\n");
+	//rtx_dbug_outs((CHAR *)"init_crt \r\n");
 	pcb_crt->next = NULL;
 	pcb_crt->id = -5;
 	pcb_crt->priority = 0;//you must be very important!
@@ -71,5 +159,5 @@ void init_crt (struct PCB* pcb_crt, UINT32* stackPtr){
 	// initialize the process to the correct ready queue
 	put_to_ready(pcb_crt);
 	pcb_crt->state = STATE_NEW;	
-	rtx_dbug_outs((CHAR *)"init_crt: exited \r\n");
+	//rtx_dbug_outs((CHAR *)"init_crt: exited \r\n");
 }

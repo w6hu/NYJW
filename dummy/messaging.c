@@ -90,7 +90,6 @@ void * receive_message_jessie (int * sender_ID, int block) {
 			//rtx_dbug_out_num(receiver_ID);
 			//put_to_blocked(0, get_process_from_ID(receiver_ID));
 			if (block == 1) {
-				//rtx_dbug_outs("No message, blocked\r\n");
 				put_to_blocked(0, get_process_from_ID(receiver_ID));
 				release_processor_kuma_san();
 			}

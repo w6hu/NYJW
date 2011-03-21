@@ -21,7 +21,7 @@ LDFLAGS_RTX_TEST = -Trtx_test.ld -Wl,-Map=rtx_test.map
 #RTX_OBJS = dbug.o memory.o init.o rtx.o main_rtx.o
 RTX_OBJS = process.o init.o memory.o dbug.o kcd.o priority.o hotkeys.o crt.o messaging.o rtx.o main_rtx.o iprocess.o timer.o
 RTX_LOADER_OBJS = dbug.o rtx_loader.o
-RTX_TEST_DUMMY_OBJS = dbug.o jessie_test.o
+RTX_TEST_DUMMY_OBJS = dbug.o rtx_test_dummy.o
 
 all: mdummy.s19 
 #all: Gid_rtx.s19
@@ -58,9 +58,15 @@ mdummy.s19: m2.s19 rtx_loader.s19
 	python merge.py mdummy.s19 m2.s19 rtx_loader.s19
 	chmod u+x mdummy.s19
 
+Gid_rtx.s19: mlight.s19 rtx.s19
+	python merge.py Gid_rtx.s19 mlight.s19 rtx.s19
+	chmod u+x Gid_rtx.s19	
+	
 .c.o:
 	$(CC) $(CFLAGS) -c $<
 
 .PHONY: clean
 clean:
-	rm -f *.bin *.s19 *.o *.map *.lst
+	mv mlight.s19 mlight_back	
+	rm -f *.bin *.s19 *.o *.map *.lst	
+	mv mlight_back mlight.s19

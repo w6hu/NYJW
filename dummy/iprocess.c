@@ -20,8 +20,6 @@ void uart_i_process(){
 	asm( "move.w #0x2700,%sr" );
 	volatile BYTE temp;
 	temp = SERIAL1_USR;
-
-	BOOLEAN caught = FALSE;
 	SERIAL1_IMR = 2;//disable interrupt
 	//if data is waiting
 	if (temp & 1){
@@ -34,24 +32,29 @@ void uart_i_process(){
 			struct PCB* backup = current_running_process;
 			current_running_process = &keyboard_i_proc; 
 			
-			void * msg = request_memory_block();
+			void * msg = s_request_memory_block_yishi(0);
+			*((UINT32 *)msg) = COMMAND_KEYBOARD;
 			*((UINT32 *)msg + 16) =  1;
-			*((CHAR *)msg + 68) =  charIn;			
+			
+			*((CHAR *)msg + 68) =  charIn;
+
 			send_message_jessie(-5, msg);//send to the CRT first.
 			// set automic here by disabling the interrupt
 				
-			void * msg2 = request_memory_block();
+			void * msg2 = s_request_memory_block_yishi(0);
 			*((UINT32 *)msg2) = COMMAND_KEYBOARD;
 			*((UINT32 *)msg2 + 16) =  1;
 			*((CHAR *)msg2 + 68) =  charIn;
 			
-			rtx_dbug_outs((CHAR *)"IPROCESS : sending message to KCD\r\n");
+			//rtx_dbug_outs((CHAR *)"IPROCESS : sending message to KCD\r\n");
 			send_message_jessie(-4, msg2);//send to the KCD next.
 			current_running_process = backup;
 			}
 	}else if (temp & 4)
 	// if port is ready to accept data
 	{
+
+		
 		SERIAL1_IMR = 2;
 		struct PCB* backup = current_running_process;
 		current_running_process = &keyboard_i_proc; 
@@ -59,16 +62,16 @@ void uart_i_process(){
 		void * block;
 		block = receive_message_jessie(&sender_id, 0);
 		if (sender_id == -5){
-			CHAR charOut = *((CHAR*)block +68);
+			temp = SERIAL1_USR;
+			charOut = *((CHAR*)block +68);
 			while (! (temp&4)){
-				temp = SERIAL1_USR;
-				//rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");					
+				temp = SERIAL1_USR;								
 			}
+			charOut = *((CHAR*)block +68);
 			SERIAL1_WD = charOut;
 			if (charOut == CR){
 				temp = SERIAL1_USR;
 				while (! (temp & 4)){
-					//rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");	
 					temp = SERIAL1_USR;
 				}// blocking here?
 				charOut = LF;
@@ -78,15 +81,13 @@ void uart_i_process(){
 		if (block!= NULL) {
 			release_memory_block(block);
 		}
-		//rtx_dbug_outs((CHAR*)"done putting stuff to the other screen\n\r");
-		//done = TRUE;
 		current_running_process = backup;
 	}
 }
 
 void init_keyboard_i_proc (struct PCB* pcb_keyboard_i_proc, UINT32* stackPtr)
 {	
-	rtx_dbug_outs((CHAR *)"init_i_proc \r\n");
+	//rtx_dbug_outs((CHAR *)"init_i_proc \r\n");
 	pcb_keyboard_i_proc->next = NULL;
 	pcb_keyboard_i_proc->id = -3;
 	pcb_keyboard_i_proc->priority = 0;
@@ -117,12 +118,12 @@ void init_keyboard_i_proc (struct PCB* pcb_keyboard_i_proc, UINT32* stackPtr)
 	// initialize the process to the correct ready queue
 	//put_to_ready(pcb_keyboard_i_proc);
 	pcb_keyboard_i_proc->state = STATE_NEW;	
-	rtx_dbug_outs((CHAR *)"init_i_proc: exited \r\n");
+	//rtx_dbug_outs((CHAR *)"init_i_proc: exited \r\n");
 }
 
 void init_timer_i_proc (struct PCB* pcb_keyboard_i_proc, UINT32* stackPtr)
 {	
-	rtx_dbug_outs((CHAR *)"init_i_proc \r\n");
+	//rtx_dbug_outs((CHAR *)"init_i_proc \r\n");
 	pcb_keyboard_i_proc->next = NULL;
 	pcb_keyboard_i_proc->id = TIMER_INTERRUPT;
 	pcb_keyboard_i_proc->priority = 0;
@@ -153,5 +154,5 @@ void init_timer_i_proc (struct PCB* pcb_keyboard_i_proc, UINT32* stackPtr)
 	// initialize the process to the correct ready queue
 	//put_to_ready(pcb_keyboard_i_proc);
 	pcb_keyboard_i_proc->state = STATE_NEW;	
-	rtx_dbug_outs((CHAR *)"init_i_proc: exited \r\n");
+	//rtx_dbug_outs((CHAR *)"init_i_proc: exited \r\n");
 }
