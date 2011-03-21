@@ -23,11 +23,11 @@ void* s_request_memory_block_yishi(int block)
 		if(*free_blocks == NULL) {
 			if (block == TRUE) {
 				put_to_blocked(1, current_running_process);
-				rtx_dbug_outs((CHAR *)"blocked on requesting memory\r\n");
+				//rtx_dbug_outs((CHAR *)"blocked on requesting memory\r\n");
 				release_processor_kuma_san();
 			}
 			else {
-				rtx_dbug_outs((CHAR *)"no memory available, return null\r\n");
+				//rtx_dbug_outs((CHAR *)"no memory available, return null\r\n");
 				return NULL;
 			}
 		}

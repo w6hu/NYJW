@@ -124,13 +124,13 @@ void wall_clock() {
 	int hour, minute, second;
 	void * new_msg = NULL;
 	register_command(WALL_CLOCK_ID, 'W');
-	rtx_dbug_outs("inside clock\r\n");
+	//rtx_dbug_outs("inside clock\r\n");
 	while (TRUE) {
 		void* incoming_msg = receive_message(&sender);
 		
 		int sender_ID = *((int *)incoming_msg + 1);
 		
-		rtx_dbug_outs("inside clock loop\r\n");
+		//rtx_dbug_outs("inside clock loop\r\n");
 		
 		// if the msg is from KCD
 		if (sender_ID == KCD_ID) {
@@ -224,14 +224,14 @@ void wall_clock() {
 				}
 				
 				ERROR_INPUT:
-					rtx_dbug_outs("invalid command in clock");
+					//rtx_dbug_outs("invalid command in clock");
 					if (new_msg != NULL) {
 						release_memory_block(new_msg);
 					}
 					goto FINALLY;
 					
 				CORRECT_INPUT:
-					rtx_dbug_outs("Correct input!");
+					//rtx_dbug_outs("Correct input!");
 					if (clock_on == FALSE) {
 						// send a message to myself
 						void* my_message = request_memory_block();

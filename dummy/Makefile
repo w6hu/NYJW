@@ -58,9 +58,15 @@ mdummy.s19: m2.s19 rtx_loader.s19
 	python merge.py mdummy.s19 m2.s19 rtx_loader.s19
 	chmod u+x mdummy.s19
 
+Gid_rtx.s19: mlight.s19 rtx.s19
+	python merge.py Gid_rtx.s19 mlight.s19 rtx.s19
+	chmod u+x Gid_rtx.s19	
+	
 .c.o:
 	$(CC) $(CFLAGS) -c $<
 
 .PHONY: clean
 clean:
-	rm -f *.bin *.s19 *.o *.map *.lst
+	mv mlight.s19 mlight_back	
+	rm -f *.bin *.s19 *.o *.map *.lst	
+	mv mlight_back mlight.s19

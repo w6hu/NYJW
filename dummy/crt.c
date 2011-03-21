@@ -17,9 +17,9 @@ void crt(){
 		void* block = receive_message(&sender_id);//receive from -3
 		if ((sender_id == -3 || sender_id == -6 || sender_id == -7) && block != NULL){//if sender is i-process or timer
 			UINT32 type = *((UINT32 *)block);
-			rtx_dbug_outs((CHAR*)"ERROR type");
-			rtx_dbug_out_num(type);
-			rtx_dbug_outs((CHAR*)"\r\n");
+			//rtx_dbug_outs((CHAR*)"ERROR type");
+			//rtx_dbug_out_num(type);
+			//rtx_dbug_outs((CHAR*)"\r\n");
 			if (type == COMMAND_ERROR){//remove the false to enable error printing.
 				//release_memory_block(block);
 				//block = request_memory_block();
@@ -44,16 +44,16 @@ void crt(){
 				
 			}
 			UINT32 length = *((UINT32*)block+16);
-			rtx_dbug_outs((CHAR*) "length =");
-			rtx_dbug_out_num(length);
-			rtx_dbug_outs((CHAR*) "\n");
+			//rtx_dbug_outs((CHAR*) "length =");
+			//rtx_dbug_out_num(length);
+			//rtx_dbug_outs((CHAR*) "\n");
 			int j = 0;
 			CHAR charOut;
 			CHAR temp = SERIAL1_USR;
 			if (sender_id == -6){
 				int j = 0;
 				for (j; j < 8 ; j++){
-					void * newBlock  = request_memory_block();
+					void * newBlock  = s_request_memory_block_yishi(0);
 					*((int* )newBlock+16) = 1;
 					*((CHAR* )newBlock+68) = escapeHack[j];
 					send_message(-3,newBlock);
@@ -69,7 +69,7 @@ void crt(){
 			for (j = 0; j < length; j++){
 
 				charOut = *((CHAR*)block +68+j);
-				void * newBlock  = request_memory_block();
+				void * newBlock  = s_request_memory_block_yishi(0);
 				*((int* )newBlock+16) = 1;
 				*((CHAR* )newBlock+68) = charOut;
 				send_message(-3,newBlock);
@@ -81,11 +81,16 @@ void crt(){
 				SERIAL1_IMR = 3;
 				if (sender_id != -6){
 					column++;
-					column = column % 80;
+					if (column >=80)
+						line++;
+					column = column % 76;
 					if (charOut == CR){
 						line ++;
 						column = 1;
 					}
+					if (charOut == BKSP)
+						column = column -2;
+						column = column %76;
 				}
 								
 			}
@@ -99,7 +104,7 @@ void crt(){
 				
 				int j = 0;
 				for (j;j< 8;j++){
-					void * newBlock  = request_memory_block();
+					void * newBlock  = s_request_memory_block_yishi(0);
 					*((int* )newBlock+16) = 1;
 					*((CHAR* )newBlock+68) = restoreHack[j];
 					send_message(-3,newBlock);
@@ -123,7 +128,7 @@ void crt(){
 
 void init_crt (struct PCB* pcb_crt, UINT32* stackPtr){
 
-	rtx_dbug_outs((CHAR *)"init_crt \r\n");
+	//rtx_dbug_outs((CHAR *)"init_crt \r\n");
 	pcb_crt->next = NULL;
 	pcb_crt->id = -5;
 	pcb_crt->priority = 0;//you must be very important!
@@ -154,5 +159,5 @@ void init_crt (struct PCB* pcb_crt, UINT32* stackPtr){
 	// initialize the process to the correct ready queue
 	put_to_ready(pcb_crt);
 	pcb_crt->state = STATE_NEW;	
-	rtx_dbug_outs((CHAR *)"init_crt: exited \r\n");
+	//rtx_dbug_outs((CHAR *)"init_crt: exited \r\n");
 }

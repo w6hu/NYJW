@@ -60,7 +60,6 @@ void kcd()
 	
 	
 	KCD_START:
-		rtx_dbug_outs((CHAR *)"rtx_test: TEST KCD START\r\n");
 		num_characters = 0;
 	
 	while(1)
@@ -70,21 +69,11 @@ void kcd()
 		command = *((char*)user_command + 68);
 		registering_process = *((int *)user_command + 26);
 		release_memory_block(user_command);
-	
-		rtx_dbug_outs((CHAR *)"KCD_TEST: Got a message\r\n");
-
 		
 		if(message_type == COMMAND_REGISTER)
 		{
 			if(num_handlers < 28)
 			{
-			/*			
-				rtx_dbug_outs((CHAR *)"KCD_TEST: got a registerring command : ");
-				rtx_dbug_out_num(registering_process);
-				rtx_dbug_outs((CHAR *)"      ");
-				rtx_dbug_out_char(command);
-				rtx_dbug_outs((CHAR *)"\r\n");			
-			*/
 			
 				commands[num_handlers] = command;
 				handlers[num_handlers] = registering_process;
@@ -147,7 +136,6 @@ void kcd()
 						}
 						
 						send_message(destination_process, initiate_action_request);
-						rtx_dbug_outs((CHAR *)"KCD_TEST: Message sent \r\n");
 						goto KCD_START;
 					}
 				}

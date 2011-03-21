@@ -42,7 +42,6 @@ void priority_modifier()
 	
 	while(1)
 	{
-		rtx_dbug_outs((CHAR *)"PRIORITY_test: PRIORITY_MODIFIER START\r\n");
 		int sender;
 		void* user_command = receive_message(&sender);
 					
@@ -68,14 +67,11 @@ void priority_modifier()
 		if( *((char *)user_command + 72) != CR)
 			goto PRIORITY_CHECK_ERROR;	
 		
-		rtx_dbug_outs((CHAR *)"valid statement\r\n");
 		set_process_priority(process_id, new_priority);
 		
 		goto PRIORITY_END_CHECK;
 	
 	PRIORITY_CHECK_ERROR:
-	
-		rtx_dbug_outs((CHAR *)"PRIORITY_test: incorrect command format\r\n");
 		error_message = request_memory_block();
 		*((int *)error_message) = COMMAND_ERROR;
 		send_message(-5, error_message);
