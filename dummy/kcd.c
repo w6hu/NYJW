@@ -95,17 +95,16 @@ void kcd()
 			else 
 			{
 				// put whatever thing onto the buffer if it has any space
+				if(command == CR && (num_characters < 3 || num_characters >= 30))
+					goto KCD_START;
+				
 				if(num_characters < 30)
 				{
 					command_buff[num_characters] = command;
 					num_characters += 1;
 					
-					if(command == CR && num_characters < 3)
-						goto KCD_START;
-					
 					if(command == CR && num_characters >= 3)
 					{
-					
 						// if the user pressed ENTER, then parse the string
 						if(command_buff[0] != '%')
 						{

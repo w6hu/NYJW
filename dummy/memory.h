@@ -4,8 +4,8 @@
  * @date: 2011/01/07
  */
 
- #include "../dummy/rtx_inc.h"
- #include "../dummy/dbug.h"
+ #include "rtx_inc.h"
+ #include "dbug.h"
  
 UINT32* mem_end; 
  
