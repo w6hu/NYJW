@@ -160,5 +160,6 @@ UINT32 *free_blocks;
 #define COMMAND_PRIORITY_MODIFIER 3
 #define COMMAND_ERROR 4
 #define COMMAND_ERASED 5
+#define COMMAND_COUNT_REPORT 6
 
 #endif
