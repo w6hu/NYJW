@@ -134,7 +134,7 @@ VOID stack_pointer_switcher( VOID )
 VOID trap_call_animal( VOID )
 {
 	// set automic here by disabling the interrupt
-    asm( "move.w #0x2700,%sr" );
+    // asm( "move.w #0x2700,%sr" );
 	
 	// get the caller id
 	int val;

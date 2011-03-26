@@ -17,7 +17,7 @@ extern struct PCB* current_running_process;
 extern struct PCB keyboard_i_proc;
 
 void uart_i_process(){
-	asm( "move.w #0x2700,%sr" );
+	//asm( "move.w #0x2700,%sr" );
 	volatile BYTE temp;
 	temp = SERIAL1_USR;
 	SERIAL1_IMR = 2;//disable interrupt
