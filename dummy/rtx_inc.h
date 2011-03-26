@@ -153,6 +153,10 @@ UINT32 *free_blocks;
 #define SET_PRIORITY_ID -7
 #define TIMER_INTERRUPT -8
 
+#define PROCESS_A 7
+#define PROCESS_B 8
+#define PROCESS_C 9
+
 //define the message types
 #define COMMAND_KEYBOARD 0
 #define COMMAND_REGISTER 1
@@ -160,5 +164,7 @@ UINT32 *free_blocks;
 #define COMMAND_PRIORITY_MODIFIER 3
 #define COMMAND_ERROR 4
 #define COMMAND_ERASED 5
+#define COMMAND_COUNT_REPORT 6
+#define COMMAND_WAKEUP10 7
 
 #endif

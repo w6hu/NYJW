@@ -15,7 +15,7 @@ void crt(){
 		struct PCB* backup;
 		
 		void* block = receive_message(&sender_id);//receive from -3
-		if ((sender_id == -3 || sender_id == -6 || sender_id == -7) && block != NULL){//if sender is i-process or timer
+		if ((sender_id == KEYBOARD_INTERRUPT || sender_id == WALL_CLOCK_ID || sender_id == SET_PRIORITY_ID || sender_id == PROCESS_C) && block != NULL){//if sender is i-process or timer
 			UINT32 type = *((UINT32 *)block);
 			//rtx_dbug_outs((CHAR*)"ERROR type");
 			//rtx_dbug_out_num(type);
@@ -50,13 +50,13 @@ void crt(){
 			int j = 0;
 			CHAR charOut;
 			CHAR temp = SERIAL1_USR;
-			if (sender_id == -6){
+			if (sender_id == WALL_CLOCK_ID){
 				int j = 0;
 				for (j; j < 8 ; j++){
 					void * newBlock  = s_request_memory_block_yishi(0);
 					*((int* )newBlock+16) = 1;
 					*((CHAR* )newBlock+68) = escapeHack[j];
-					send_message(-3,newBlock);
+					send_message(KEYBOARD_INTERRUPT,newBlock);
 					temp = SERIAL1_USR;
 					while (! (temp&4)){
 						temp = SERIAL1_USR;
@@ -72,14 +72,14 @@ void crt(){
 				void * newBlock  = s_request_memory_block_yishi(0);
 				*((int* )newBlock+16) = 1;
 				*((CHAR* )newBlock+68) = charOut;
-				send_message(-3,newBlock);
+				send_message(KEYBOARD_INTERRUPT,newBlock);
 				temp = SERIAL1_USR;
 				while (! (temp&4)){
 					temp = SERIAL1_USR;
 					//rtx_dbug_outs((CHAR*)"output not ready yet!!\n\r");					
 				}
 				SERIAL1_IMR = 3;
-				if (sender_id != -6){
+				if (sender_id != WALL_CLOCK_ID){
 					column++;
 					if (column >=80)
 						line++;
@@ -96,7 +96,7 @@ void crt(){
 			}
 			
 
-			if (sender_id == -6){
+			if (sender_id == WALL_CLOCK_ID){
 				restoreHack[2] = line /10 +48;
 				restoreHack[3] = line %10 +48;
 				restoreHack[5] = column/10+ 48;
@@ -107,7 +107,7 @@ void crt(){
 					void * newBlock  = s_request_memory_block_yishi(0);
 					*((int* )newBlock+16) = 1;
 					*((CHAR* )newBlock+68) = restoreHack[j];
-					send_message(-3,newBlock);
+					send_message(KEYBOARD_INTERRUPT,newBlock);
 					temp = SERIAL1_USR;
 					while (! (temp&4)){
 						temp = SERIAL1_USR;
@@ -130,7 +130,7 @@ void init_crt (struct PCB* pcb_crt, UINT32* stackPtr){
 
 	//rtx_dbug_outs((CHAR *)"init_crt \r\n");
 	pcb_crt->next = NULL;
-	pcb_crt->id = -5;
+	pcb_crt->id = CRT_ID;
 	pcb_crt->priority = 0;//you must be very important!
 	pcb_crt->stack = stackPtr;
 	pcb_crt->returning = FALSE;

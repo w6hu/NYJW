@@ -38,7 +38,7 @@ void uart_i_process(){
 			
 			*((CHAR *)msg + 68) =  charIn;
 
-			send_message_jessie(-5, msg);//send to the CRT first.
+			send_message_jessie(CRT_ID, msg);//send to the CRT first.
 			// set automic here by disabling the interrupt
 				
 			void * msg2 = s_request_memory_block_yishi(0);
@@ -47,7 +47,7 @@ void uart_i_process(){
 			*((CHAR *)msg2 + 68) =  charIn;
 			
 			//rtx_dbug_outs((CHAR *)"IPROCESS : sending message to KCD\r\n");
-			send_message_jessie(-4, msg2);//send to the KCD next.
+			send_message_jessie(KCD_ID, msg2);//send to the KCD next.
 			current_running_process = backup;
 			}
 	}else if (temp & 4)
@@ -61,7 +61,7 @@ void uart_i_process(){
 		int sender_id;
 		void * block;
 		block = receive_message_jessie(&sender_id, 0);
-		if (sender_id == -5){
+		if (sender_id == CRT_ID){
 			temp = SERIAL1_USR;
 			charOut = *((CHAR*)block +68);
 			while (! (temp&4)){
@@ -89,7 +89,7 @@ void init_keyboard_i_proc (struct PCB* pcb_keyboard_i_proc, UINT32* stackPtr)
 {	
 	//rtx_dbug_outs((CHAR *)"init_i_proc \r\n");
 	pcb_keyboard_i_proc->next = NULL;
-	pcb_keyboard_i_proc->id = -3;
+	pcb_keyboard_i_proc->id = KEYBOARD_INTERRUPT;
 	pcb_keyboard_i_proc->priority = 0;
 	pcb_keyboard_i_proc->stack = stackPtr;
 	pcb_keyboard_i_proc->returning = FALSE;

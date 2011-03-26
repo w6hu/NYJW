@@ -21,7 +21,7 @@ void null_process()
 void init_null_process( struct PCB* pcb_null_process, UINT32* process_start)
 {	
 	pcb_null_process->next = NULL;
-	pcb_null_process->id = -2;
+	pcb_null_process->id = NULL_ID;
 	pcb_null_process->priority = 4;
 	pcb_null_process->stack = process_start;
 	pcb_null_process->returning = FALSE;
