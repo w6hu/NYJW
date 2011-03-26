@@ -54,7 +54,7 @@ void priority_modifier()
 			goto PRIORITY_CHECK_ERROR;
 		
 		process_id = *((char *)user_command + 69)-48;
-		if( process_id > 6 || process_id < 1)
+		if( process_id > 9 || process_id < 1)
 			goto PRIORITY_CHECK_ERROR;
 
 		if( *((char *)user_command + 70) != ' ')

@@ -143,7 +143,7 @@
 #define NUM_MEM_BLKS 32
 UINT32 *free_blocks;
 
-#define NUM_PROCESS 10
+#define NUM_PROCESS 13
 
 #define NULL_ID -2
 #define KEYBOARD_INTERRUPT -3
