@@ -1,6 +1,7 @@
 	.globl asm_trap_entry
 	.even		
 asm_trap_entry:
+	move.w #0x2700, %sr
 	move.l %d0, -(%a7)
 	move.l %d1, -(%a7)
 	move.l %d2, -(%a7)

@@ -78,7 +78,7 @@ void handle_expired() {
 }
 
 void handle_timer() {
-	asm( "move.w #0x2700,%sr" );
+	//asm( "move.w #0x2700,%sr" );
 
 	//rtx_dbug_outs("timer trigger!");
 	

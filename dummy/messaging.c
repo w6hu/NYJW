@@ -52,9 +52,9 @@ int act_send_message (int process_ID, int sender_ID, void * MessageEnvelope) {
 	// update process states
 	if (is_waiting_for(process_ID, 0)) {
 		remove_from_blocked(0, get_process_from_ID(process_ID));
-		if (get_process_priority_usagi_san(process_ID) < get_process_priority_usagi_san(sender_ID)) {
+		/*if (get_process_priority_usagi_san(process_ID) < get_process_priority_usagi_san(sender_ID)) {
 			release_processor_kuma_san();
-		}
+		}*/
 	}
 }
 
