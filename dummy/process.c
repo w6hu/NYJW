@@ -96,8 +96,8 @@ void schedule_next_process_neko_san()
 			
 		/*	rtx_dbug_outs((CHAR*)"Next process to run = ");
 			rtx_dbug_out_num(current_running_process->id);
-			rtx_dbug_outs((CHAR*)"\r\n"); */
-			
+			rtx_dbug_outs((CHAR*)"\r\n"); 
+		*/	
 			stack_pointer_switcher();			
 
 			break;

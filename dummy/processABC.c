@@ -1,10 +1,8 @@
 #include "processABC.h"
 
 void process_a() {
-
-	rtx_dbug_outs((CHAR*)"In process A\r\n");
 	register_command(PROCESS_A, 'Z');
-	rtx_dbug_outs((CHAR*)"finish registeringA\r\n");
+	
 	while (TRUE) {
 		int sender_id;
 		void* message = receive_message(&sender_id);
@@ -45,11 +43,8 @@ void process_c(){
 	int sender_id;
 	while (TRUE){
 		if (headPtr == tailPtr){
-			rtx_dbug_outs((CHAR*)"head = tail\r\n");
-
 			p = receive_message(sender_id);
 		}else{
-			rtx_dbug_outs((CHAR*)"in the else clause\r\n");
 			p = messageQueue[headPtr];
 			headPtr++;
 			headPtr  %= 33;
@@ -58,7 +53,7 @@ void process_c(){
 		if (*((UINT32*)p) == COMMAND_COUNT_REPORT){
 			int msg_data = *((UINT32*)p+ 17);
 			if (msg_data % 20 == 0){
-				*((UINT32* )p +16) = 9;
+				*((UINT32* )p +16) = 10;
 				*((CHAR* )p +68) = 'P';
 				*((CHAR* )p +69) = 'r';
 				*((CHAR* )p +70) = 'o';
@@ -68,6 +63,7 @@ void process_c(){
 				*((CHAR* )p +74) = 's';
 				*((CHAR* )p +75) = ' ';
 				*((CHAR* )p +76) = 'C';
+				*((CHAR* )p +77) = CR;
 				send_message(CRT_ID, p);
 				
 				//hibernate
@@ -75,7 +71,6 @@ void process_c(){
 				*((UINT32 *)q) = COMMAND_WAKEUP10;
 				delayed_send(PROCESS_C, q, 10000);
 				while (TRUE) {
-					rtx_dbug_outs((CHAR*)"sleeping\r\n");
 					void* message = receive_message(NULL);
 					if (*((UINT32 *)message) == COMMAND_WAKEUP10) {
 						release_memory_block(message);
@@ -94,7 +89,6 @@ void process_c(){
 		else {
 			release_memory_block(p);
 		}
-		rtx_dbug_outs((CHAR*)"about to release processor\r\n");
 		release_processor();
 	}
 }

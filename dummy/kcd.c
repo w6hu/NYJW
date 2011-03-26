@@ -67,9 +67,9 @@ void kcd()
 		user_command = receive_message(NULL);
 		message_type = *((int*)user_command);
 		command = *((char*)user_command + 68);
-		rtx_dbug_outs((CHAR*)"KCD got ");
-		rtx_dbug_out_char(command);
-		rtx_dbug_outs((CHAR*)"\r\n");
+//		rtx_dbug_outs((CHAR*)"KCD got ");
+//		rtx_dbug_out_char(command);
+//		rtx_dbug_outs((CHAR*)"\r\n");
 		registering_process = *((int *)user_command + 26);
 		release_memory_block(user_command);
 		
