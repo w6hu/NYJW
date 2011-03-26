@@ -235,12 +235,12 @@ void wall_clock() {
 					if (clock_on == FALSE) {
 						// send a message to myself
 						void* my_message = request_memory_block();
-						delayed_send(-6, my_message, 1000);
+						delayed_send(WALL_CLOCK_ID, my_message, 1000);
 						clock_on = TRUE;
 					}
 					
 					// send message to crt
-					send_message(-5, new_msg);
+					send_message(CRT_ID, new_msg);
 					
 					/*rtx_dbug_out_num(hour);
 					rtx_dbug_out_char(':');
@@ -265,7 +265,7 @@ void wall_clock() {
 			}
 		}
 		// if the message is from myself
-		else if (sender == -6) {
+		else if (sender == WALL_CLOCK_ID) {
 			if (clock_on) {
 				// increament the clock
 				second++;
@@ -282,7 +282,7 @@ void wall_clock() {
 				}
 				
 				// resend the message to myself
-				delayed_send(-6, incoming_msg, 1000);
+				delayed_send(WALL_CLOCK_ID, incoming_msg, 1000);
 				
 				// send message to CRT
 				new_msg = request_memory_block();
@@ -295,7 +295,7 @@ void wall_clock() {
 				*((char *)new_msg + 73) = (char)58;
 				*((char *)new_msg + 74) = (char)(second/10 + 48);
 				*((char *)new_msg + 75) = (char)(second%10 + 48);
-				send_message(-5, new_msg);
+				send_message(CRT_ID, new_msg);
 				
 				/*rtx_dbug_out_num(hour);
 					rtx_dbug_out_char(':');
@@ -319,7 +319,7 @@ void wall_clock() {
 void init_wall_clock(struct PCB* pcb_wall_clock, UINT32* process_start)
 {	
 	pcb_wall_clock->next = NULL;
-	pcb_wall_clock->id = -6;
+	pcb_wall_clock->id = WALL_CLOCK_ID;
 	pcb_wall_clock->priority = 0;
 	pcb_wall_clock->stack = process_start;
 	pcb_wall_clock->returning = FALSE;

@@ -3,7 +3,7 @@
 void init_pm (struct PCB* pcb_pm, UINT32* stackPtr)
 {	
 	pcb_pm->next = NULL;
-	pcb_pm->id = -7;
+	pcb_pm->id = SET_PRIORITY_ID;
 	pcb_pm->priority = 0;
 	pcb_pm->stack = stackPtr;
 	pcb_pm->returning = FALSE;
@@ -38,7 +38,7 @@ void priority_modifier()
 {
 	void* error_message;
 	// the first thing it does it register itself
-	register_command(-7, 'C');
+	register_command(SET_PRIORITY_ID, 'C');
 	
 	while(1)
 	{
@@ -74,7 +74,7 @@ void priority_modifier()
 	PRIORITY_CHECK_ERROR:
 		error_message = request_memory_block();
 		*((int *)error_message) = COMMAND_ERROR;
-		send_message(-5, error_message);
+		send_message(CRT_ID, error_message);
 	
 	PRIORITY_END_CHECK:	
 		release_memory_block(user_command);

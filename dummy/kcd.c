@@ -6,13 +6,13 @@ void register_command(int registering_process, char registering_command)
 	*((int *)register_request) = COMMAND_REGISTER;
 	*((int *)register_request + 26) = registering_process;
 	*((char *)register_request + 68) = registering_command;
-	send_message(-4, register_request);
+	send_message(KCD_ID, register_request);
 }
 
 void init_kcd (struct PCB* pcb_kcd, UINT32* stackPtr)
 {	
 	pcb_kcd->next = NULL;
-	pcb_kcd->id = -4;
+	pcb_kcd->id = KCD_ID;
 	pcb_kcd->priority = 0;
 	pcb_kcd->stack = stackPtr;
 	pcb_kcd->returning = FALSE;
