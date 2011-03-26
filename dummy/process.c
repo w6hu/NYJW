@@ -251,7 +251,7 @@ int get_process_priority_usagi_san(int process_id)
 }
 
 int set_process_priority_yama_san(int process_ID, int priority)
-{
+{	
 	struct PCB* to_be_changed = get_process_from_ID(process_ID);
 	if(to_be_changed == NULL)
 		return RTX_FAILURE;  // false for failing to set it
@@ -262,11 +262,19 @@ int set_process_priority_yama_san(int process_ID, int priority)
 		
 	// if the process is running or blocked, we don't need to 
 	// change any queue, as it is not in the ready queue
-	if(to_be_changed->state == STATE_READY)
+	if(to_be_changed->state == STATE_READY || to_be_changed->state == STATE_NEW)
 	{
+		int prev_state = to_be_changed->state;	
 		remove_from_ready(to_be_changed);
 		to_be_changed->priority = priority;
 		put_to_ready(to_be_changed);
+		to_be_changed->state = prev_state;
+		
+		if(current_running_process->priority > priority && 
+		   current_running_process->id != process_ID)
+		{
+			schedule_next_process_neko_san();
+		}
 	}
 	
 	to_be_changed->priority = priority;

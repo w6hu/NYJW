@@ -19,70 +19,79 @@ int test = 0;
 void test1()
 {
 	test = 0;
-	//rtx_dbug_outs((CHAR *)"rtx_test: TEST 1 start\r\n");
+	rtx_dbug_outs((CHAR *)"rtx_test: TEST 1 start\r\n");
     //rtx_dbug_outs((CHAR *)"rtx_test: test1\r\n");
     
     while (1) 
     {
+//		rtx_dbug_outs((CHAR *)"rtx_test: test1\r\n");
+	//	rtx_dbug_outs((CHAR *)"rtx_test: calling setting priority ...... \r\n");
+	//	g_test_fixture.set_process_priority(6, 1);
+	//	rtx_dbug_outs((CHAR *)"rtx_test: finish calling setting priority ...... \r\n");
 	    g_test_fixture.release_processor();
-		//rtx_dbug_outs((CHAR *)"rtx_test: TEST 1 END\r\n");
+//		rtx_dbug_outs((CHAR *)"rtx_test: TEST 1 END\r\n");
     }
 }
 
 /* third party dummy test process 2 */ 
 void test2()
 {
-	//rtx_dbug_outs((CHAR *)"rtx_test: TEST 2 start\r\n");
+	rtx_dbug_outs((CHAR *)"rtx_test: TEST 2 start\r\n");
     while (1) 
     {
+//		rtx_dbug_outs((CHAR *)"rtx_test: test2\r\n");
 	    g_test_fixture.release_processor();
-		//rtx_dbug_outs((CHAR *)"rtx_test: TEST 2 END\r\n");
+//		rtx_dbug_outs((CHAR *)"rtx_test: TEST 2 END\r\n");
     }
 }
 /* third party dummy test process 3 */ 
 void test3()
 {
-	//rtx_dbug_outs((CHAR *)"rtx_test: TEST 3 start\r\n");
-   // rtx_dbug_outs((CHAR *)"rtx_test: test3\r\n");
+	rtx_dbug_outs((CHAR *)"rtx_test: TEST 3 start\r\n");
+
     while (1) 
     {
+//		rtx_dbug_outs((CHAR *)"rtx_test: test3\r\n");	
 	    g_test_fixture.release_processor();
-		//rtx_dbug_outs((CHAR *)"rtx_test: TEST 3 END\r\n");
+//		rtx_dbug_outs((CHAR *)"rtx_test: TEST 3 END\r\n");
     }
 }
 
 /* third party dummy test process 4 */ 
 void test4()
 {
-	//rtx_dbug_outs((CHAR *)"rtx_test: TEST 4 start\r\n");
-   // rtx_dbug_outs((CHAR *)"rtx_test: test4\r\n");
+	rtx_dbug_outs((CHAR *)"rtx_test: TEST 4 start\r\n");
+   
     while (1) 
     {
+//		rtx_dbug_outs((CHAR *)"rtx_test: test4\r\n");
 	    g_test_fixture.release_processor();
-		//rtx_dbug_outs((CHAR *)"rtx_test: TEST 4 END\r\n");
+//		rtx_dbug_outs((CHAR *)"rtx_test: TEST 4 END\r\n");
     }
 }
 /* third party dummy test process 5 */ 
 void test5()
 {	
-	//rtx_dbug_outs((CHAR *)"rtx_test: TEST 5 start\r\n");
-   // rtx_dbug_outs((CHAR *)"rtx_test: test5\r\n");
+	rtx_dbug_outs((CHAR *)"rtx_test: TEST 5 start\r\n");
+
     while (1) 
     {
+//		rtx_dbug_outs((CHAR *)"rtx_test: test5\r\n");
 	    /* execute a rtx primitive to test */
         g_test_fixture.release_processor();
-		//rtx_dbug_outs((CHAR *)"rtx_test: TEST 5 END\r\n");
+//		rtx_dbug_outs((CHAR *)"rtx_test: TEST 5 END\r\n");
     }
 }
 /* third party dummy test process 6 */ 
 void test6()
 {
-//rtx_dbug_outs((CHAR *)"rtx_test: TEST 6 start\r\n");
-  //  rtx_dbug_outs((CHAR *)"rtx_test: test6\r\n");
+	rtx_dbug_outs((CHAR *)"rtx_test: TEST 6 start\r\n");
+
     while (1) 
     {
+//		rtx_dbug_outs((CHAR *)"rtx_test: test6\r\n");
 	    g_test_fixture.release_processor();
-		//rtx_dbug_outs((CHAR *)"rtx_test: TEST 6 END\r\n");
+//		rtx_dbug_outs((CHAR *)"rtx_test: TEST 6 END\r\n");
     }
 }
 
