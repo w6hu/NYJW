@@ -1,5 +1,6 @@
  #include "processA.h"
- 
+#include "processBC.h"
+
 void process_a() {
 	void* block = request_memory_block();
 	register_command(PROCESS_A, 'Z'); //Should I be sending a message to KCD to reguster command instead?
@@ -26,7 +27,6 @@ void process_a() {
 }
 
 
-#include "processBC.h"
 
 
 process_b(){
