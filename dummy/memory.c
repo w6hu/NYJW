@@ -78,7 +78,10 @@ int s_release_memory_block_yishi( void* memory_block )
 	*((UINT32 *)memory_block + 4) = NULL;
 	*((int *)memory_block+2) = FREE;
 	// pull blocked process out of the blocked queue if any
-	remove_first_from_blocked(1);
+	int priority = remove_first_from_blocked(1);
+	if (priority < current_running_process->priority) {
+		release_processor();
+	}
 	return SUCCESS;
 }
 

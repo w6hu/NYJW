@@ -137,11 +137,11 @@ void remove_from_blocked(int waiting_on, struct PCB* p) {
 	put_to_ready(p);
 }
 
-// remove the first blocking message from the blocked queue
-void remove_first_from_blocked(int index) {
+// remove the first blocking message from the blocked queue and returns the priority of removed process
+int remove_first_from_blocked(int index) {
 	//rtx_dbug_outs((CHAR *)"rtx: remove first from blocked \r\n");
 	if (blocked_queue[index] == 0) {
-		return;
+		return 5;
 	}
 	else {
 		struct PCB* first = blocked_queue[index];
@@ -150,6 +150,7 @@ void remove_first_from_blocked(int index) {
 		first->state = STATE_READY;
 		first->waiting_on = -1;
 		put_to_ready(first);
+		return first->priority;
 	}
 }
 

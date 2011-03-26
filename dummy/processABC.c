@@ -1,5 +1,5 @@
- #include "processABC.h"
- 
+#include "processABC.h"
+
 void process_a() {
 
 	rtx_dbug_outs((CHAR*)"In process A\r\n");
@@ -27,9 +27,7 @@ void process_a() {
 	}	
 }
 
-
 void process_b(){
-
 	while (TRUE){
 		int sender_id;
 		void * p = receive_message(&sender_id);
