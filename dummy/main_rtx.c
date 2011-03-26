@@ -21,7 +21,8 @@
 #include "priority.h"
 #include "iprocess.h"
 #include "messaging.h"
-#include "timer.h";
+#include "timer.h"
+#include "processABC.h"
 
 /* test proc initializaiton info. registration function provided by test suite.
  * test suite needs to register its test proc initilization info with rtx
@@ -99,7 +100,7 @@ int main()
 		val = *(g_test_proc[i].entry);			
 		asm("move.l %0, %%d0" : : "r" (val));
 		asm("move.l %d0, -(%a7)");
-		val = 4;		// 1796 is the value that disable all interrupt	
+		val = 4;
 		asm("move.w %0, %%d0" : : "r" (val));
 		asm("move.w %d0, -(%a7)");
 		val = 16512;			
@@ -130,6 +131,15 @@ int main()
 	
 	process_start = process_start + 2048/4;
 	init_wall_clock(&p[9], process_start);
+	
+	process_start = process_start + 2048/4;
+	init_process_a(&p[10], process_start);
+
+	process_start = process_start + 2048/4;
+	init_process_b(&p[11], process_start);	
+
+	process_start = process_start + 2048/4;
+	init_process_c(&p[12], process_start);		
 	
 	process_start = process_start + 2048/4;
 	init_keyboard_i_proc(&keyboard_i_proc, process_start);

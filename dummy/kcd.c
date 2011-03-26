@@ -77,7 +77,6 @@ void kcd()
 		{
 			if(num_handlers < 28)
 			{
-			
 				commands[num_handlers] = command;
 				handlers[num_handlers] = registering_process;
 			
@@ -95,7 +94,8 @@ void kcd()
 			else 
 			{
 				// put whatever thing onto the buffer if it has any space
-				if(command == CR && (num_characters < 3 || num_characters >= 30))
+				// take care of keyboard slamming
+				if(command == CR && (num_characters < 2 || num_characters >= 30))
 					goto KCD_START;
 				
 				if(num_characters < 30)
@@ -127,7 +127,7 @@ void kcd()
 						
 						// send the message to the handler
 						void* initiate_action_request = request_memory_block();
-						*((int *)initiate_action_request) = COMMAND_PRIORITY_MODIFIER;
+						//*((int *)initiate_action_request) = COMMAND_PRIORITY_MODIFIER;
 						*((int *)initiate_action_request + 16) = num_characters - 2;
 						
 						// put the command string in the message 
@@ -136,6 +136,8 @@ void kcd()
 						{
 							*((char *)initiate_action_request + 68 + j) = command_buff[j+2];
 						}
+						
+										rtx_dbug_outs((CHAR*)"sending a command\r\n");
 						
 						send_message(destination_process, initiate_action_request);
 						goto KCD_START;

@@ -1,12 +1,14 @@
- #include "processA.h"
+ #include "processABC.h"
  
 void process_a() {
-	void* block = request_memory_block();
-	register_command(PROCESS_A, 'Z'); //Should I be sending a message to KCD to reguster command instead?
+
+	rtx_dbug_outs((CHAR*)"In process A\r\n");
+	register_command(PROCESS_A, 'Z');
+	rtx_dbug_outs((CHAR*)"finish registeringA\r\n");
 	while (TRUE) {
 		int sender_id;
 		void* message = receive_message(&sender_id);
-		if (sender_id == KCD_ID && *((char *)message + 68) != 'Z') {
+		if (sender_id == KCD_ID) {
 			release_memory_block(message);
 			break;
 		} else {
@@ -26,10 +28,7 @@ void process_a() {
 }
 
 
-#include "processBC.h"
-
-
-process_b(){
+void process_b(){
 
 	while (TRUE){
 		int sender_id;
@@ -38,21 +37,24 @@ process_b(){
 	}
 }
 
-int headPtr = 0;
-int tailPtr = 0;
 //insert from tail, remove from head.
-process_c(){
-	void * messageQueue[32];
+void process_c(){
+	int headPtr = 0;
+	int tailPtr = 0;
+	void * messageQueue[33];
 	//initC();
 	void * p;
 	int sender_id;
 	while (TRUE){
 		if (headPtr == tailPtr){
+			rtx_dbug_outs((CHAR*)"head = tail\r\n");
+
 			p = receive_message(sender_id);
 		}else{
+			rtx_dbug_outs((CHAR*)"in the else clause\r\n");
 			p = messageQueue[headPtr];
 			headPtr++;
-			headPtr  %= 32;
+			headPtr  %= 33;
 		}
 		
 		if (*((UINT32*)p) == COMMAND_COUNT_REPORT){
@@ -70,31 +72,39 @@ process_c(){
 				*((CHAR* )p +76) = 'C';
 				send_message(CRT_ID, p);
 				
+				//hibernate
 				void* q = request_memory_block();
 				*((UINT32 *)q) = COMMAND_WAKEUP10;
 				delayed_send(PROCESS_C, q, 10000);
 				while (TRUE) {
+					rtx_dbug_outs((CHAR*)"sleeping\r\n");
 					void* message = receive_message(NULL);
 					if (*((UINT32 *)message) == COMMAND_WAKEUP10) {
+						release_memory_block(message);
 						break;
 					} else{
 						messageQueue[tailPtr] = message;
 						tailPtr++;
-						tailPtr %=32;
+						tailPtr %=33;
 					}
 				}			
 			}
+			else {
+				release_memory_block(p);
+			}
 		}
-		release_memory_block(p);
+		else {
+			release_memory_block(p);
+		}
+		rtx_dbug_outs((CHAR*)"about to release processor\r\n");
 		release_processor();
 	}
 }
 
-
 void init_process_b (struct PCB* pcb_proc_b, UINT32* stackPtr) {
 	pcb_proc_b->next = NULL;
 	pcb_proc_b->id = PROCESS_B;
-	pcb_proc_b->priority = 0;
+	pcb_proc_b->priority = 1;
 	pcb_proc_b->stack = stackPtr;
 	pcb_proc_b->returning = FALSE;
 	pcb_proc_b->waiting_on = -1;
@@ -108,7 +118,7 @@ void init_process_b (struct PCB* pcb_proc_b, UINT32* stackPtr) {
 	val = process_b;			
 	asm("move.l %0, %%d0" : : "r" (val));
 	asm("move.l %d0, -(%a7)");
-	val = 9988;			
+	val = 4;			
 	asm("move.w %0, %%d0" : : "r" (val));
 	asm("move.w %d0, -(%a7)");
 	val = 16512;			
@@ -120,16 +130,15 @@ void init_process_b (struct PCB* pcb_proc_b, UINT32* stackPtr) {
 	asm("move.l %0, %%a7" : : "r" (original_a7));
 		
 	// initialize the process to the correct ready queue
-	//put_to_ready(pcb_proc_b);
+	put_to_ready(pcb_proc_b);
 	pcb_proc_b->state = STATE_NEW;	
-	//rtx_dbug_outs((CHAR *)"init_i_proc: exited \r\n");
 }
 
 
 void init_process_c (struct PCB* pcb_proc_c, UINT32* stackPtr) {
 	pcb_proc_c->next = NULL;
 	pcb_proc_c->id = PROCESS_C;
-	pcb_proc_c->priority = 0;
+	pcb_proc_c->priority = 1;
 	pcb_proc_c->stack = stackPtr;
 	pcb_proc_c->returning = FALSE;
 	pcb_proc_c->waiting_on = -1;
@@ -143,7 +152,7 @@ void init_process_c (struct PCB* pcb_proc_c, UINT32* stackPtr) {
 	val = process_c;			
 	asm("move.l %0, %%d0" : : "r" (val));
 	asm("move.l %d0, -(%a7)");
-	val = 9988;			
+	val = 4;			
 	asm("move.w %0, %%d0" : : "r" (val));
 	asm("move.w %d0, -(%a7)");
 	val = 16512;			
@@ -155,15 +164,14 @@ void init_process_c (struct PCB* pcb_proc_c, UINT32* stackPtr) {
 	asm("move.l %0, %%a7" : : "r" (original_a7));
 		
 	// initialize the process to the correct ready queue
-	//put_to_ready(pcb_proc_b);
+	put_to_ready(pcb_proc_c);
 	pcb_proc_c->state = STATE_NEW;	
-	//rtx_dbug_outs((CHAR *)"init_i_proc: exited \r\n");
 }
 
 void init_process_a (struct PCB* pcb_proc_a, UINT32* stackPtr) {
 	pcb_proc_a->next = NULL;
 	pcb_proc_a->id = PROCESS_A;
-	pcb_proc_a->priority = 0;
+	pcb_proc_a->priority = 1;
 	pcb_proc_a->stack = stackPtr;
 	pcb_proc_a->returning = FALSE;
 	pcb_proc_a->waiting_on = -1;
@@ -177,7 +185,7 @@ void init_process_a (struct PCB* pcb_proc_a, UINT32* stackPtr) {
 	val = process_a;			
 	asm("move.l %0, %%d0" : : "r" (val));
 	asm("move.l %d0, -(%a7)");
-	val = 9988;			
+	val = 4;			
 	asm("move.w %0, %%d0" : : "r" (val));
 	asm("move.w %d0, -(%a7)");
 	val = 16512;			
@@ -189,7 +197,6 @@ void init_process_a (struct PCB* pcb_proc_a, UINT32* stackPtr) {
 	asm("move.l %0, %%a7" : : "r" (original_a7));
 		
 	// initialize the process to the correct ready queue
-	//put_to_ready(pcb_proc_a);
+	put_to_ready(pcb_proc_a);
 	pcb_proc_a->state = STATE_NEW;	
-	//rtx_dbug_outs((CHAR *)"init_i_proc: exited \r\n");
 }
